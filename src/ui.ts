@@ -3,7 +3,7 @@ import {
   send_bot_message,
   set_current_bot,
 } from "./main";
-import { admin_bots, ZulipAccount } from "./secrets";
+import { admin_bots, self_creds, ZulipAccount } from "./secrets";
 
 class StatusBar {
   status_text?: string;
@@ -84,7 +84,8 @@ export function show_composebox() {
 }
 
 export function show_right_sidebar() {
-  const bots = admin_bots;
+  const self = self_creds;
+  const bots = [self, ...admin_bots];
   const right_sidebar = document.createElement("div");
   const right_sidebar_styles: Partial<CSSStyleDeclaration> = {
     position: "absolute",
