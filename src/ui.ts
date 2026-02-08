@@ -3,7 +3,7 @@ import {
   send_bot_message,
   set_current_bot,
 } from "./main";
-import { admin_bots, AdminBot } from "./secrets";
+import { admin_bots, ZulipAccount } from "./secrets";
 
 class StatusBar {
   status_text?: string;
@@ -29,16 +29,50 @@ class StatusBar {
   }
 }
 
+class MessageFeed {
+  feed_container: HTMLElement;
+  constructor() {
+    this.feed_container = this.create_feed_container();
+  }
+
+  create_feed_container() {
+    const container = document.createElement("div");
+    const container_styles: Partial<CSSStyleDeclaration> = {
+      maxHeight: "60vh",
+      minHeight: "60vh",
+      backgroundColor: "lightgray",
+      overflowY: "auto",
+    };
+    Object.assign(container.style, container_styles);
+
+    return container;
+  }
+  render() {
+    document.body.append(this.feed_container);
+  }
+
+  add_new_message(sender_name: string, content: string) {
+    const sender_name_ele = document.createElement("div");
+    const content_ele = document.createElement("pre");
+    content_ele.textContent = content;
+    sender_name_ele.textContent = sender_name;
+    this.feed_container.append(sender_name_ele, content_ele);
+  }
+}
+const message_feed: MessageFeed = new MessageFeed();
 const status_bar: StatusBar = new StatusBar();
 
 export function show_status_bar() {
   status_bar.render();
 }
 
+export function show_message_feed() {
+  message_feed.render();
+}
+
 export function show_composebox() {
   const textarea = document.createElement("textarea");
-  textarea.rows = 20;
-  textarea.cols = 50;
+  textarea.style.width = "70%";
   textarea.placeholder = `Type some text as ${get_current_bot_name()}`;
 
   const send_btn = document.createElement("button");
@@ -72,7 +106,7 @@ export function show_right_sidebar() {
   document.body.append(right_sidebar);
 }
 
-function get_bot_button(bot: AdminBot) {
+function get_bot_button(bot: ZulipAccount) {
   const bot_button = document.createElement("button");
   bot_button.innerText = bot.name;
   bot_button.addEventListener("click", () => {
@@ -82,9 +116,17 @@ function get_bot_button(bot: AdminBot) {
   return bot_button;
 }
 
+export function add_new_message_to_message_feed(
+  sender_name: string,
+  content: string,
+) {
+  message_feed.add_new_message(sender_name, content);
+}
+
 export function render_everything() {
   show_status_bar();
   status_bar.update_text("Active bot:" + get_current_bot_name());
+  show_message_feed();
   show_composebox();
   show_right_sidebar();
 }
