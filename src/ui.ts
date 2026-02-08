@@ -73,7 +73,7 @@ export function show_message_feed() {
 export function show_composebox() {
   const textarea = document.createElement("textarea");
   textarea.style.width = "70%";
-  textarea.placeholder = `Type some text as ${get_current_bot_name()}`;
+  textarea.placeholder = `Click send with an empty textbox to send a random cat phrase`;
 
   const send_btn = document.createElement("button");
   send_btn.innerText = "Send";
