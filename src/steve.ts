@@ -117,6 +117,11 @@ function render_message_content(content: string): HTMLElement {
     return div;
 }
 
+/**************************************************
+ * topic pane
+ *
+**************************************************/
+
 class TopicRowName {
     div: HTMLElement;
 
@@ -127,7 +132,7 @@ class TopicRowName {
             if (selected) {
                 CurrentSearchWidget.clear_topic();
             } else {
-                CurrentSearchWidget.set_topic_name(index, topic_name);
+                CurrentSearchWidget.set_topic_index(index);
             }
         });
 
@@ -267,6 +272,11 @@ class TopicPane {
     }
 }
 
+/**************************************************
+ * message pane
+ *
+**************************************************/
+
 class MessageSender {
     div: HTMLElement;
 
@@ -387,6 +397,11 @@ class MessagePane {
     }
 }
 
+/**************************************************
+ * search widget
+ *
+**************************************************/
+
 let CurrentSearchWidget: SearchWidget;
 
 class SearchWidget {
@@ -424,7 +439,7 @@ class SearchWidget {
         return div;
     }
 
-    set_topic_name(index: number, topic_name: string): void {
+    set_topic_index(index: number): void {
         CurrentTopicList.select_index(index);
         this.message_pane.populate();
     }
