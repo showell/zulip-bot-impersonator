@@ -12,6 +12,7 @@ type RawStream = {
     name: string;
 };
 
+let RawMessages: RawMessage[];
 
 function render_topic_count(count: number): HTMLElement {
     const div = document.createElement("div");
@@ -113,6 +114,22 @@ class SearchWidget {
     }
 }
 
+/**************************************************
+ * model code below, please!
+ *
+**************************************************/
+
+let CurrentMessageStore: MessageStore;
+
+class MessageStore {
+    raw_messages: RawMessage[];
+
+    constructor(raw_messages: RawMessage[]) {
+        console.log("building message store");
+        this.raw_messages = raw_messages;
+    }
+}
+
 class TopicList {
     div: HTMLElement;
     max_recent: number;
@@ -160,10 +177,10 @@ let CurrentTopicTable: TopicTable;
 class TopicTable {
     map: Map<string, Topic>;
 
-    constructor(messages: RawMessage[]) {
+    constructor() {
         this.map = new Map<string, Topic>();
 
-        for (const message of messages) {
+        for (const message of CurrentMessageStore.raw_messages) {
             const topic_name = message.topic_name;
             const msg_id = message.id;
 
@@ -188,7 +205,6 @@ class TopicTable {
     get_topics(max_recent: number) {
         const all_topics = [...this.map.values()];
         all_topics.sort((t1, t2) => t2.last_msg_id - t1.last_msg_id);
-        console.log(all_topics.map((t) => t.name));
 
         const topics = all_topics.slice(0, max_recent);
 
@@ -243,14 +259,16 @@ export async function run() {
     const stream_id = await get_stream_id_for_favorite_stream();
 
     const rows = await zulip_client.get_messages_for_stream_id(stream_id);
-    const messages: RawMessage[] = rows.map((row: any) => {
+    const raw_messages = rows.map((row: any) => {
         return {
             id: row.id,
             topic_name: row.subject,
         };
     });
 
-    CurrentTopicTable = new TopicTable(messages);
+    CurrentMessageStore = new MessageStore(raw_messages);
+
+    CurrentTopicTable = new TopicTable();
 
     CurrentSearchWidget = new SearchWidget();
     CurrentSearchWidget.populate();
