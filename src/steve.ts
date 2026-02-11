@@ -9,12 +9,19 @@ function render_topic_heading_count(count: number): HTMLElement {
     return div;
 }
 
+function render_th(label: string): HTMLElement {
+    const th = document.createElement("th");
+    th.innerText = label;
+    th.style.textAlign = "left";
+    th.style.fontWeight = "bold";
+    th.style.color = "#000080";
+    th.style.margin = "2px";
+    return th;
+}
+
 function render_topic_count(count: number): HTMLElement {
     const div = document.createElement("div");
     div.innerText = `${count}`;
-    div.style.padding = "3px";
-    div.style.marginRight = "3px";
-    div.style.width = "20px";
     div.style.textAlign = "right";
 
     return div;
@@ -25,8 +32,6 @@ function render_topic_name(topic_name: string): HTMLElement {
     div.innerText = topic_name;
     div.style.maxWidth = "270px";
     div.style.overflowWrap = "break-word";
-    div.style.padding = "3px";
-    div.style.marginBottom = "4px";
     div.style.color = "#000080";
     div.style.cursor = "pointer";
 
@@ -123,6 +128,8 @@ class TopicRow {
 
         function append(div: HTMLElement) {
             const td = document.createElement("td");
+            td.style.verticalAlign = "bottom";
+            td.style.padding = "4px";
             td.append(div);
             tr.append(td);
         }
@@ -164,6 +171,11 @@ class TopicList {
         const div = this.div;
 
         const table = document.createElement("table");
+
+        const tr = document.createElement("tr");
+        tr.append(render_th("Count"));
+        tr.append(render_th("Topic name"));
+        table.append(tr);
 
         const max_recent = 50;
         const topics = CurrentTopicTable.get_topics(max_recent);
