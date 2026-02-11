@@ -129,29 +129,39 @@ class TopicRow {
     }
 }
 
+let CurrentTopicList: TopicList;
+
 class TopicList {
     div: HTMLElement;
-    max_recent: number;
     selected_index?: number;
+    topics: Topic[];
 
     constructor() {
         const div = document.createElement("div");
-        this.max_recent = 20;
+        div.style.paddingRight = "5px";
+        div.style.maxHeight = "80vh";
+        div.style.overflowY = "auto";
 
-        div.style.marginRight = "15px";
+        this.topics = [];
 
         this.div = div;
-        this.populate();
+    }
+
+    get_current_topic(): Topic | undefined {
+        const index = this.selected_index;
+
+        if (index === undefined) return undefined;
+
+        return this.topics[index];
     }
 
     populate() {
-        const max_recent = this.max_recent;
-        const topics = CurrentTopicTable.get_topics(max_recent);
         const div = this.div;
 
         div.innerHTML = "";
 
-        div.append(render_stream_heading(favorite_stream_name));
+        const max_recent = 50;
+        const topics = CurrentTopicTable.get_topics(max_recent);
 
         for (let i = 0; i < topics.length; ++i) {
             const topic = topics[i];
@@ -159,6 +169,8 @@ class TopicList {
             const topic_row = new TopicRow(topic, i, selected);
             div.append(topic_row.div);
         }
+
+        this.topics = topics;
     }
 
     select_index(index: number) {
@@ -169,6 +181,76 @@ class TopicList {
     clear_selection(): void {
         this.selected_index = undefined;
         this.populate();
+    }
+
+    up(): void {
+        const count = this.topics.length;
+        this.selected_index = ((this.selected_index ?? 0) - 1 + count) % count;
+        this.populate();
+    }
+}
+
+class TopicUpButton {
+    div: HTMLElement;
+
+    constructor() {
+        const div = document.createElement("div");
+        div.style.padding = "3px";
+
+        const button = document.createElement("button");
+        button.innerText = "up";
+
+        div.append(button);
+
+        div.addEventListener("click", () => {
+            CurrentSearchWidget.up();
+        });
+
+        this.div = div;
+    }
+}
+
+class TopicUpDownPanel {
+    div: HTMLElement;
+
+    constructor() {
+        const div = document.createElement("div");
+        div.style.display = "flex";
+
+        const up_button = new TopicUpButton();
+
+        div.append(up_button.div);
+
+        this.div = div;
+    }
+}
+
+class TopicPane {
+    div: HTMLElement;
+
+    constructor() {
+        const div = document.createElement("div");
+
+        div.style.marginRight = "45px";
+
+        CurrentTopicList = new TopicList();
+
+        this.div = div;
+        this.populate();
+    }
+
+    populate() {
+        const div = this.div;
+        const topic_list = this.topic_list;
+
+        CurrentTopicList.populate();
+
+        const button_panel = new TopicUpDownPanel();
+
+        div.innerHTML = "";
+        div.append(render_stream_heading(favorite_stream_name));
+        div.append(button_panel.div);
+        div.append(CurrentTopicList.div);
     }
 }
 
@@ -220,6 +302,8 @@ class MessageList {
 
     constructor(messages: RawMessage[]) {
         const div = document.createElement("div");
+        div.style.maxHeight = "80vh";
+        div.style.overflowY = "auto";
 
         let prev_sender_id: number | undefined;
 
@@ -264,23 +348,23 @@ class MessagePane {
         const div = document.createElement("div");
 
         this.div = div;
-        this.clear();
     }
 
-    clear(): void {
+    populate(): void {
         const div = this.div;
 
-        div.innerText = "(no topic selected)";
-    }
+        const topic = CurrentTopicList.get_current_topic();
 
-    set_topic_name(topic_name: string): void {
-        const div = this.div;
+        if (topic === undefined) {
+            div.innerText = "(no topic selected)";
+            return;
+        }
 
-        const messages = CurrentMessageStore.message_for_topic_name(topic_name);
+        const messages = CurrentMessageStore.message_for_topic_name(topic.name);
 
         div.innerHTML = "";
 
-        const topic_line = new TopicLine(topic_name, messages.length);
+        const topic_line = new TopicLine(topic.name, messages.length);
 
         const message_list = new MessageList(messages);
 
@@ -294,7 +378,7 @@ let CurrentSearchWidget: SearchWidget;
 class SearchWidget {
     div: HTMLElement;
     message_pane: MessagePane;
-    topic_list: TopicList;
+    topic_pane: TopicPane;
 
     constructor() {
         const div = document.createElement("div");
@@ -302,7 +386,7 @@ class SearchWidget {
         this.div = div;
 
         this.message_pane = new MessagePane();
-        this.topic_list = new TopicList();
+        this.topic_pane = new TopicPane();
     }
 
     populate(): void {
@@ -310,18 +394,23 @@ class SearchWidget {
 
         div.innerHTML = "";
 
-        div.append(this.topic_list.div);
+        div.append(this.topic_pane.div);
         div.append(this.message_pane.div);
     }
 
     set_topic_name(index: number, topic_name: string): void {
-        this.topic_list.select_index(index);
-        this.message_pane.set_topic_name(topic_name);
+        CurrentTopicList.select_index(index);
+        this.message_pane.populate();
     }
 
     clear_topic(): void {
-        this.topic_list.clear_selection();
-        this.message_pane.clear();
+        CurrentTopicList.clear_selection();
+        this.message_pane.populate();
+    }
+
+    up(): void {
+        CurrentTopicList.up();
+        this.message_pane.populate();
     }
 }
 
