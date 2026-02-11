@@ -212,8 +212,6 @@ class TopicList {
     populate() {
         const div = this.div;
 
-        const table = document.createElement("table");
-
         const thead = render_thead([
             render_th("Count"),
             render_th("Topic name"),
@@ -221,7 +219,7 @@ class TopicList {
 
         const tbody = document.createElement("tbody");
 
-        const max_recent = 50;
+        const max_recent = 5000;
         const topics = CurrentTopicTable.get_topics(max_recent);
 
         for (let i = 0; i < topics.length; ++i) {
@@ -231,6 +229,7 @@ class TopicList {
             tbody.append(topic_row.tr);
         }
 
+        const table = document.createElement("table");
         table.append(thead);
         table.append(tbody);
 
