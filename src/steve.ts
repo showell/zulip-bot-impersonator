@@ -26,10 +26,9 @@ function render_topic_name(topic_name: string): HTMLElement {
 function render_topic_heading(topic_name: string): HTMLElement {
     const div = document.createElement("div");
     div.innerText = topic_name;
-    div.style.backgroundColor = "#000080";
     div.style.padding = "4px";
-    div.style.color = "white";
     div.style.fontSize = "19px";
+    div.style.borderBottom = "1px solid black";
 
     return div;
 }
@@ -37,12 +36,16 @@ function render_topic_heading(topic_name: string): HTMLElement {
 class TopicRowName {
     div: HTMLElement;
 
-    constructor(topic_name: string) {
+    constructor(topic_name: string, index: number, selected: boolean) {
         const div = document.createElement("div");
         div.append(render_topic_name(topic_name));
 
         div.addEventListener("click", () => {
-            CurrentSearchWidget.set_topic_name(topic_name);
+            if (selected) {
+                CurrentSearchWidget.clear_topic();
+            } else {
+                CurrentSearchWidget.set_topic_name(index, topic_name);
+            }
         });
 
         this.div = div;
@@ -52,12 +55,16 @@ class TopicRowName {
 class TopicRow {
     div: HTMLElement;
 
-    constructor(topic: Topic) {
+    constructor(topic: Topic, index: number, selected: boolean) {
         const div = document.createElement("div");
 
         div.style.display = "flex";
 
-        const topic_row_name = new TopicRowName(topic.name);
+        if (selected) {
+            div.style.backgroundColor = "cyan";
+        }
+
+        const topic_row_name = new TopicRowName(topic.name, index, selected);
 
         div.append(render_topic_count(topic.msg_count));
         div.append(topic_row_name.div);
@@ -66,14 +73,57 @@ class TopicRow {
     }
 }
 
+class TopicList {
+    div: HTMLElement;
+    max_recent: number;
+    selected_index?: number;
+
+    constructor() {
+        this.div = document.createElement("div");
+        this.max_recent = 20;
+        this.populate();
+    }
+
+    populate() {
+        const max_recent = this.max_recent;
+        const topics = CurrentTopicTable.get_topics(max_recent);
+        const div = this.div;
+
+        div.innerHTML = "";
+
+        for (let i = 0; i < topics.length; ++i) {
+            const topic = topics[i];
+            const selected = i === this.selected_index;
+            const topic_row = new TopicRow(topic, i, selected);
+            div.append(topic_row.div);
+        }
+    }
+
+    select_index(index: number) {
+        this.selected_index = index;
+        this.populate();
+    }
+
+    clear_selection(): void {
+        this.selected_index = undefined;
+        this.populate();
+    }
+}
+
 class MessagePane {
     div: HTMLElement;
 
     constructor() {
         const div = document.createElement("div");
-        div.innerText = "(no topic selected)";
 
         this.div = div;
+        this.clear();
+    }
+
+    clear(): void {
+        const div = this.div;
+
+        div.innerText = "(no topic selected)";
     }
 
     set_topic_name(topic_name: string): void {
@@ -92,6 +142,7 @@ let CurrentSearchWidget: SearchWidget;
 class SearchWidget {
     div: HTMLElement;
     message_pane: MessagePane;
+    topic_list: TopicList;
 
     constructor() {
         const div = document.createElement("div");
@@ -99,21 +150,26 @@ class SearchWidget {
         this.div = div;
 
         this.message_pane = new MessagePane();
+        this.topic_list = new TopicList();
     }
 
     populate(): void {
         const div = this.div;
 
         div.innerHTML = "";
-        const topic_list = new TopicList();
-        topic_list.populate();
 
-        div.append(topic_list.div);
+        div.append(this.topic_list.div);
         div.append(this.message_pane.div);
     }
 
-    set_topic_name(topic_name: string): void {
+    set_topic_name(index: number, topic_name: string): void {
+        this.topic_list.select_index(index);
         this.message_pane.set_topic_name(topic_name);
+    }
+
+    clear_topic(): void {
+        this.topic_list.clear_selection();
+        this.message_pane.clear();
     }
 }
 
@@ -151,29 +207,6 @@ class MessageStore {
         return this.raw_messages.filter((raw_message) => {
             return raw_message.topic_name === topic_name;
         });
-    }
-}
-
-class TopicList {
-    div: HTMLElement;
-    max_recent: number;
-
-    constructor() {
-        this.div = document.createElement("div");
-        this.max_recent = 20;
-    }
-
-    populate() {
-        const max_recent = this.max_recent;
-        const topics = CurrentTopicTable.get_topics(max_recent);
-        const div = this.div;
-
-        div.innerHTML = "";
-
-        for (const topic of topics) {
-            const topic_row = new TopicRow(topic);
-            div.append(topic_row.div);
-        }
     }
 }
 
