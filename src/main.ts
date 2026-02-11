@@ -57,12 +57,14 @@ export async function send_bot_message(msg_content?: string) {
   console.log(data);
 }
 
+/*
 function gui() {
     ui.render_client();
 }
 
-// gui();
-// zulip_client.register_queue();
+gui();
+zulip_client.register_queue();
+*/
 
 
 steve.run();

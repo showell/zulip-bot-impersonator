@@ -1,5 +1,16 @@
 import * as zulip_client from "./zulip_client";
 
+type RawMessage = {
+    id: number;
+    topic_name: string;
+};
+
+type RawStream = {
+    stream_id: number;
+    name: string;
+};
+
+
 function render_topic_count(count: number): HTMLElement {
     const div = document.createElement("div");
     div.innerText = `${count}`;
@@ -79,16 +90,16 @@ class Topic {
     }
 }
 
-let CurrentTopicTable;
+let CurrentTopicTable: TopicTable;
 
 class TopicTable {
     map: Map<string, Topic>;
 
-    constructor(messages) {
-        this.map = new Map<string, number>();
+    constructor(messages: RawMessage[]) {
+        this.map = new Map<string, Topic>();
 
         for (const message of messages) {
-            const topic_name = message.subject;
+            const topic_name = message.topic_name;
             const msg_id = message.id;
 
             const topic = this.get_or_create(topic_name, msg_id);
@@ -103,7 +114,7 @@ class TopicTable {
 
         if (topic !== undefined) return topic;
 
-        const new_topic = new Topic(topic_name, msg_id);
+        const new_topic = new Topic(topic_name);
         map.set(topic_name, new_topic);
 
         return new_topic;
@@ -136,10 +147,10 @@ class Page {
     }
 }
 
-export async function get_stream_id_for_favorite_stream(): number {
+export async function get_stream_id_for_favorite_stream(): Promise<number> {
     const subscriptions = await zulip_client.get_subscriptions();
 
-    const streams = subscriptions.map((subscription) => {
+    const streams: RawStream[] = subscriptions.map((subscription: any) => {
         return {
             stream_id: subscription.stream_id,
             name: subscription.name,
@@ -150,8 +161,9 @@ export async function get_stream_id_for_favorite_stream(): number {
         return stream.name === "LynRummy (engineering)";
     });
 
-    return stream.stream_id;
+    return stream!.stream_id;
 }
+
 export async function run() {
     console.log("begin steve client");
 
@@ -159,7 +171,13 @@ export async function run() {
 
     const stream_id = await get_stream_id_for_favorite_stream();
 
-    const messages = await zulip_client.get_messages_for_stream_id(stream_id);
+    const rows = await zulip_client.get_messages_for_stream_id(stream_id);
+    const messages: RawMessage[] = rows.map((row: any) => {
+        return {
+            id: row.id,
+            topic_name: row.subject,
+        };
+    });
 
     CurrentTopicTable = new TopicTable(messages);
 
