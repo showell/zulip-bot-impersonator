@@ -35,8 +35,9 @@ function render_thead(headers: HTMLElement[]): HTMLElement {
     const thead = document.createElement("thead");
 
     const tr = document.createElement("tr");
-    tr.append(render_th("Count"));
-    tr.append(render_th("Topic name"));
+    for (const th of headers) {
+        tr.append(th);
+    }
     thead.append(tr);
 
     return thead;
@@ -54,6 +55,20 @@ function render_th(label: string): HTMLElement {
     th.style.color = "#000080";
     th.style.margin = "2px";
     return th;
+}
+
+function render_tr(divs: HTMLElement[]): HTMLElement {
+    const tr = document.createElement("tr");
+
+    for (const div of divs) {
+        const td = document.createElement("td");
+        td.style.verticalAlign = "bottom";
+        td.style.padding = "4px";
+        td.append(div);
+        tr.append(td);
+    }
+
+    return tr;
 }
 
 function render_topic_count(count: number): HTMLElement {
@@ -206,23 +221,12 @@ class TopicRow {
     tr: HTMLElement;
 
     constructor(topic: Topic, index: number, selected: boolean) {
-
         const topic_row_name = new TopicRowName(topic.name, index, selected);
 
-        const tr = document.createElement("tr");
-
-        function append(div: HTMLElement) {
-            const td = document.createElement("td");
-            td.style.verticalAlign = "bottom";
-            td.style.padding = "4px";
-            td.append(div);
-            tr.append(td);
-        }
-
-        append(render_topic_count(topic.msg_count));
-        append(topic_row_name.div);
-
-        this.tr = tr;
+        this.tr = render_tr([
+            render_topic_count(topic.msg_count),
+            topic_row_name.div,
+        ]);
     }
 }
 
