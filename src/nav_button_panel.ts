@@ -1,5 +1,4 @@
 type CallbackType = {
-    clear_stream(): void;
     stream_up(): void;
     stream_down(): void;
     clear_topic(): void;
@@ -36,33 +35,30 @@ function render_div_button(label: string): DivButton {
 class Button {
     div: HTMLElement;
     button: HTMLElement;
+    width: string;
 
     constructor(label: string, callback: () => void) {
         const { div, button } = render_div_button(label);
         this.div = div;
         this.button = button;
 
+        this.width = div.style.width;
+
         button.addEventListener("click", () => {
             callback();
         });
 
-        this.hide();
-    }
-
-    show_if(cond: boolean): void {
-        if (cond) {
-            this.show();
-        } else {
-            this.hide();
-        }
+        this.show();
     }
 
     show(): void {
         this.div.style.visibility = "visible";
+        this.div.style.width = this.width;
     }
 
     hide(): void {
         this.div.style.visibility = "hidden";
+        this.div.style.width = "0px";
     }
 
     focus(): void {
@@ -74,7 +70,6 @@ export class ButtonPanel {
     div: HTMLElement;
     next_channel: Button;
     prev_channel: Button;
-    clear_channel: Button;
     next_topic: Button;
     prev_topic: Button;
     clear_topic: Button;
@@ -90,9 +85,6 @@ export class ButtonPanel {
         this.prev_channel = new Button("prev channel", () => {
             callbacks.stream_up();
         });
-        this.clear_channel = new Button("clear channel", () => {
-            callbacks.clear_stream();
-        });
 
         this.next_topic = new Button("next topic", () => {
             callbacks.topic_down();
@@ -106,23 +98,29 @@ export class ButtonPanel {
 
         div.append(this.next_channel.div);
         div.append(this.prev_channel.div);
-        div.append(this.clear_channel.div);
 
+        div.append(this.clear_topic.div);
         div.append(this.next_topic.div);
         div.append(this.prev_topic.div);
-        div.append(this.clear_topic.div);
 
         this.div = div;
     }
 
     update(stream_selected: boolean, topic_selected: boolean): void {
-        console.log(stream_selected, topic_selected);
-        this.next_channel.show_if(true);
-        this.prev_channel.show_if(stream_selected);
-        this.clear_channel.show_if(stream_selected);
-        this.next_topic.show_if(stream_selected);
-        this.prev_topic.show_if(topic_selected);
-        this.clear_topic.show_if(topic_selected);
+        const div = this.div;
+
+        function show_if(button: Button, cond: boolean): void {
+            if (cond) {
+                button.show()
+            } else {
+                button.hide();
+            }
+        }
+        show_if(this.next_channel, !topic_selected);
+        show_if(this.prev_channel, !topic_selected && stream_selected);
+        show_if(this.clear_topic, topic_selected);
+        show_if(this.next_topic, stream_selected);
+        show_if(this.prev_topic, topic_selected);
     }
 
     focus_next_channel_button(): void {
