@@ -1,5 +1,3 @@
-let Callbacks: CallbackType;
-
 type CallbackType = {
     clear_stream(): void;
     stream_up(): void;
@@ -9,7 +7,12 @@ type CallbackType = {
     topic_down(): void;
 };
 
-function render_div_button(label: string): HTMLElement {
+type DivButton = {
+    div: HTMLElement;
+    button: HTMLElement;
+};
+
+function render_div_button(label: string): DivButton {
     const div = document.createElement("div");
     div.style.padding = "3px";
 
@@ -27,94 +30,83 @@ function render_div_button(label: string): HTMLElement {
     });
 
     div.append(button);
-    return div;
+    return { div, button };
 }
 
-function stream_up_button(): HTMLElement {
-    const div = render_div_button("prev channel");
+class Button {
+    div: HTMLElement;
+    button: HTMLElement;
 
-    div.addEventListener("click", () => {
-        Callbacks.stream_up();
-    });
+    constructor(label: string, callback: () => void) {
+        const { div, button } = render_div_button(label);
+        this.div = div;
+        this.button = button;
 
-    return div;
-}
+        button.addEventListener("click", () => {
+            callback();
+        });
+    }
 
-function stream_down_button(): HTMLElement {
-    const div = render_div_button("next channel");
-
-    div.addEventListener("click", () => {
-        Callbacks.stream_down();
-    });
-
-    return div;
-}
-
-function stream_clear_button() {
-    const div = render_div_button("clear channel");
-
-    div.addEventListener("click", () => {
-        Callbacks.clear_stream();
-    });
-
-    return div;
-}
-
-function topic_up_button(): HTMLElement {
-    const div = render_div_button("prev topic");
-
-    div.addEventListener("click", () => {
-        Callbacks.topic_up();
-    });
-
-    return div;
-}
-
-function topic_down_button() {
-    const div = render_div_button("next topic");
-
-    div.addEventListener("click", () => {
-        Callbacks.topic_down();
-    });
-
-    return div;
-}
-
-function topic_clear_button() {
-    const div = render_div_button("clear topic");
-
-    div.addEventListener("click", () => {
-        Callbacks.clear_topic();
-    });
-
-    return div;
+    focus(): void {
+        this.button.focus();
+    }
 }
 
 export class ButtonPanel {
     div: HTMLElement;
-    first_button: HTMLElement;
+    next_channel: Button;
+    prev_channel: Button;
+    clear_channel: Button;
+    next_topic: Button;
+    prev_topic: Button;
+    clear_topic: Button;
 
     constructor(callbacks: CallbackType) {
-        Callbacks = callbacks;
-
         const div = document.createElement("div");
         div.style.display = "flex";
         div.style.paddingBottom = "4px";
 
-        div.append(stream_up_button());
-        div.append(stream_down_button());
-        div.append(stream_clear_button());
+        this.next_channel = new Button("next channel", () => {
+            callbacks.stream_down();
+        });
+        this.prev_channel = new Button("prev channel", () => {
+            callbacks.stream_up();
+        });
+        this.clear_channel = new Button("clear channel", () => {
+            callbacks.clear_stream();
+        });
 
-        div.append(topic_up_button());
-        div.append(topic_down_button());
-        div.append(topic_clear_button());
-
-        this.first_button = div.querySelectorAll("button")[1];
+        this.next_topic = new Button("next topic", () => {
+            callbacks.topic_down();
+        });
+        this.prev_topic = new Button("prev topic", () => {
+            callbacks.topic_up();
+        });
+        this.clear_topic = new Button("clear topic", () => {
+            callbacks.clear_topic();
+        });
         this.div = div;
+
+        this.populate();
     }
 
-    focus_first_button() {
-        console.log(this.first_button);
-        this.first_button.focus();
+    populate(): void {
+        const div = this.div;
+
+        div.innerHTML = "";
+
+        function show(button: Button) {
+            div.append(button.div);
+        }
+
+        show(this.next_channel);
+        show(this.prev_channel);
+        show(this.clear_channel);
+
+        show(this.next_topic);
+        show(this.prev_topic);
+        show(this.clear_topic);
+
+        this.next_channel.focus();
     }
 }

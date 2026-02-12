@@ -88,7 +88,7 @@ class SearchWidget {
     }
 
     start() {
-        this.button_panel.focus_first_button();
+        this.button_panel.populate();
     }
 
     build_main_section(): HTMLElement {
@@ -112,48 +112,60 @@ class SearchWidget {
         this.message_pane.populate(topic);
     }
 
+    populate_button_panel(): void {
+        this.populate_button_panel();
+    }
+
     set_stream_index(index: number): void {
         CurrentStreamList.select_index(index);
         this.populate_topic_pane();
         this.populate_message_pane();
+        this.populate_button_panel();
     }
 
     clear_stream(): void {
         CurrentStreamList.clear_selection();
         this.populate_topic_pane();
         this.populate_message_pane();
+        this.populate_button_panel();
     }
 
     stream_up(): void {
         CurrentStreamList.up();
         this.populate_topic_pane();
         this.populate_message_pane();
+        this.populate_button_panel();
     }
 
     stream_down(): void {
         CurrentStreamList.down();
         this.populate_topic_pane();
         this.populate_message_pane();
+        this.populate_button_panel();
     }
 
     set_topic_index(index: number): void {
         CurrentTopicList.select_index(index);
         this.populate_message_pane();
+        this.populate_button_panel();
     }
 
     clear_topic(): void {
         CurrentTopicList.clear_selection();
         this.populate_message_pane();
+        this.populate_button_panel();
     }
 
     topic_up(): void {
         CurrentTopicList.up();
         this.populate_message_pane();
+        this.populate_button_panel();
     }
 
     topic_down(): void {
         CurrentTopicList.down();
         this.populate_message_pane();
+        this.populate_button_panel();
     }
 }
 
