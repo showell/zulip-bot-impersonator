@@ -1071,16 +1071,10 @@ async function get_users(): Promise<void> {
     }
 }
 
-export async function run() {
-    document.title = config.nickname;
-
-    const ThePage = new Page();
-
-    await get_users();
-    Streams = await get_streams();
-
+async function get_raw_messages(): Promise<RawMessage[]> {
+    console.log("get_raw_messages");
     const rows = await zulip_client.get_messages(BATCH_SIZE);
-    const raw_messages = rows.map((row: any) => {
+    return rows.map((row: any) => {
         return {
             id: row.id,
             sender_id: row.sender_id,
@@ -1089,6 +1083,17 @@ export async function run() {
             content: row.content,
         };
     });
+}
+
+export async function run() {
+    document.title = config.nickname;
+
+    const ThePage = new Page();
+
+    await get_users();
+    Streams = await get_streams();
+
+    const raw_messages = await get_raw_messages();
 
     CurrentMessageStore = new MessageStore(raw_messages);
 
