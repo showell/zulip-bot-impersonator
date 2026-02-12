@@ -108,10 +108,15 @@ class StreamList {
         return thead;
     }
 
+    sort(stream_infos: StreamInfo[]) {
+        stream_infos.sort((s1, s2) => s2.num_messages - s1.num_messages);
+    }
+
     get_streams(): StreamInfo[] {
         const cursor = this.cursor;
 
         const stream_infos = model.get_streams();
+        this.sort(stream_infos);
 
         cursor.set_count(stream_infos.length);
 
