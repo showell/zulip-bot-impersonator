@@ -1,5 +1,6 @@
 import * as model from "./model";
 import { MessagePane } from "./message_pane";
+import { ButtonPanel } from "./nav_button_panel";
 import {
     render_list_heading,
     render_thead,
@@ -10,27 +11,6 @@ import {
 import { config } from "./secrets";
 import { CurrentStreamList, StreamPane } from "./stream_pane";
 import { CurrentTopicList, TopicPane } from "./topic_pane";
-
-function render_div_button(label: string): HTMLElement {
-    const div = document.createElement("div");
-    div.style.padding = "3px";
-
-    const button = document.createElement("button");
-    button.innerText = label;
-    button.style.color = "white";
-    button.style.backgroundColor = "#000080";
-
-    button.addEventListener("focus", () => {
-        button.style.backgroundColor = "green";
-    });
-
-    button.addEventListener("blur", () => {
-        button.style.backgroundColor = "#000080";
-    });
-
-    div.append(button);
-    return div;
-}
 
 /**************************************************
  * search widget
@@ -53,7 +33,27 @@ class SearchWidget {
 
         this.div = div;
 
-        this.button_panel = new ButtonPanel();
+        this.button_panel = new ButtonPanel({
+            clear_stream(): void {
+                self.clear_stream();
+            },
+            stream_up(): void {
+                self.stream_up();
+            },
+            stream_down(): void {
+                self.stream_down();
+            },
+            clear_topic(): void {
+                self.clear_topic();
+            },
+            topic_up(): void {
+                self.topic_up();
+            },
+            topic_down(): void {
+                self.topic_down();
+            },
+        });
+
         this.stream_pane = new StreamPane({
             clear_stream(): void {
                 self.clear_stream();
@@ -62,6 +62,7 @@ class SearchWidget {
                 self.set_stream_index(index);
             },
         });
+
         this.topic_pane = new TopicPane({
             clear_topic(): void {
                 self.clear_topic();
@@ -70,6 +71,7 @@ class SearchWidget {
                 self.set_topic_index(index);
             },
         });
+
         this.message_pane = new MessagePane();
     }
 
@@ -152,98 +154,6 @@ class SearchWidget {
     topic_down(): void {
         CurrentTopicList.down();
         this.populate_message_pane();
-    }
-}
-
-/**************************************************
- * buttons
- *
- **************************************************/
-
-function stream_up_button(): HTMLElement {
-    const div = render_div_button("prev channel");
-
-    div.addEventListener("click", () => {
-        CurrentSearchWidget.stream_up();
-    });
-
-    return div;
-}
-
-function stream_down_button(): HTMLElement {
-    const div = render_div_button("next channel");
-
-    div.addEventListener("click", () => {
-        CurrentSearchWidget.stream_down();
-    });
-
-    return div;
-}
-
-function stream_clear_button() {
-    const div = render_div_button("clear channel");
-
-    div.addEventListener("click", () => {
-        CurrentSearchWidget.clear_stream();
-    });
-
-    return div;
-}
-
-function topic_up_button(): HTMLElement {
-    const div = render_div_button("prev topic");
-
-    div.addEventListener("click", () => {
-        CurrentSearchWidget.topic_up();
-    });
-
-    return div;
-}
-
-function topic_down_button() {
-    const div = render_div_button("next topic");
-
-    div.addEventListener("click", () => {
-        CurrentSearchWidget.topic_down();
-    });
-
-    return div;
-}
-
-function topic_clear_button() {
-    const div = render_div_button("clear topic");
-
-    div.addEventListener("click", () => {
-        CurrentSearchWidget.clear_topic();
-    });
-
-    return div;
-}
-
-class ButtonPanel {
-    div: HTMLElement;
-    first_button: HTMLElement;
-
-    constructor() {
-        const div = document.createElement("div");
-        div.style.display = "flex";
-        div.style.paddingBottom = "4px";
-
-        div.append(stream_up_button());
-        div.append(stream_down_button());
-        div.append(stream_clear_button());
-
-        div.append(topic_up_button());
-        div.append(topic_down_button());
-        div.append(topic_clear_button());
-
-        this.first_button = div.querySelectorAll("button")[1];
-        this.div = div;
-    }
-
-    focus_first_button() {
-        console.log(this.first_button);
-        this.first_button.focus();
     }
 }
 
