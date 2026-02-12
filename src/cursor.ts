@@ -6,6 +6,10 @@ export class Cursor {
         this.count = 0;
     }
 
+    has_selection(): boolean {
+        return this.selected_index !== undefined;
+    }
+
     is_selecting(index: number): boolean {
         return this.selected_index === index;
     }

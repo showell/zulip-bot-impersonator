@@ -47,6 +47,14 @@ class Button {
         });
     }
 
+    show(): void {
+        this.div.style.visibility = "visible";
+    }
+
+    hide(): void {
+        this.div.style.visibility = "hidden";
+    }
+
     focus(): void {
         this.button.focus();
     }
@@ -85,28 +93,34 @@ export class ButtonPanel {
         this.clear_topic = new Button("clear topic", () => {
             callbacks.clear_topic();
         });
-        this.div = div;
 
-        this.populate();
+        div.append(this.next_channel.div);
+        div.append(this.prev_channel.div);
+        div.append(this.clear_channel.div);
+
+        div.append(this.next_topic.div);
+        div.append(this.prev_topic.div);
+        div.append(this.clear_topic.div);
+
+        this.div = div;
     }
 
-    populate(): void {
-        const div = this.div;
-
-        div.innerHTML = "";
-
-        function show(button: Button) {
-            div.append(button.div);
+    update(stream_selected: boolean): void {
+        console.log("stream_selected", stream_selected);
+        if (stream_selected) {
+            this.clear_channel.show();
+            this.next_topic.show();
+            this.prev_topic.show();
+            this.clear_topic.show();
+        } else {
+            this.clear_channel.hide();
+            this.next_topic.hide();
+            this.prev_topic.hide();
+            this.clear_topic.hide();
         }
+    }
 
-        show(this.next_channel);
-        show(this.prev_channel);
-        show(this.clear_channel);
-
-        show(this.next_topic);
-        show(this.prev_topic);
-        show(this.clear_topic);
-
+    start(): void {
         this.next_channel.focus();
     }
 }

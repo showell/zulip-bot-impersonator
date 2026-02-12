@@ -89,6 +89,10 @@ class StreamList {
         this.div = div;
     }
 
+    has_selection(): boolean {
+        return this.cursor.has_selection();
+    }
+
     get_stream_id(): number | undefined {
         const index = this.cursor.selected_index;
 
@@ -184,6 +188,10 @@ export class StreamPane {
 
         this.div = div;
         this.populate();
+    }
+
+    stream_selected(): boolean {
+        return CurrentStreamList.has_selection();
     }
 
     populate() {
