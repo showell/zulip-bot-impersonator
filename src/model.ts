@@ -109,26 +109,19 @@ class TopicTable {
         return new_topic;
     }
 
-    get_topics(stream_id: number, max_recent: number) {
+    get_topics(stream_id: number) {
         const all_topics = [...this.map.values()];
-        all_topics.sort((t1, t2) => t2.last_msg_id - t1.last_msg_id);
 
-        const stream_topics = all_topics.filter(
+        return all_topics.filter(
             (topic) => topic.stream_id === stream_id,
         );
-
-        const topics = stream_topics.slice(0, max_recent);
-
-        topics.sort((t1, t2) => t1.name.localeCompare(t2.name));
-        return topics;
     }
 }
 
 export function get_recent_topics(
     stream_id: number,
-    max_recent: number,
 ): Topic[] {
-    return CurrentTopicTable.get_topics(stream_id, max_recent);
+    return CurrentTopicTable.get_topics(stream_id);
 }
 
 export function messages_for_topic(topic: Topic): RawMessage[] {
@@ -148,7 +141,6 @@ async function get_streams(): Promise<Stream[]> {
         };
     });
 
-    console.log(streams);
     return streams;
 }
 

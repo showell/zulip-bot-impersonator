@@ -115,8 +115,9 @@ class TopicList {
         const stream_id = this.stream_id!;
         const cursor = this.cursor;
 
-        const max_recent = 5000;
-        const topics = model.get_recent_topics(stream_id, max_recent);
+        const topics = model.get_recent_topics(stream_id);
+
+        topics.sort((t1, t2) => t1.name.localeCompare(t2.name));
 
         cursor.set_count(topics.length);
 
