@@ -226,7 +226,6 @@ class StreamRowName {
     div: HTMLElement;
 
     constructor(stream: Stream, index: number, selected: boolean) {
-        const stream_id = stream.stream_id;
         const stream_name = stream.name;
 
         const div = render_stream_name(stream_name);
@@ -235,7 +234,7 @@ class StreamRowName {
             if (selected) {
                 CurrentSearchWidget.clear_stream();
             } else {
-                CurrentSearchWidget.set_stream_index({stream_id, index});
+                CurrentSearchWidget.set_stream_index(index);
             }
         });
 
@@ -276,12 +275,12 @@ class StreamList {
         this.div = div;
     }
 
-    get_current_stream(): Stream | undefined {
+    get_stream_id(): number | undefined {
         const index = this.cursor.selected_index;
 
         if (index === undefined) return undefined;
 
-        return this.streams[index];
+        return this.streams[index].stream_id;
     }
 
     make_thead(): HTMLElement {
@@ -547,12 +546,13 @@ class TopicPane {
 
         this.div = div;
 
-        const stream_id = undefined;
-        this.populate(stream_id);
+        this.populate();
     }
 
-    populate(stream_id: number | undefined): void {
+    populate(): void {
         const div = this.div;
+
+        const stream_id = CurrentStreamList.get_stream_id();
 
         if (stream_id === undefined) {
             div.innerHTML = "no stream set";
@@ -680,14 +680,15 @@ class MessagePane {
             return;
         }
 
+        const stream_id = CurrentStreamList.get_stream_id();
         const topic = CurrentTopicList.get_current_topic();
 
-        if (topic === undefined) {
+        if (stream_id === undefined || topic === undefined) {
             div.innerText = "(no topic selected)";
             return;
         }
 
-        const messages = CurrentMessageStore.message_for_topic_name(topic.name);
+        const messages = CurrentMessageStore.message_for_topic_name(stream_id, topic.name);
 
         div.innerHTML = "";
 
@@ -713,13 +714,10 @@ class SearchWidget {
     stream_pane: StreamPane;
     topic_pane: TopicPane;
     button_panel: ButtonPanel;
-    stream_id: number | undefined;
 
     constructor() {
         const div = document.createElement("div");
         this.div = div;
-
-        this.stream_id = undefined;
 
         this.button_panel = new ButtonPanel();
         this.stream_pane = new StreamPane();
@@ -754,19 +752,15 @@ class SearchWidget {
         return div;
     }
 
-    set_stream_index(info: {stream_id: number, index: number}): void {
-        const {stream_id, index} = info;
-
-        this.stream_id = stream_id;
+    set_stream_index(index: number): void {
         CurrentStreamList.select_index(index);
-        this.topic_pane.populate(stream_id);
+        this.topic_pane.populate();
         this.message_pane.populate();
     }
 
     clear_stream(): void {
         CurrentStreamList.clear_selection();
-        this.stream_id = undefined;
-        this.topic_pane.populate(undefined);
+        this.topic_pane.populate();
         this.message_pane.populate();
     }
 
@@ -891,9 +885,9 @@ class MessageStore {
         this.raw_messages = raw_messages;
     }
 
-    message_for_topic_name(topic_name: string) {
+    message_for_topic_name(stream_id: number, topic_name: string) {
         return this.raw_messages.filter((raw_message) => {
-            return raw_message.topic_name === topic_name;
+            return raw_message.stream_id === stream_id && raw_message.topic_name === topic_name;
         });
     }
 
