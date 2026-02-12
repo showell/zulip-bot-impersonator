@@ -1,4 +1,5 @@
 import * as zulip_client from "./zulip_client";
+import {config} from "./secrets";
 
 function render_div_button(label: string): HTMLElement {
     const div = document.createElement("div");
@@ -1071,6 +1072,8 @@ async function get_users(): Promise<void> {
 }
 
 export async function run() {
+    document.title = config.nickname;
+
     const ThePage = new Page();
 
     await get_users();
