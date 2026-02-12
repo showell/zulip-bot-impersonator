@@ -71,6 +71,25 @@ function render_tr(divs: HTMLElement[]): HTMLElement {
     return tr;
 }
 
+function render_stream_count(count: number): HTMLElement {
+    const div = document.createElement("div");
+    div.innerText = `${count}`;
+    div.style.textAlign = "right";
+
+    return div;
+}
+
+function render_stream_name(topic_name: string): HTMLElement {
+    const div = document.createElement("div");
+    div.innerText = topic_name;
+    div.style.maxWidth = "270px";
+    div.style.overflowWrap = "break-word";
+    div.style.color = "#000080";
+    div.style.cursor = "pointer";
+
+    return div;
+}
+
 function render_topic_count(count: number): HTMLElement {
     const div = document.createElement("div");
     div.innerText = `${count}`;
@@ -199,6 +218,175 @@ class Cursor {
 }
 
 /**************************************************
+ * stream pane
+ *
+**************************************************/
+
+class StreamRowName {
+    div: HTMLElement;
+
+    constructor(stream: Stream, index: number, selected: boolean) {
+        const stream_id = stream.stream_id;
+        const stream_name = stream.name;
+
+        const div = render_stream_name(stream_name);
+
+        div.addEventListener("click", () => {
+            if (selected) {
+                CurrentSearchWidget.clear_stream();
+            } else {
+                CurrentSearchWidget.set_stream_index({stream_id, index});
+            }
+        });
+
+        if (selected) {
+            div.style.backgroundColor = "cyan";
+        }
+
+        this.div = div;
+    }
+}
+
+class StreamRow {
+    tr: HTMLElement;
+
+    constructor(stream: Stream, index: number, selected: boolean) {
+        const stream_row_name = new StreamRowName(stream, index, selected);
+
+        this.tr = render_tr([
+            render_stream_count(CurrentMessageStore.num_messages_for_stream(stream.stream_id)),
+            stream_row_name.div,
+        ]);
+    }
+}
+
+let CurrentStreamList: StreamList;
+
+class StreamList {
+    div: HTMLElement;
+    streams: Stream[];
+    cursor: Cursor;
+
+    constructor() {
+        const div = render_big_list();
+
+        this.streams = [];
+        this.cursor = new Cursor();
+
+        this.div = div;
+    }
+
+    get_current_stream(): Stream | undefined {
+        const index = this.cursor.selected_index;
+
+        if (index === undefined) return undefined;
+
+        return this.streams[index];
+    }
+
+    make_thead(): HTMLElement {
+        const thead = render_thead([
+            render_th("Count"),
+            render_th("Channel"),
+        ]);
+
+        return thead;
+    }
+
+    get_streams(): Stream[] {
+        const cursor = this.cursor;
+
+        const streams = Streams;
+
+        cursor.set_count(streams.length);
+
+        this.streams = streams;
+
+        return streams;
+    }
+
+
+    make_tbody(): HTMLElement {
+        const cursor = this.cursor;
+        const streams = this.get_streams();
+
+        const tbody = document.createElement("tbody");
+
+        for (let i = 0; i < streams.length; ++i) {
+            const stream = streams[i];
+            const selected = cursor.is_selecting(i);
+            const stream_row = new StreamRow(stream, i, selected);
+            tbody.append(stream_row.tr);
+        }
+
+        return tbody;
+    }
+
+    make_table(): HTMLElement {
+        const thead = this.make_thead();
+        const tbody = this.make_tbody();
+
+        const table = document.createElement("table");
+        table.append(thead);
+        table.append(tbody);
+
+        return table;
+    }
+
+    populate() {
+        const div = this.div;
+
+        div.innerHTML = "";
+        div.append(this.make_table());
+    }
+
+    select_index(index: number) {
+        this.cursor.select_index(index);
+        this.populate();
+    }
+
+    clear_selection(): void {
+        this.cursor.clear();
+        this.populate();
+    }
+
+    down(): void {
+        this.cursor.down();
+        this.populate();
+    }
+
+    up(): void {
+        this.cursor.up();
+        this.populate();
+    }
+}
+
+class StreamPane {
+    div: HTMLElement;
+
+    constructor() {
+        const div = document.createElement("div");
+
+        div.style.marginRight = "45px";
+
+        CurrentStreamList = new StreamList();
+
+        this.div = div;
+        this.populate();
+    }
+
+    populate() {
+        const div = this.div;
+
+        CurrentStreamList.populate();
+
+        div.innerHTML = "";
+        div.append(render_stream_heading("Channels"));
+        div.append(CurrentStreamList.div);
+    }
+}
+
+/**************************************************
  * topic pane
  *
 **************************************************/
@@ -244,9 +432,12 @@ class TopicList {
     div: HTMLElement;
     topics: Topic[];
     cursor: Cursor;
+    stream_id: number;
 
-    constructor() {
+    constructor(stream_id: number) {
         const div = render_big_list();
+
+        this.stream_id = stream_id;
 
         this.topics = [];
         this.cursor = new Cursor();
@@ -272,10 +463,11 @@ class TopicList {
     }
 
     get_topics(): Topic[] {
+        const stream_id = this.stream_id!;
         const cursor = this.cursor;
 
         const max_recent = 5000;
-        const topics = CurrentTopicTable.get_topics(max_recent);
+        const topics = CurrentTopicTable.get_topics(stream_id, max_recent);
 
         cursor.set_count(topics.length);
 
@@ -315,6 +507,11 @@ class TopicList {
     populate() {
         const div = this.div;
 
+        if (this.stream_id === undefined) {
+            div.innerHTML = "no channel set";
+            return;
+        }
+
         div.innerHTML = "";
         div.append(this.make_table());
     }
@@ -348,19 +545,27 @@ class TopicPane {
 
         div.style.marginRight = "45px";
 
-        CurrentTopicList = new TopicList();
-
         this.div = div;
-        this.populate();
+
+        const stream_id = undefined;
+        this.populate(stream_id);
     }
 
-    populate() {
+    populate(stream_id: number | undefined): void {
         const div = this.div;
 
+        if (stream_id === undefined) {
+            div.innerHTML = "no stream set";
+            return;
+        }
+
+        CurrentTopicList = new TopicList(stream_id);
         CurrentTopicList.populate();
 
+        const stream_name = stream_name_for(stream_id);
+
         div.innerHTML = "";
-        div.append(render_stream_heading(favorite_stream_name));
+        div.append(render_stream_heading(stream_name));
         div.append(CurrentTopicList.div);
     }
 }
@@ -470,6 +675,11 @@ class MessagePane {
     populate(): void {
         const div = this.div;
 
+        if (CurrentTopicList === undefined) {
+            div.innerText = "(no topic selected)";
+            return;
+        }
+
         const topic = CurrentTopicList.get_current_topic();
 
         if (topic === undefined) {
@@ -500,14 +710,19 @@ let CurrentSearchWidget: SearchWidget;
 class SearchWidget {
     div: HTMLElement;
     message_pane: MessagePane;
+    stream_pane: StreamPane;
     topic_pane: TopicPane;
     button_panel: ButtonPanel;
+    stream_id: number | undefined;
 
     constructor() {
         const div = document.createElement("div");
         this.div = div;
 
+        this.stream_id = undefined;
+
         this.button_panel = new ButtonPanel();
+        this.stream_pane = new StreamPane();
         this.topic_pane = new TopicPane();
         this.message_pane = new MessagePane();
     }
@@ -532,10 +747,27 @@ class SearchWidget {
         const div = document.createElement("div");
         div.style.display = "flex";
 
+        div.append(this.stream_pane.div);
         div.append(this.topic_pane.div);
         div.append(this.message_pane.div);
 
         return div;
+    }
+
+    set_stream_index(info: {stream_id: number, index: number}): void {
+        const {stream_id, index} = info;
+
+        this.stream_id = stream_id;
+        CurrentStreamList.select_index(index);
+        this.topic_pane.populate(stream_id);
+        this.message_pane.populate();
+    }
+
+    clear_stream(): void {
+        CurrentStreamList.clear_selection();
+        this.stream_id = undefined;
+        this.topic_pane.populate(undefined);
+        this.message_pane.populate();
     }
 
     set_topic_index(index: number): void {
@@ -623,17 +855,17 @@ class ButtonPanel {
  *
 **************************************************/
 
-const BATCH_SIZE = 1000;
-const favorite_stream_name = "apoorva/showell projects";
+const BATCH_SIZE = 5000;
 
 type RawMessage = {
     id: number;
-    topic_name: string;
     sender_id: number;
+    stream_id: number;
+    topic_name: string;
     content: string;
 };
 
-type RawStream = {
+type Stream = {
     stream_id: number;
     name: string;
 };
@@ -647,7 +879,7 @@ type RawUser = {
 let UserMap = new Map<number, RawUser>();
 
 let RawMessages: RawMessage[];
-let RawStreams: RawStream[];
+let Streams: Stream[];
 
 let CurrentMessageStore: MessageStore;
 
@@ -664,14 +896,26 @@ class MessageStore {
             return raw_message.topic_name === topic_name;
         });
     }
+
+    messages_for_stream(stream_id: number): RawMessage[] {
+        return this.raw_messages.filter((raw_message) => {
+            return raw_message.stream_id === stream_id;
+        });
+    }
+
+    num_messages_for_stream(stream_id: number): number {
+        return this.messages_for_stream(stream_id).length;
+    }
 }
 
 class Topic {
+    stream_id: number;
     name: string;
     last_msg_id: number;
     msg_count: number
 
-    constructor(name: string) {
+    constructor(stream_id: number, name: string) {
+        this.stream_id = stream_id;
         this.name = name;
         this.msg_count = 0;
         this.last_msg_id = -1;
@@ -694,32 +938,36 @@ class TopicTable {
         this.map = new Map<string, Topic>();
 
         for (const message of CurrentMessageStore.raw_messages) {
+            const stream_id = message.stream_id;
             const topic_name = message.topic_name;
             const msg_id = message.id;
 
-            const topic = this.get_or_create(topic_name, msg_id);
+            const topic = this.get_or_create(stream_id, topic_name);
 
             topic.update_last_message(msg_id);
         }
     }
 
-    get_or_create(topic_name: string, msg_id: number): Topic {
+    get_or_create(stream_id: number, topic_name: string): Topic {
         const map = this.map;
-        const topic = map.get(topic_name);
+        const topic_key = `${stream_id},${topic_name}`;
+        const topic = map.get(topic_key);
 
         if (topic !== undefined) return topic;
 
-        const new_topic = new Topic(topic_name);
-        map.set(topic_name, new_topic);
+        const new_topic = new Topic(stream_id, topic_name);
+        map.set(topic_key, new_topic);
 
         return new_topic;
     }
 
-    get_topics(max_recent: number) {
+    get_topics(stream_id: number, max_recent: number) {
         const all_topics = [...this.map.values()];
         all_topics.sort((t1, t2) => t2.last_msg_id - t1.last_msg_id);
 
-        const topics = all_topics.slice(0, max_recent);
+        const stream_topics = all_topics.filter((topic) => topic.stream_id === stream_id);
+
+        const topics = stream_topics.slice(0, max_recent);
 
         topics.sort((t1, t2) => t1.name.localeCompare(t2.name));
         return topics;
@@ -746,10 +994,10 @@ class Page {
     }
 }
 
-export async function get_streams(): Promise<RawStream[]> {
+export async function get_streams(): Promise<Stream[]> {
     const subscriptions = await zulip_client.get_subscriptions();
 
-    const streams: RawStream[] = subscriptions.map((subscription: any) => {
+    const streams: Stream[] = subscriptions.map((subscription: any) => {
         return {
             stream_id: subscription.stream_id,
             name: subscription.name,
@@ -760,12 +1008,12 @@ export async function get_streams(): Promise<RawStream[]> {
     return streams;
 }
 
-function get_stream_id_for_favorite_stream(): number {
-    const stream = RawStreams.find((stream) => {
-        return stream.name === favorite_stream_name;
+function stream_name_for(stream_id: number): string {
+    const stream = Streams.find((stream) => {
+        return stream.stream_id === stream_id;
     });
 
-    return stream!.stream_id;
+    return stream!.name;
 }
 
 async function get_users(): Promise<void> {
@@ -786,16 +1034,15 @@ export async function run() {
     const ThePage = new Page();
 
     await get_users();
-    RawStreams = await get_streams();
+    Streams = await get_streams();
 
-    const stream_id = get_stream_id_for_favorite_stream();
-
-    const rows = await zulip_client.get_messages_for_stream_id(stream_id, BATCH_SIZE);
+    const rows = await zulip_client.get_messages(BATCH_SIZE);
     const raw_messages = rows.map((row: any) => {
         return {
             id: row.id,
-            topic_name: row.subject,
             sender_id: row.sender_id,
+            topic_name: row.subject,
+            stream_id: row.stream_id,
             content: row.content,
         };
     });
