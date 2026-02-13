@@ -1,4 +1,5 @@
-import { TopicPane } from "./topic_pane";
+import { MessagePane } from "./message_pane";
+import { CurrentTopicList, TopicPane } from "./topic_pane";
 
 type CallbackType = {
     clear_message_pane(): void;
@@ -10,25 +11,34 @@ export class ChannelView {
     div: HTMLElement;
     stream_id: number;
     topic_pane: TopicPane;
+    message_pane: MessagePane;
 
     constructor(stream_id: number, callbacks: CallbackType) {
-       this.stream_id = stream_id;
+        this.stream_id = stream_id;
 
-       this.topic_pane = new TopicPane({
+        this.topic_pane = new TopicPane({
            clear_message_pane(): void {
                callbacks.clear_message_pane();
            },
            set_topic_index(index: number): void {
                callbacks.set_topic_index(index);
-           },
-       });
+            },
+        });
 
-       const div = document.createElement("div");
-       div.style.display = "flex";
+        this.message_pane = new MessagePane();
 
-       div.append(this.topic_pane.div);
+        const div = document.createElement("div");
+        div.style.display = "flex";
 
-       this.div = div;
+        div.append(this.topic_pane.div);
+        div.append(this.message_pane.div);
+
+        this.div = div;
+    }
+
+    populate_message_pane(): void {
+        const topic = CurrentTopicList.get_current_topic();
+        this.message_pane.populate(topic);
     }
 
     topic_selected(): boolean {

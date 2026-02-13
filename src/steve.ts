@@ -1,5 +1,4 @@
 import * as model from "./model";
-import { MessagePane } from "./message_pane";
 import { ButtonPanel } from "./nav_button_panel";
 import {
     render_list_heading,
@@ -26,7 +25,6 @@ class SearchWidget {
     main_section: HTMLElement;
     stream_pane: StreamPane;
     channel_view?: ChannelView;
-    message_pane: MessagePane;
     channels_hidden: boolean;
 
     constructor() {
@@ -65,8 +63,6 @@ class SearchWidget {
                 self.set_stream_index(index);
             },
         });
-
-        this.message_pane = new MessagePane();
 
         this.main_section = this.build_main_section();
         this.show_only_channels();
@@ -150,14 +146,12 @@ class SearchWidget {
         div.innerHTML = "";
 
         div.append(this.channel_view!.div);
-        div.append(this.message_pane.div);
 
         this.channels_hidden = true;
     }
 
     populate_message_pane(): void {
-        const topic = CurrentTopicList.get_current_topic();
-        this.message_pane.populate(topic);
+        this.channel_view!.populate_message_pane();
     }
 
     update_button_panel(): void {
