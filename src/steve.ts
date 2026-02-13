@@ -26,6 +26,7 @@ class SearchWidget {
     stream_pane: StreamPane;
     topic_pane: TopicPane;
     message_pane: MessagePane;
+    channels_hidden: boolean;
 
     constructor() {
         const self = this;
@@ -76,7 +77,9 @@ class SearchWidget {
         this.message_pane = new MessagePane();
 
         this.main_section = this.build_main_section();
-        this.show_channels();
+        this.show_only_channels();
+
+        this.channels_hidden = false;
     }
 
     populate(): void {
@@ -115,6 +118,8 @@ class SearchWidget {
         div.innerHTML = "";
 
         div.append(this.stream_pane.div);
+
+        this.channels_hidden = false;
     }
 
     show_channels(): void {
@@ -124,6 +129,8 @@ class SearchWidget {
 
         div.append(this.stream_pane.div);
         div.append(this.topic_pane.div);
+
+        this.channels_hidden = false;
     }
 
     hide_channels(): void {
@@ -133,6 +140,8 @@ class SearchWidget {
 
         div.append(this.topic_pane.div);
         div.append(this.message_pane.div);
+
+        this.channels_hidden = true;
     }
 
     populate_topic_pane(): void {
@@ -146,7 +155,11 @@ class SearchWidget {
     }
 
     update_button_panel(): void {
-        this.button_panel.update(this.stream_selected(), this.topic_selected());
+        this.button_panel.update({
+            stream_selected: this.stream_selected(),
+            topic_selected: this.topic_selected(),
+            channels_hidden: this.channels_hidden,
+        });
     }
 
     set_stream_index(index: number): void {
@@ -181,8 +194,8 @@ class SearchWidget {
     set_topic_index(index: number): void {
         CurrentTopicList.select_index(index);
         this.populate_message_pane();
-        this.update_button_panel();
         this.hide_channels();
+        this.update_button_panel();
         this.button_panel.focus_next_topic_button();
     }
 
@@ -199,16 +212,17 @@ class SearchWidget {
         }
         CurrentStreamList.surf();
         this.stream_pane.populate();
-        this.update_button_panel();
+        this.populate_topic_pane();
         this.show_channels();
+        this.update_button_panel();
         this.button_panel.focus_next_channel_button();
     }
 
     surf_topics(): void {
         CurrentTopicList.surf();
         this.populate_message_pane();
-        this.update_button_panel();
         this.hide_channels();
+        this.update_button_panel();
         this.button_panel.focus_next_topic_button();
     }
 
@@ -232,7 +246,8 @@ class Page {
 
     constructor() {
         const div = document.createElement("div");
-        div.innerText = "Welcome to Zulip! loading users and recent messages...";
+        div.innerText =
+            "Welcome to Zulip! loading users and recent messages...";
         div.style.marginLeft = "15px";
         document.body.append(div);
 

@@ -121,7 +121,9 @@ class StreamList {
 
         cursor.set_count(stream_infos.length);
 
-        this.stream_ids = stream_infos.map((stream_info) => stream_info.stream.stream_id);
+        this.stream_ids = stream_infos.map(
+            (stream_info) => stream_info.stream.stream_id,
+        );
 
         return stream_infos;
     }

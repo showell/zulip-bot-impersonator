@@ -13,7 +13,7 @@ export type RawMessage = {
 export type StreamInfo = {
     num_messages: number;
     stream: Stream;
-}
+};
 
 export type Stream = {
     stream_id: number;
@@ -126,15 +126,11 @@ class TopicTable {
     get_topics(stream_id: number) {
         const all_topics = [...this.map.values()];
 
-        return all_topics.filter(
-            (topic) => topic.stream_id === stream_id,
-        );
+        return all_topics.filter((topic) => topic.stream_id === stream_id);
     }
 }
 
-export function get_recent_topics(
-    stream_id: number,
-): Topic[] {
+export function get_recent_topics(stream_id: number): Topic[] {
     return CurrentTopicTable.get_topics(stream_id);
 }
 
