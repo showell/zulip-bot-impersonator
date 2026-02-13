@@ -1,4 +1,5 @@
 import * as model from "./model";
+import { ComposeBox } from "./compose";
 import { MessagePane } from "./message_pane";
 import { ButtonPanel } from "./nav_button_panel";
 import {
@@ -262,6 +263,8 @@ class Page {
 
 export async function run() {
     document.title = config.nickname;
+
+    new ComposeBox();
 
     // do before fetching to get "spinner"
     const ThePage = new Page();
