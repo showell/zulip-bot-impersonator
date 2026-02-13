@@ -86,6 +86,7 @@ class StreamList {
 
         this.stream_ids = [];
         this.cursor = new Cursor();
+        this.get_streams();
 
         this.div = div;
     }
@@ -166,6 +167,11 @@ class StreamList {
 
     clear_selection(): void {
         this.cursor.clear();
+        this.populate();
+    }
+
+    surf(): void {
+        this.cursor.first();
         this.populate();
     }
 

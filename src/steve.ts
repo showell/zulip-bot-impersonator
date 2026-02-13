@@ -65,8 +65,8 @@ class SearchWidget {
         });
 
         this.topic_pane = new TopicPane({
-            surf_channels(): void {
-                self.surf_channels();
+            clear_message_pane(): void {
+                self.clear_message_pane();
             },
             set_topic_index(index: number): void {
                 self.set_topic_index(index);
@@ -186,8 +186,19 @@ class SearchWidget {
         this.button_panel.focus_next_topic_button();
     }
 
-    surf_channels(): void {
+    clear_message_pane(): void {
         CurrentTopicList.clear_selection();
+        this.populate_message_pane();
+        this.update_button_panel();
+        this.button_panel.focus_surf_topics_button();
+    }
+
+    surf_channels(): void {
+        if (CurrentTopicList) {
+            CurrentTopicList.clear_selection();
+        }
+        CurrentStreamList.surf();
+        this.stream_pane.populate();
         this.update_button_panel();
         this.show_channels();
         this.button_panel.focus_next_channel_button();

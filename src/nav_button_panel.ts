@@ -126,10 +126,11 @@ export class ButtonPanel {
             }
         }
 
-        show_if(this.next_channel, !topic_selected);
+        show_if(this.surf_channels, true);
+
+        show_if(this.next_channel, !topic_selected && stream_selected);
         show_if(this.prev_channel, !topic_selected && stream_selected);
 
-        show_if(this.surf_channels, topic_selected);
 
         show_if(this.surf_topics, stream_selected && !topic_selected);
 
@@ -150,6 +151,6 @@ export class ButtonPanel {
     }
 
     start(): void {
-        this.next_channel.focus();
+        this.surf_channels.focus();
     }
 }
