@@ -10,7 +10,8 @@ import {
 } from "./render";
 import { config } from "./secrets";
 import { CurrentStreamList, StreamPane } from "./stream_pane";
-import { CurrentTopicList, TopicPane } from "./topic_pane";
+import { CurrentTopicList } from "./topic_pane";
+import { ChannelView } from "./channel_view";
 
 /**************************************************
  * search widget
@@ -24,7 +25,7 @@ class SearchWidget {
     button_panel: ButtonPanel;
     main_section: HTMLElement;
     stream_pane: StreamPane;
-    topic_pane: TopicPane;
+    channel_view: ChannelView;
     message_pane: MessagePane;
     channels_hidden: boolean;
 
@@ -65,7 +66,7 @@ class SearchWidget {
             },
         });
 
-        this.topic_pane = new TopicPane({
+        this.channel_view = new ChannelView({
             clear_message_pane(): void {
                 self.clear_message_pane();
             },
@@ -99,7 +100,7 @@ class SearchWidget {
     }
 
     topic_selected(): boolean {
-        return this.topic_pane.topic_selected();
+        return this.channel_view.topic_selected();
     }
 
     stream_selected(): boolean {
@@ -128,7 +129,7 @@ class SearchWidget {
         div.innerHTML = "";
 
         div.append(this.stream_pane.div);
-        div.append(this.topic_pane.div);
+        div.append(this.channel_view.div);
 
         this.channels_hidden = false;
     }
@@ -138,15 +139,15 @@ class SearchWidget {
 
         div.innerHTML = "";
 
-        div.append(this.topic_pane.div);
+        div.append(this.channel_view.div);
         div.append(this.message_pane.div);
 
         this.channels_hidden = true;
     }
 
-    populate_topic_pane(): void {
+    populate_channel_view(): void {
         const stream_id = CurrentStreamList.get_stream_id();
-        this.topic_pane.populate(stream_id);
+        this.channel_view.populate(stream_id);
     }
 
     populate_message_pane(): void {
@@ -164,7 +165,7 @@ class SearchWidget {
 
     set_stream_index(index: number): void {
         CurrentStreamList.select_index(index);
-        this.populate_topic_pane();
+        this.populate_channel_view();
         this.update_button_panel();
         this.show_channels();
         this.button_panel.focus_surf_topics_button();
@@ -179,14 +180,14 @@ class SearchWidget {
 
     stream_up(): void {
         CurrentStreamList.up();
-        this.populate_topic_pane();
+        this.populate_channel_view();
         this.populate_message_pane();
         this.update_button_panel();
     }
 
     stream_down(): void {
         CurrentStreamList.down();
-        this.populate_topic_pane();
+        this.populate_channel_view();
         this.populate_message_pane();
         this.update_button_panel();
     }
@@ -212,7 +213,7 @@ class SearchWidget {
         }
         CurrentStreamList.surf();
         this.stream_pane.populate();
-        this.populate_topic_pane();
+        this.populate_channel_view();
         this.show_channels();
         this.update_button_panel();
         this.button_panel.focus_next_channel_button();
