@@ -53,7 +53,6 @@ function process_events(events: any, callback: () => void) {
             event_radio_widget.add_event(event);
             const message = event.message;
             if (message.type === "stream") {
-                Popup.finish();
                 const sender_name = message.sender_full_name;
                 const content = message.content;
                 const topic = message.subject;
@@ -62,14 +61,8 @@ function process_events(events: any, callback: () => void) {
                 const sender_id = message.sender_id;
                 const id = message.id;
 
-                Popup.show({
-                    content:
-                        `#${stream}>${topic}\n${sender_name} said:\n\n` +
-                        content,
-                    confirm_button_text: "Got it",
-                    type: "info",
-                    callback, // for now we just refresh
-                });
+                console.log(`New message from ${sender_name} to ${stream} > ${topic}`);
+                console.log("content", content);
                 add_messages_to_cache({
                     content,
                     topic_name: topic!,
@@ -77,6 +70,7 @@ function process_events(events: any, callback: () => void) {
                     sender_id: sender_id!,
                     id: id!,
                 });
+                callback();
             }
         }
     }
