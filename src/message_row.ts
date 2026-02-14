@@ -4,10 +4,11 @@ import * as model from "./model";
 
 function render_sender_name(sender_name: string): HTMLElement {
     const div = document.createElement("div");
-    div.innerText = sender_name + " said:";
+    div.innerText = sender_name;
     div.style.fontWeight = "bold";
-    div.style.fontSize = "15px";
-    div.style.color = "#000080";
+    div.style.fontSize = "16px";
+    div.style.color = "rgb(51, 51, 51)";
+    div.style.lineHeight = "35px";
     div.style.marginTop = "2px";
     return div;
 }
