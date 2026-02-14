@@ -11,12 +11,25 @@ type SendInfo = {
 function render_textarea(): HTMLTextAreaElement {
     const elem = document.createElement("textarea");
     elem.placeholder = "Enter some text to send.";
-    elem.style.width = "450px";
-    elem.style.height = "300px";
-    elem.style.resize = "none";
-    elem.style.zIndex = "100";
+    elem.style.width = "350px";
+    elem.style.height = "250px";
 
     return elem;
+}
+
+function labeled_input(name: string, input: HTMLInputElement) {
+    const label = document.createElement("label");
+
+    const name_div = document.createElement("div");
+    name_div.innerText = name;
+    name_div.style.marginRight = "7px";
+    name_div.style.marginBottom = "14px";
+    name_div.style.display = "inline-block";
+
+    label.append(name_div);
+    label.append(input);
+
+    return label;
 }
 
 class TopicInput {
@@ -27,7 +40,9 @@ class TopicInput {
         const div = document.createElement("div");
 
         const topic_input = this.make_topic_input(topic_name);
-        div.append(topic_input);
+        const label = labeled_input("Topic:", topic_input);
+
+        div.append(label);
 
         this.topic_input = topic_input;
         this.div = div;
@@ -37,8 +52,9 @@ class TopicInput {
         const input = document.createElement("input");
 
         input.type = "text";
+        input.placeholder = "topic";
         input.value = topic_name;
-        input.style.width = "100px";
+        input.style.width = "300px";
 
         return input;
     }
