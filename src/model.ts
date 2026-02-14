@@ -33,7 +33,7 @@ export let Streams: Stream[];
 
 let CurrentMessageStore: MessageStore;
 
-export class MessageStore {
+class MessageStore {
     raw_messages: RawMessage[];
 
     constructor(raw_messages: RawMessage[]) {
