@@ -1,4 +1,5 @@
 import { ComposeBox } from "./compose";
+import { Topic } from "./model";
 
 function render_heading(): HTMLElement {
     const div = document.createElement("div");

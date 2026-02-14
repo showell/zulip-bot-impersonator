@@ -68,8 +68,8 @@ class SearchWidget {
 
         const stream_id = CurrentStreamList.get_stream_id();
         this.channel_view = new ChannelView(stream_id!, {
-            clear_message_pane(): void {
-                self.clear_message_pane();
+            clear_message_view(): void {
+                self.clear_message_view();
             },
             set_topic_index(index: number): void {
                 self.set_topic_index(index);
@@ -179,8 +179,8 @@ class SearchWidget {
         this.update_button_panel();
     }
 
-    clear_message_pane(): void {
-        this.channel_view!.clear_message_pane();
+    clear_message_view(): void {
+        this.channel_view!.clear_message_view();
         this.update_button_panel();
         this.button_panel.focus_surf_topics_button();
     }

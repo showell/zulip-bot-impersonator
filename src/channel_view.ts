@@ -1,8 +1,8 @@
-import { MessagePane } from "./message_pane";
+import { MessageView } from "./message_view";
 import { CurrentTopicList, TopicPane } from "./topic_pane";
 
 type CallbackType = {
-    clear_message_pane(): void;
+    clear_message_view(): void;
     set_topic_index(index: number): void;
 };
 
@@ -15,8 +15,8 @@ export class ChannelView {
         this.stream_id = stream_id;
 
         this.topic_pane = new TopicPane({
-            clear_message_pane(): void {
-                callbacks.clear_message_pane();
+            clear_message_view(): void {
+                callbacks.clear_message_view();
             },
             set_topic_index(index: number): void {
                 callbacks.set_topic_index(index);
@@ -36,18 +36,18 @@ export class ChannelView {
         return this.topic_pane.topic_selected();
     }
 
-    open_message_pane(): void {
+    open_message_view(): void {
         const div = this.div;
 
         const topic = CurrentTopicList.get_current_topic();
-        const message_pane = new MessagePane(topic!);
+        const message_view = new MessageView(topic!);
 
         div.innerHTML = "";
         div.append(this.topic_pane.div);
-        div.append(message_pane.div);
+        div.append(message_view.div);
     }
 
-    clear_message_pane(): void {
+    clear_message_view(): void {
         const div = this.div;
         CurrentTopicList.clear_selection();
 
@@ -59,21 +59,21 @@ export class ChannelView {
 
     set_topic_index(index: number): void {
         CurrentTopicList.select_index(index);
-        this.open_message_pane();
+        this.open_message_view();
     }
 
     surf_topics(): void {
         CurrentTopicList.surf();
-        this.open_message_pane();
+        this.open_message_view();
     }
 
     topic_up(): void {
         CurrentTopicList.up();
-        this.open_message_pane();
+        this.open_message_view();
     }
 
     topic_down(): void {
         CurrentTopicList.down();
-        this.open_message_pane();
+        this.open_message_view();
     }
 }

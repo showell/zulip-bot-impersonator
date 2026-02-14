@@ -13,7 +13,7 @@ import {
 let Callbacks: CallbackType;
 
 type CallbackType = {
-    clear_message_pane(): void;
+    clear_message_view(): void;
     set_topic_index(index: number): void;
 };
 
@@ -44,7 +44,7 @@ class TopicRowName {
 
         div.addEventListener("click", () => {
             if (selected) {
-                Callbacks.clear_message_pane();
+                Callbacks.clear_message_view();
             } else {
                 Callbacks.set_topic_index(index);
             }
