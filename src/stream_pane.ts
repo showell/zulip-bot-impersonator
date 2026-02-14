@@ -11,8 +11,6 @@ import {
     render_pane,
 } from "./render";
 
-let Callbacks: CallbackType;
-
 type CallbackType = {
     clear_stream(): void;
     set_stream_index(index: number): void;
