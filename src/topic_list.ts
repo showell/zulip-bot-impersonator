@@ -102,6 +102,18 @@ export class TopicList {
         return this.topics[index];
     }
 
+    refresh(): void {
+        const topics = this.topics;
+        const topic = this.get_current_topic();
+
+        console.log("topic", topics, this.cursor.selected_index);
+        if (topic) {
+            const new_index = topics.find((other) => topic.is_same(other));
+            console.log("new index", new_index);
+        }
+        this.populate();
+    }
+
     make_thead(): HTMLElement {
         const thead = render_thead([
             render_th("Count"),
@@ -156,11 +168,6 @@ export class TopicList {
 
     populate() {
         const div = this.div;
-
-        if (this.stream_id === undefined) {
-            div.innerHTML = "(no channel set)";
-            return;
-        }
 
         div.innerHTML = "";
         div.append(this.make_table());

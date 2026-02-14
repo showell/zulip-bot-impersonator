@@ -87,6 +87,10 @@ export class Topic {
         this.last_msg_id = -1;
     }
 
+    is_same(other: Topic) {
+        return (this.stream_id === other.stream_id) && (this.name === other.name);
+    }
+
     update_last_message(msg_id: number): void {
         if (msg_id > this.last_msg_id) {
             this.last_msg_id = msg_id;
@@ -146,7 +150,8 @@ export function messages_for_topic(topic: Topic): RawMessage[] {
 }
 
 export function add_messages_to_cache(message: RawMessage) {
-  CurrentMessageStore.add_messages([message])
+    CurrentMessageStore.add_messages([message]);
+    CurrentTopicTable = new TopicTable();
 }
 
 async function fetch_streams(): Promise<Stream[]> {

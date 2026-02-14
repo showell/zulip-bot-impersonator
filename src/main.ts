@@ -66,4 +66,3 @@ gui();
 */
 
 steve.run();
-zulip_client.register_queue();

@@ -53,6 +53,11 @@ export class ChannelView {
         return this.topic_pane.get_topic_list();
     }
 
+    refresh(): void {
+        const topic_list = this.get_topic_list()!;
+        topic_list.refresh();
+    }
+
     clear_message_view(): void {
         const div = this.div;
         const topic_list = this.get_topic_list()!;

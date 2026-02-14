@@ -1,6 +1,7 @@
 import type { TopicList } from "./topic_list";
 
 import * as model from "./model";
+import * as zulip_client from "./zulip_client";
 import { ButtonPanel } from "./nav_button_panel";
 import { config } from "./secrets";
 import { StreamList, StreamPane } from "./stream_pane";
@@ -62,6 +63,13 @@ class SearchWidget {
         this.show_only_channels();
 
         this.channels_hidden = false;
+    }
+
+    refresh(): void {
+        console.log("refreshing in SearchWidget");
+        if (this.channel_view) {
+            this.channel_view.refresh();
+        }
     }
 
     make_channel_view() {
@@ -264,15 +272,30 @@ export async function run() {
 
     document.body.style.backgroundColor = "rgb(246, 246, 255)";
 
+
     // do before fetching to get "spinner"
     const page = new Page();
+
+    let ready = false;
+
+    // we wait for register to finish, but then polling goes
+    // on "forever" asynchronously
+    await zulip_client.register_queue(() => {
+        if (ready) {
+            search_widget.refresh();
+        } else {
+            console.log("we were told to refresh before finishing fetch");
+        }
+    });
 
     await model.fetch_model_data();
 
     const search_widget = new SearchWidget();
     search_widget.populate();
-
     page.populate(search_widget.div);
     search_widget.start();
-    page.div.append(event_radio_widget.div)
+
+    ready = true;
+
+    page.div.append(event_radio_widget.div);
 }

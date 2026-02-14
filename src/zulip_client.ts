@@ -12,7 +12,7 @@ function get_headers() {
 let queue_id: string | undefined;
 let last_event_id: string | undefined;
 
-export async function register_queue() {
+export async function register_queue(callback: () => void) {
     const url = realm_data.url;
     const response = await fetch(url.href + "/api/v1/register", {
         method: "POST",
@@ -21,10 +21,10 @@ export async function register_queue() {
     const data = await response.json();
     queue_id = data.queue_id;
     last_event_id = data.last_event_id;
-    start_polling();
+    start_polling(callback);
 }
 
-async function start_polling() {
+async function start_polling(callback: () => void) {
     if (queue_id === undefined || last_event_id === undefined) {
         return;
     }
@@ -43,12 +43,12 @@ async function start_polling() {
         }
         if (data.events?.length) {
             last_event_id = data.events[data.events.length - 1].id;
-            process_events(data.events);
+            process_events(data.events, callback);
         }
     }
 }
 
-function process_events(events: any) {
+function process_events(events: any, callback: () => void) {
     for (const event of events) {
         if (event.type === "message") {
           event_radio_widget.add_event(event);
@@ -63,7 +63,14 @@ function process_events(events: any) {
                 const sender_id = message.sender_id;
                 const id = message.id;
 
-                Popup.show({ content:`#${stream}>${topic}\n${sender_name} said:\n\n` + content, confirm_button_text: "Got it", type: "info", callback: () => { } })
+                Popup.show({
+                    content:
+                        `#${stream}>${topic}\n${sender_name} said:\n\n` +
+                        content,
+                    confirm_button_text: "Got it",
+                    type: "info",
+                    callback, // for now we just refresh
+                });
                 add_messages_to_cache({
                   content,topic_name:topic!, stream_id:stream_id!, sender_id:sender_id!, id:id!
                 })
