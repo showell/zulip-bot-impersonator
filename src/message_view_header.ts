@@ -1,6 +1,6 @@
 function render_topic_heading_count(count: number): HTMLElement {
     const div = document.createElement("div");
-    div.innerText = `(${count})`;
+    div.innerText = `(${count} messages)`;
     div.style.padding = "3px";
     div.style.marginLeft = "3px";
 
