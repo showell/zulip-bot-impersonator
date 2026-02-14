@@ -105,13 +105,16 @@ export class TopicList {
     refresh(): void {
         const topics = this.topics;
         const topic = this.get_current_topic();
+        const cursor = this.cursor;
 
-        console.log("topic", topics, this.cursor.selected_index);
+        const new_topics = this.get_topics();
+
         if (topic) {
-            const new_index = topics.find((other) => topic.is_same(other));
-            console.log("new index", new_index);
+            const new_index = new_topics.findIndex((other) => topic.is_same(other));
+            cursor.select_index(new_index);
         }
-        this.populate();
+
+        this.populate_from_topics(new_topics);
     }
 
     make_thead(): HTMLElement {
@@ -138,10 +141,9 @@ export class TopicList {
         return topics;
     }
 
-    make_tbody(): HTMLElement {
+    make_tbody(topics: Topic[]): HTMLElement {
         const callbacks = this.callbacks;
         const cursor = this.cursor;
-        const topics = this.get_topics();
 
         const tbody = document.createElement("tbody");
 
@@ -155,9 +157,9 @@ export class TopicList {
         return tbody;
     }
 
-    make_table(): HTMLElement {
+    make_table(topics: Topic[]): HTMLElement {
         const thead = this.make_thead();
-        const tbody = this.make_tbody();
+        const tbody = this.make_tbody(topics);
 
         const table = document.createElement("table");
         table.append(thead);
@@ -166,11 +168,18 @@ export class TopicList {
         return table;
     }
 
-    populate() {
+    populate_from_topics(topics: Topic[]) {
         const div = this.div;
 
         div.innerHTML = "";
-        div.append(this.make_table());
+        div.append(this.make_table(topics));
+    }
+
+    populate() {
+        const div = this.div;
+
+        const topics = this.get_topics();
+        this.populate_from_topics(topics);
     }
 
     select_index(index: number) {
