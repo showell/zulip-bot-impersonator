@@ -260,13 +260,13 @@ export async function run() {
     document.body.style.backgroundColor = "rgb(246, 246, 255)";
 
     // do before fetching to get "spinner"
-    const ThePage = new Page();
+    const page = new Page();
 
     await model.fetch_model_data();
 
-    CurrentSearchWidget = new SearchWidget();
-    CurrentSearchWidget.populate();
+    const search_widget = new SearchWidget();
+    search_widget.populate();
 
-    ThePage.populate(CurrentSearchWidget.div);
-    CurrentSearchWidget.start();
+    page.populate(search_widget.div);
+    search_widget.start();
 }
