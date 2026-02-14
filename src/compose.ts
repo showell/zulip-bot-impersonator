@@ -65,6 +65,11 @@ class TextArea {
     contents(): string {
         return this.elem.value;
     }
+
+    clear(): void {
+        this.elem.value = "";
+    }
+
 }
 
 async function send_message(info: SendInfo): Promise<void> {
@@ -130,7 +135,10 @@ export class ComposeBox {
         div.style.justifyContent = "end";
 
         const send_button = new Button("Send", () => {
-            self.send();
+            // TODO: save draft
+            const content = self.get_content_to_send();
+            this.textarea.clear();
+            self.send(content);
         });
 
         div.append(send_button.div);
@@ -138,13 +146,13 @@ export class ComposeBox {
         return div;
     }
 
-    send() {
+    get_content_to_send(): string {
+        return this.textarea.contents() + "\n\n*from steve client*";
+    }
+
+    send(content: string): void {
         const stream_id = this.topic.stream_id;
         const topic_name = this.topic_input.topic_name();
-
-        console.log("send", stream_id, topic_name);
-
-        const content = this.textarea.contents() + "\n\n*from steve client*";
 
         send_message({ stream_id, topic_name, content });
     }
