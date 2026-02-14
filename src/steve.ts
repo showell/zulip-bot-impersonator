@@ -1,8 +1,9 @@
+import type { TopicList } from "./topic_list";
+
 import * as model from "./model";
 import { ButtonPanel } from "./nav_button_panel";
 import { config } from "./secrets";
 import { CurrentStreamList, StreamPane } from "./stream_pane";
-import { CurrentTopicList } from "./topic_pane";
 import { ChannelView } from "./channel_view";
 
 /**************************************************
@@ -91,6 +92,13 @@ class SearchWidget {
     start() {
         this.update_button_panel();
         this.button_panel.start();
+    }
+
+    get_topic_list(): TopicList | undefined {
+        if (this.channel_view === undefined) {
+            return undefined;
+        }
+        return this.channel_view.get_topic_list();
     }
 
     topic_selected(): boolean {
@@ -186,8 +194,10 @@ class SearchWidget {
     }
 
     surf_channels(): void {
-        if (CurrentTopicList) {
-            CurrentTopicList.clear_selection();
+        const topic_list = this.get_topic_list();
+
+        if (topic_list) {
+            topic_list.clear_selection();
         }
         CurrentStreamList.surf();
         this.stream_pane.populate();

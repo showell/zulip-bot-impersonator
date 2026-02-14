@@ -1,5 +1,6 @@
 import { MessageView } from "./message_view";
-import { CurrentTopicList, TopicPane } from "./topic_pane";
+import { TopicList } from "./topic_list";
+import { TopicPane } from "./topic_pane";
 
 type CallbackType = {
     clear_message_view(): void;
@@ -38,8 +39,9 @@ export class ChannelView {
 
     open_message_view(): void {
         const div = this.div;
+        const topic_list = this.get_topic_list()!;
 
-        const topic = CurrentTopicList.get_current_topic();
+        const topic = topic_list.get_current_topic();
         const message_view = new MessageView(topic!);
 
         div.innerHTML = "";
@@ -47,33 +49,47 @@ export class ChannelView {
         div.append(message_view.div);
     }
 
+    get_topic_list(): TopicList | undefined {
+        return this.topic_pane.get_topic_list();
+    }
+
     clear_message_view(): void {
         const div = this.div;
-        CurrentTopicList.clear_selection();
+        const topic_list = this.get_topic_list()!;
 
-        const topic = CurrentTopicList.get_current_topic();
+        topic_list.clear_selection();
+
+        const topic = topic_list.get_current_topic();
 
         div.innerHTML = "";
         div.append(this.topic_pane.div);
     }
 
     set_topic_index(index: number): void {
-        CurrentTopicList.select_index(index);
+        const topic_list = this.get_topic_list()!;
+
+        topic_list.select_index(index);
         this.open_message_view();
     }
 
     surf_topics(): void {
-        CurrentTopicList.surf();
+        const topic_list = this.get_topic_list()!;
+
+        topic_list.surf();
         this.open_message_view();
     }
 
     topic_up(): void {
-        CurrentTopicList.up();
+        const topic_list = this.get_topic_list()!;
+
+        topic_list.up();
         this.open_message_view();
     }
 
     topic_down(): void {
-        CurrentTopicList.down();
+        const topic_list = this.get_topic_list()!;
+
+        topic_list.down();
         this.open_message_view();
     }
 }
