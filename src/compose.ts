@@ -69,7 +69,6 @@ class TextArea {
     clear(): void {
         this.elem.value = "";
     }
-
 }
 
 async function send_message(info: SendInfo): Promise<void> {
@@ -129,7 +128,7 @@ export class ComposeBox {
 
     button_row(): HTMLElement {
         const self = this;
-        const div = document.createElement("div")
+        const div = document.createElement("div");
 
         div.style.display = "flex";
         div.style.justifyContent = "end";

@@ -28,7 +28,7 @@ function render_avatar(avatar_url: string): HTMLElement {
     return div;
 }
 
-function preprocess_anchor_element(ele:HTMLAnchorElement){
+function preprocess_anchor_element(ele: HTMLAnchorElement) {
     const url = new URL(ele.getAttribute("href")!, window.location.href);
     if (
         url.hash === "" ||
@@ -42,7 +42,9 @@ function preprocess_anchor_element(ele:HTMLAnchorElement){
 function preprocess_message_content(html_content: string): DocumentFragment {
     const template = document.createElement("template");
     template.innerHTML = html_content;
-    template.content.querySelectorAll("a").forEach((ele) => preprocess_anchor_element(ele));
+    template.content
+        .querySelectorAll("a")
+        .forEach((ele) => preprocess_anchor_element(ele));
     return template.content;
 }
 
@@ -84,7 +86,7 @@ export class MessageRow {
         div.style.borderBottom = "1px dotted #000080";
         div.style.maxWidth = "500px";
         div.style.fontSize = "16px";
-        div.style.fontFamily = `"Source Sans 3 VF", sans-serif`
+        div.style.fontFamily = `"Source Sans 3 VF", sans-serif`;
         div.style.color = "rgb(38, 38, 38)";
         div.style.lineHeight = "22.4px";
 

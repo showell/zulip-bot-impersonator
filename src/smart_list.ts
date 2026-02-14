@@ -19,7 +19,7 @@ export class SmartList {
     }
 
     populate(opts: Opts): void {
-        const {size, get_div} = opts;
+        const { size, get_div } = opts;
         const div = this.div;
 
         div.innerHTML = "";

@@ -1,8 +1,7 @@
 import type { Topic } from "./model";
 
 import { MessagePane } from "./message_pane";
-import {ReplyPane} from "./reply_pane";
-
+import { ReplyPane } from "./reply_pane";
 
 export class MessageView {
     div: HTMLElement;

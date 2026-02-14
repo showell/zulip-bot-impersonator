@@ -59,4 +59,3 @@ export class MessageList {
         div.append(smart_list.div);
     }
 }
-
