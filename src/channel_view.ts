@@ -15,7 +15,7 @@ export class ChannelView {
     constructor(stream_id: number, callbacks: CallbackType) {
         this.stream_id = stream_id;
 
-        this.topic_pane = new TopicPane({
+        this.topic_pane = new TopicPane(stream_id, {
             clear_message_view(): void {
                 callbacks.clear_message_view();
             },
@@ -27,7 +27,6 @@ export class ChannelView {
         const div = document.createElement("div");
         div.style.display = "flex";
 
-        this.topic_pane.populate(stream_id);
         div.append(this.topic_pane.div);
 
         this.div = div;
@@ -39,7 +38,7 @@ export class ChannelView {
 
     open_message_view(): void {
         const div = this.div;
-        const topic_list = this.get_topic_list()!;
+        const topic_list = this.get_topic_list();
 
         const topic = topic_list.get_current_topic();
         const message_view = new MessageView(topic!);
@@ -49,18 +48,18 @@ export class ChannelView {
         div.append(message_view.div);
     }
 
-    get_topic_list(): TopicList | undefined {
+    get_topic_list(): TopicList {
         return this.topic_pane.get_topic_list();
     }
 
     refresh(): void {
-        const topic_list = this.get_topic_list()!;
+        const topic_list = this.get_topic_list();
         topic_list.refresh();
     }
 
     clear_message_view(): void {
         const div = this.div;
-        const topic_list = this.get_topic_list()!;
+        const topic_list = this.get_topic_list();
 
         topic_list.clear_selection();
 
@@ -71,28 +70,28 @@ export class ChannelView {
     }
 
     set_topic_index(index: number): void {
-        const topic_list = this.get_topic_list()!;
+        const topic_list = this.get_topic_list();
 
         topic_list.select_index(index);
         this.open_message_view();
     }
 
     surf_topics(): void {
-        const topic_list = this.get_topic_list()!;
+        const topic_list = this.get_topic_list();
 
         topic_list.surf();
         this.open_message_view();
     }
 
     topic_up(): void {
-        const topic_list = this.get_topic_list()!;
+        const topic_list = this.get_topic_list();
 
         topic_list.up();
         this.open_message_view();
     }
 
     topic_down(): void {
-        const topic_list = this.get_topic_list()!;
+        const topic_list = this.get_topic_list();
 
         topic_list.down();
         this.open_message_view();

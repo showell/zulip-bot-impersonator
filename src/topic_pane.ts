@@ -19,13 +19,19 @@ type CallbackType = {
 
 export class TopicPane {
     div: HTMLElement;
-    callbacks: CallbackType;
-    topic_list?: TopicList;
+    topic_list: TopicList;
 
-    constructor(callbacks: CallbackType) {
-        this.callbacks = callbacks;
-
+    constructor(stream_id: number, callbacks: CallbackType) {
         const div = render_pane();
+
+        this.topic_list = new TopicList(stream_id, callbacks);
+        this.topic_list.populate();
+
+        const stream_name = model.stream_name_for(stream_id);
+
+        div.innerHTML = "";
+        div.append(render_list_heading(stream_name));
+        div.append(this.topic_list.div);
 
         this.div = div;
     }
@@ -37,26 +43,7 @@ export class TopicPane {
         return this.topic_list.has_selection();
     }
 
-    get_topic_list(): TopicList | undefined {
+    get_topic_list(): TopicList {
         return this.topic_list;
-    }
-
-    populate(stream_id: number | undefined): void {
-        const div = this.div;
-        const callbacks = this.callbacks;
-
-        if (stream_id === undefined) {
-            div.innerHTML = "(no channel set)";
-            return;
-        }
-
-        this.topic_list = new TopicList(stream_id, callbacks);
-        this.topic_list.populate();
-
-        const stream_name = model.stream_name_for(stream_id);
-
-        div.innerHTML = "";
-        div.append(render_list_heading(stream_name));
-        div.append(this.topic_list.div);
     }
 }
