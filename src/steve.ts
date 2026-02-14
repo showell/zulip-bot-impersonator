@@ -5,6 +5,8 @@ import { ButtonPanel } from "./nav_button_panel";
 import { config } from "./secrets";
 import { StreamList, StreamPane } from "./stream_pane";
 import { ChannelView } from "./channel_view";
+import { EventRadioWidgetSingleton } from "./event_radio";
+import { PopupSingleton } from "./popup";
 
 /**************************************************
  * search widget
@@ -254,6 +256,9 @@ class Page {
     }
 }
 
+export const event_radio_widget = new EventRadioWidgetSingleton();
+export const Popup  = new PopupSingleton();
+
 export async function run() {
     document.title = config.nickname;
 
@@ -269,4 +274,5 @@ export async function run() {
 
     page.populate(search_widget.div);
     search_widget.start();
+    page.div.append(event_radio_widget.div)
 }

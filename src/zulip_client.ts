@@ -1,4 +1,5 @@
 import { realm_data, self_creds } from "./secrets";
+import { Popup, event_radio_widget } from "./steve";
 import { add_new_message_to_message_feed } from "./ui";
 
 function get_headers() {
@@ -48,20 +49,17 @@ async function start_polling() {
 
 function process_events(events: any) {
     for (const event of events) {
+        radio_widget.add_event(event);
         if (event.type === "message") {
-            const message = event.message;
+          const message = event.message
             if (message.type === "stream") {
+                Popup.finish();
                 const sender_name = message.sender_full_name;
                 const content = message.content;
                 const topic = message.subject;
                 const stream = message.display_recipient;
-                add_new_message_to_message_feed({
-                    sender_name,
-                    content,
-                    topic,
-                    stream,
-                });
-            }
+                Popup.show({ content:`#${stream}>${topic}\n${sender_name} said:\n\n` + content, confirm_button_text: "Got it", type: "info", callback: () => { } })
+          }
         }
     }
 }
