@@ -50,8 +50,8 @@ async function start_polling() {
 
 function process_events(events: any) {
     for (const event of events) {
-        event_radio_widget.add_event(event);
         if (event.type === "message") {
+          event_radio_widget.add_event(event);
           const message = event.message
             if (message.type === "stream") {
                 Popup.finish();
