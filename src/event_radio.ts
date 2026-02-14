@@ -1,3 +1,4 @@
+import type { ZulipEvent } from "./event";
 import { Button } from "./button";
 
 class IndicatorButton {
@@ -122,10 +123,10 @@ export class EventRadioWidgetSingleton {
         return main_content;
     }
 
-    add_event(event: Object): void {
+    add_event(event: ZulipEvent): void {
         this.button.ready();
 
-        this.main_content.textContent += "\n--------\n" + JSON.stringify(event);
+        this.main_content.textContent += event.info + "\n";
         this.scroll_to_bottom();
     }
 

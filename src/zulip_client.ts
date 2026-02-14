@@ -1,6 +1,7 @@
+import { process_events } from "./event";
 import { add_messages_to_cache } from "./model";
 import { realm_data, self_creds } from "./secrets";
-import { Popup, event_radio_widget } from "./steve";
+import { Popup } from "./steve";
 
 function get_headers() {
     const auth = btoa(`${self_creds.email}:${self_creds.api_key}`);
@@ -43,35 +44,6 @@ async function start_polling(callback: () => void) {
         if (data.events?.length) {
             last_event_id = data.events[data.events.length - 1].id;
             process_events(data.events, callback);
-        }
-    }
-}
-
-function process_events(events: any, callback: () => void) {
-    for (const event of events) {
-        if (event.type === "message") {
-            event_radio_widget.add_event(event);
-            const message = event.message;
-            if (message.type === "stream") {
-                const sender_name = message.sender_full_name;
-                const content = message.content;
-                const topic = message.subject;
-                const stream = message.display_recipient;
-                const stream_id = message.stream_id;
-                const sender_id = message.sender_id;
-                const id = message.id;
-
-                console.log(`New message from ${sender_name} to ${stream} > ${topic}`);
-                console.log("content", content);
-                add_messages_to_cache({
-                    content,
-                    topic_name: topic!,
-                    stream_id: stream_id!,
-                    sender_id: sender_id!,
-                    id: id!,
-                });
-                callback();
-            }
         }
     }
 }
