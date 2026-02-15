@@ -124,7 +124,8 @@ export class StreamList {
     }
 
     sort(stream_infos: StreamInfo[]) {
-        stream_infos.sort((s1, s2) => s2.num_messages - s1.num_messages);
+        stream_infos.sort();
+        // stream_infos.sort((s1, s2) => s2.num_messages - s1.num_messages);
     }
 
     get_streams(): StreamInfo[] {
