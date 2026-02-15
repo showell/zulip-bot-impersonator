@@ -77,7 +77,10 @@ export class MessageRow {
             div.append(sender.div);
         }
 
-        div.append(render_message_content(message.content));
+        const content_div = render_message_content(message.content);
+        content_div.classList.add("rendered_markdown");
+
+        div.append(content_div);
 
         this.div = div;
     }
