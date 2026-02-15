@@ -69,7 +69,7 @@ export class MessageRow {
         div.style.lineHeight = "22.4px";
 
         if (message.is_super_new) {
-            div.style.backgroundColor = "violet";
+            div.style.border = "1px violet solid";
         }
 
         if (sender_id) {
