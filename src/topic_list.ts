@@ -3,12 +3,10 @@ import type { Topic } from "./db_types";
 import { Cursor } from "./cursor";
 import * as model from "./model";
 import {
-    render_list_heading,
     render_thead,
     render_th,
     render_tr,
     render_big_list,
-    render_pane,
 } from "./render";
 
 type CallbackType = {
@@ -130,7 +128,6 @@ export class TopicList {
     }
 
     refresh(): void {
-        const topics = this.topics;
         const topic = this.get_current_topic();
         const cursor = this.cursor;
 
@@ -206,8 +203,6 @@ export class TopicList {
     }
 
     populate() {
-        const div = this.div;
-
         const topics = this.get_topics();
         this.populate_from_topics(topics);
     }

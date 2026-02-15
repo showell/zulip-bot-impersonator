@@ -71,8 +71,6 @@ export class ButtonPanel {
     }): void {
         const { stream_selected, topic_selected, channels_hidden } = info;
 
-        const div = this.div;
-
         function show_if(button: Button, cond: boolean): void {
             if (cond) {
                 button.show();

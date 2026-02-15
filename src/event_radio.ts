@@ -1,6 +1,5 @@
 import type { ZulipEvent } from "./event";
 
-import { Button } from "./button";
 import { EventFlavor } from "./event";
 import * as model from "./model";
 import { MessageRow } from "./message_row";

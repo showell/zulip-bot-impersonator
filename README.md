@@ -11,3 +11,10 @@ Keep the TS compiler running in a separate window:
 ```
 npx tsc -w --noEmit
 ```
+
+Use oxlint every now and then:
+
+```
+npm add -D oxlint
+npx oxlint
+```

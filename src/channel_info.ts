@@ -28,8 +28,6 @@ export class ChannelInfo {
 
         const stream = model.stream_for(stream_id);
 
-        const name = stream.name;
-
         console.log(stream.rendered_description);
         if (stream.rendered_description) {
             div.append(render_message_content(stream.rendered_description));

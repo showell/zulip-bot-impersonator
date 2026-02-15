@@ -1,13 +1,6 @@
-import type { Topic } from "./db_types";
-
-import { Cursor } from "./cursor";
 import * as model from "./model";
 import {
     render_list_heading,
-    render_thead,
-    render_th,
-    render_tr,
-    render_big_list,
     render_pane,
 } from "./render";
 import { TopicList } from "./topic_list";
