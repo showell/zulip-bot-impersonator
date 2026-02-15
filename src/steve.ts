@@ -42,7 +42,9 @@ class SearchWidget {
                 self.surf_channels();
             },
             add_topic(): void {
-                console.log("add_topic");
+                if (self.channel_view) {
+                    self.channel_view.add_topic();
+                }
             },
             surf_topics(): void {
                 self.surf_topics();

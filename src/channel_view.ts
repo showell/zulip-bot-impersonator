@@ -1,5 +1,6 @@
 import type { RawStreamMessage } from "./db_types";
 
+import { AddTopicPane } from "./add_topic_pane";
 import { ChannelInfo } from "./channel_info";
 import { MessageView } from "./message_view";
 import { TopicList } from "./topic_list";
@@ -79,11 +80,27 @@ export class ChannelView {
 
         topic_list.clear_selection();
 
-        const topic = topic_list.get_current_topic();
-
         div.innerHTML = "";
         div.append(this.topic_pane.div);
         div.append(this.channel_info.div);
+    }
+
+    add_topic(): void {
+        const div = this.div;
+        const topic_list = this.get_topic_list();
+
+        topic_list.clear_selection();
+        div.innerHTML = "";
+
+        // we want the topic pane to stay visible!
+        div.append(this.topic_pane.div);
+
+        // but we replace all other views with our dedicated UI
+        // for adding a topic
+        const add_topic_pane = new AddTopicPane(this.stream_id);
+        div.append(add_topic_pane.div);
+
+        // TODO: focus the topic box!
     }
 
     set_topic_index(index: number): void {
