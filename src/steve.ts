@@ -42,6 +42,7 @@ class SearchWidget {
                 self.surf_channels();
             },
             add_topic(): void {
+                self.add_topic();
                 if (self.channel_view) {
                     self.channel_view.add_topic();
                 }
@@ -223,6 +224,15 @@ class SearchWidget {
         this.show_channels();
         this.update_button_panel();
         this.button_panel.focus_next_channel_button();
+    }
+
+    add_topic(): void {
+        if (!this.channel_view) {
+            console.log("Add topic without a channel?");
+            return
+        }
+        this.channel_view.add_topic();
+        this.hide_channels();
     }
 
     surf_topics(): void {
