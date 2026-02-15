@@ -104,6 +104,7 @@ export class EventRadioWidgetSingleton {
 
     show(): void {
         this.main_content.style.display = "block";
+        this.scroll_to_bottom();
     }
 
     hide(): void {
