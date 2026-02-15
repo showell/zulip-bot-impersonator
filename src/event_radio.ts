@@ -35,7 +35,7 @@ class IndicatorButton {
                 show();
                 self.on();
             }
-            e.stopPropagation()
+            e.stopPropagation();
         });
 
         div.append(button);
@@ -152,10 +152,7 @@ export class EventRadioWidgetSingleton {
             const stream = model.stream_for(message.stream_id);
             address_div.innerText = `${stream.name} > ${message.topic_name}`;
 
-            const message_row = new MessageRow(
-                message,
-                sender_id,
-            );
+            const message_row = new MessageRow(message, sender_id);
 
             this.main_content.append(address_div);
             this.main_content.append(message_row.div);

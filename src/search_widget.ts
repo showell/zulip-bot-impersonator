@@ -218,7 +218,7 @@ export class SearchWidget {
     add_topic(): void {
         if (!this.channel_view) {
             console.log("Add topic without a channel?");
-            return
+            return;
         }
         this.channel_view.add_topic();
         this.hide_channels();

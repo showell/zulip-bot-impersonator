@@ -53,10 +53,7 @@ class MessageSender {
 export class MessageRow {
     div: HTMLElement;
 
-    constructor(
-        message: RawMessage,
-        sender_id: number | undefined,
-    ) {
+    constructor(message: RawMessage, sender_id: number | undefined) {
         const div = document.createElement("div");
 
         div.style.paddingTop = "5px";

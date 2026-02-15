@@ -100,7 +100,9 @@ export class ChannelView {
     select_topic_and_append(raw_stream_message: RawStreamMessage): void {
         const topic_list = this.get_topic_list();
 
-        topic_list.refresh_topics_with_topic_name_selected(raw_stream_message.topic_name);
+        topic_list.refresh_topics_with_topic_name_selected(
+            raw_stream_message.topic_name,
+        );
         this.open_message_view();
     }
 
