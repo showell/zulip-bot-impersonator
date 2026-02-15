@@ -35,7 +35,11 @@ export class ChannelInfo {
         }
 
         if (stream.stream_weekly_traffic) {
-            div.append(render_text(`traffic: about ${stream.stream_weekly_traffic} messages per week`));
+            div.append(
+                render_text(
+                    `traffic: about ${stream.stream_weekly_traffic} messages per week`,
+                ),
+            );
         }
 
         const participants = model.participants_for_stream(stream_id);
@@ -45,4 +49,3 @@ export class ChannelInfo {
         this.div = div;
     }
 }
-

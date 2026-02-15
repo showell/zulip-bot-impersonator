@@ -88,7 +88,9 @@ export function participants_for_stream(stream_id: number): RawUser[] {
     sender_ids.sort((s1, s2) => map.get(s2)! - map.get(s1)!);
 
     // we still need system bots
-    return sender_ids.map((sender_id) => UserMap.get(sender_id)!).filter((user) => user !== undefined);
+    return sender_ids
+        .map((sender_id) => UserMap.get(sender_id)!)
+        .filter((user) => user !== undefined);
 }
 
 export function get_streams(): StreamInfo[] {
@@ -223,16 +225,18 @@ async function get_users(): Promise<void> {
 
 async function get_raw_stream_messages(): Promise<RawStreamMessage[]> {
     const rows = await zulip_client.get_messages(BATCH_SIZE);
-    return rows.filter((row: any) => row.type === "stream").map((row: any) => {
-        return {
-            id: row.id,
-            type: row.type,
-            sender_id: row.sender_id,
-            topic_name: row.subject,
-            stream_id: row.stream_id,
-            content: row.content,
-        };
-    });
+    return rows
+        .filter((row: any) => row.type === "stream")
+        .map((row: any) => {
+            return {
+                id: row.id,
+                type: row.type,
+                sender_id: row.sender_id,
+                topic_name: row.subject,
+                stream_id: row.stream_id,
+                content: row.content,
+            };
+        });
 }
 
 function num_messages_for_stream(stream: Stream): number {

@@ -10,9 +10,9 @@ class IndicatorButton {
     button: HTMLElement;
     expanded: boolean;
 
-    constructor(opts: {label: string, show: () => void, hide: () => void}) {
+    constructor(opts: { label: string; show: () => void; hide: () => void }) {
         const self = this;
-        const { label,show, hide } = opts;
+        const { label, show, hide } = opts;
 
         this.expanded = false;
 
@@ -42,24 +42,24 @@ class IndicatorButton {
         this.div = div;
 
         this.off();
-   }
+    }
 
-   off(): void {
-       this.button.style.backgroundColor = "white";
-       this.button.style.color = "green";
-       this.expanded = false;
-   }
+    off(): void {
+        this.button.style.backgroundColor = "white";
+        this.button.style.color = "green";
+        this.expanded = false;
+    }
 
-   on(): void {
-       this.button.style.backgroundColor = "white";
-       this.button.style.color = "red";
-       this.expanded = true;
-   }
+    on(): void {
+        this.button.style.backgroundColor = "white";
+        this.button.style.color = "red";
+        this.expanded = true;
+    }
 
-   ready(): void {
-       this.button.style.backgroundColor = "violet";
-       this.button.style.color = "white";
-   }
+    ready(): void {
+        this.button.style.backgroundColor = "violet";
+        this.button.style.color = "white";
+    }
 }
 
 export class EventRadioWidgetSingleton {
@@ -82,8 +82,12 @@ export class EventRadioWidgetSingleton {
 
         const button = new IndicatorButton({
             label: "Events",
-            show() { self.show() },
-            hide() { self.hide() },
+            show() {
+                self.show();
+            },
+            hide() {
+                self.hide();
+            },
         });
 
         const header = document.createElement("div");
@@ -140,7 +144,11 @@ export class EventRadioWidgetSingleton {
             const stream = model.stream_for(message.stream_id);
             address_div.innerText = `${stream.name} > ${message.topic_name}`;
 
-            const message_row = new MessageRow(message, sender_id, is_super_new);
+            const message_row = new MessageRow(
+                message,
+                sender_id,
+                is_super_new,
+            );
 
             this.main_content.append(address_div);
             this.main_content.append(message_row.div);

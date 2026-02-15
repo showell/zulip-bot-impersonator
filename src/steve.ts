@@ -299,7 +299,6 @@ export async function run() {
 
     zulip_client.start_polling(event_manager);
 
-
     const search_widget = new SearchWidget();
     search_widget.populate();
     page.populate(search_widget.div);
