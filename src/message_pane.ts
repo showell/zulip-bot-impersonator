@@ -1,4 +1,4 @@
-import type { Topic } from "./model";
+import type * as model from "./model";
 
 import { MessageList } from "./message_list";
 import { MessageViewHeader } from "./message_view_header";
@@ -6,8 +6,9 @@ import { render_pane } from "./render";
 
 export class MessagePane {
     div: HTMLElement;
+    message_list: MessageList;
 
-    constructor(topic: Topic) {
+    constructor(topic: model.Topic) {
         const div = render_pane();
 
         div.innerHTML = "";
@@ -20,5 +21,10 @@ export class MessagePane {
         div.append(message_list.div);
 
         this.div = div;
+        this.message_list = message_list;
+    }
+
+    refresh(raw_stream_message: model.RawStreamMessage) {
+        this.message_list.refresh(raw_stream_message);
     }
 }

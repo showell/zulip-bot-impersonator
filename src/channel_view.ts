@@ -1,4 +1,5 @@
 import { MessageView } from "./message_view";
+import * as model from "./model";
 import { TopicList } from "./topic_list";
 import { TopicPane } from "./topic_pane";
 
@@ -11,6 +12,7 @@ export class ChannelView {
     div: HTMLElement;
     stream_id: number;
     topic_pane: TopicPane;
+    message_view?: MessageView;
 
     constructor(stream_id: number, callbacks: CallbackType) {
         this.stream_id = stream_id;
@@ -46,15 +48,23 @@ export class ChannelView {
         div.innerHTML = "";
         div.append(this.topic_pane.div);
         div.append(message_view.div);
+
+        this.message_view = message_view;
     }
 
     get_topic_list(): TopicList {
         return this.topic_pane.get_topic_list();
     }
 
-    refresh(): void {
-        const topic_list = this.get_topic_list();
-        topic_list.refresh();
+    refresh(raw_stream_message: model.RawStreamMessage): void {
+        if (raw_stream_message.stream_id === this.stream_id) {
+            const topic_list = this.get_topic_list();
+            topic_list.refresh();
+
+            if (this.message_view) {
+                this.message_view.refresh(raw_stream_message);
+            }
+        }
     }
 
     clear_message_view(): void {

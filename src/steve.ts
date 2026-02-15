@@ -66,10 +66,9 @@ class SearchWidget {
         this.channels_hidden = false;
     }
 
-    refresh(): void {
-        console.log("refreshing in SearchWidget");
+    refresh(raw_stream_message: model.RawStreamMessage): void {
         if (this.channel_view) {
-            this.channel_view.refresh();
+            this.channel_view.refresh(raw_stream_message);
         }
     }
 
@@ -283,12 +282,12 @@ export async function run() {
 
         if (event.flavor === EventFlavor.STREAM_MESSAGE) {
             model.add_stream_messages_to_cache(event.raw_stream_message);
-        }
 
-        if (ready) {
-            search_widget.refresh();
-        } else {
-            console.log("we were told to refresh before finishing fetch");
+            if (ready) {
+                search_widget.refresh(event.raw_stream_message);
+            } else {
+                console.log("we were told to refresh before finishing fetch");
+            }
         }
     });
 

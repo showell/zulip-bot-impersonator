@@ -1,12 +1,13 @@
-import type { Topic } from "./model";
+import type * as model from "./model";
 
 import { MessagePane } from "./message_pane";
 import { ReplyPane } from "./reply_pane";
 
 export class MessageView {
     div: HTMLElement;
+    message_pane: MessagePane;
 
-    constructor(topic: Topic) {
+    constructor(topic: model.Topic) {
         const div = document.createElement("div");
 
         div.innerHTML = "";
@@ -19,5 +20,10 @@ export class MessageView {
         div.append(reply_pane.div);
 
         this.div = div;
+        this.message_pane = message_pane;
+    }
+
+    refresh(raw_stream_message: model.RawStreamMessage) {
+        this.message_pane.refresh(raw_stream_message);
     }
 }

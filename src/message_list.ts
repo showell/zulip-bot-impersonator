@@ -1,11 +1,11 @@
-import type { RawMessage, Topic } from "./model";
+import type { RawMessage, RawStreamMessage, Topic } from "./model";
 
 import { MessageRow } from "./message_row";
 import * as model from "./model";
 import { SmartList } from "./smart_list";
 
 type MessageInfo = {
-    message: RawMessage;
+    message: model.RawMessage;
     sender_id: number | undefined;
 };
 
@@ -22,6 +22,14 @@ export class MessageList {
         this.div = div;
         this.populate();
         this.scroll_to_bottom();
+    }
+
+    refresh(raw_stream_message: RawStreamMessage) {
+        // TODO: actual append
+        if (raw_stream_message.topic_name === this.topic.name) {
+            this.populate();
+            this.scroll_to_bottom();
+        }
     }
 
     populate() {
