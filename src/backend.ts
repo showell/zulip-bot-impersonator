@@ -1,12 +1,14 @@
 import type { RawStreamMessage, RawUser, Stream } from "./db_types";
+
+import { config } from "./secrets";
 import { MessageStore } from "./message_store";
 import { TopicStore } from "./topic_store";
-
 import * as zulip_client from "./zulip_client";
 
 const BATCH_SIZE = 5000;
 
 type Backend = {
+    current_user_id: number;
     user_map: Map<number, RawUser>;
     streams: Stream[];
     message_store: MessageStore;
@@ -34,6 +36,7 @@ async function fetch_users(): Promise<RawUser[]> {
     return rows.map((row) => {
         return {
             id: row.user_id,
+            email: row.email,
             full_name: row.full_name,
             avatar_url: row.avatar_url,
         };
@@ -62,8 +65,15 @@ export async function fetch_model_data(): Promise<Backend> {
 
     const user_map = new Map<number, RawUser>();
 
+    let current_user_id = -1;
+
     for (const user of users) {
         user_map.set(user.id, user);
+
+        if (user.email === config.user_creds.email) {
+            console.log("me?", user);
+            current_user_id = user.id;
+        }
     }
 
     console.log("got users");
@@ -80,7 +90,10 @@ export async function fetch_model_data(): Promise<Backend> {
     const topic_store = new TopicStore(message_store);
     console.log("we have a model");
 
+    console.log("current_user_id", current_user_id);
+
     return {
+        current_user_id,
         user_map,
         streams,
         message_store,

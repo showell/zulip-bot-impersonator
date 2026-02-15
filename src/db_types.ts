@@ -25,6 +25,7 @@ export type Stream = {
 
 export type RawUser = {
     id: number;
+    email: string;
     full_name: string;
     avatar_url: string;
 };
