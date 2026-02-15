@@ -2,6 +2,7 @@ import type { ZulipEvent } from "./event";
 
 import { Button } from "./button";
 import { EventFlavor } from "./event";
+import * as model from "./model";
 import { MessageRow } from "./message_row";
 
 class IndicatorButton {
@@ -131,12 +132,17 @@ export class EventRadioWidgetSingleton {
         this.button.ready();
 
         if (event.flavor === EventFlavor.STREAM_MESSAGE) {
-            const raw_stream_message = event.raw_stream_message;
-            const sender_id = raw_stream_message.sender_id;
+            const message = event.raw_stream_message;
+            const sender_id = message.sender_id;
             const is_super_new = true;
 
-            const message_row = new MessageRow(raw_stream_message, sender_id, is_super_new);
+            const address_div = document.createElement("div");
+            const stream = model.stream_for(message.stream_id);
+            address_div.innerText = `${stream.name} > ${message.topic_name}`;
 
+            const message_row = new MessageRow(message, sender_id, is_super_new);
+
+            this.main_content.append(address_div);
             this.main_content.append(message_row.div);
         }
 

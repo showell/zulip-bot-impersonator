@@ -149,7 +149,8 @@ export class TopicList {
 
         const topics = model.get_recent_topics(stream_id);
 
-        topics.sort((t1, t2) => t1.name.localeCompare(t2.name));
+        topics.sort((t1, t2) => t2.last_msg_id - t1.last_msg_id);
+        // topics.sort((t1, t2) => t1.name.localeCompare(t2.name));
 
         cursor.set_count(topics.length);
 
