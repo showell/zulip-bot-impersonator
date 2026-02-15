@@ -1,6 +1,5 @@
 import type { EventHandler } from "./event";
 import { realm_data, self_creds } from "./secrets";
-import { Popup } from "./steve";
 
 function get_headers() {
     const auth = btoa(`${self_creds.email}:${self_creds.api_key}`);
