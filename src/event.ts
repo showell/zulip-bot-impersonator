@@ -1,4 +1,4 @@
-import type { RawStreamMessage } from "./model";
+import type { RawStreamMessage } from "./db_types";
 
 export const enum EventFlavor {
     STREAM_MESSAGE,

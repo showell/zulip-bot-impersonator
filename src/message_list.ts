@@ -1,20 +1,20 @@
-import type { RawMessage, RawStreamMessage, Topic } from "./model";
+import type { RawMessage, RawStreamMessage } from "./db_types";
 
 import { MessageRow } from "./message_row";
 import * as model from "./model";
 import { SmartList } from "./smart_list";
 
 type MessageInfo = {
-    message: model.RawMessage;
+    message: RawMessage;
     sender_id: number | undefined;
 };
 
 export class MessageList {
     div: HTMLElement;
-    topic: Topic;
+    topic: model.Topic;
     smart_list: SmartList;
 
-    constructor(topic: Topic) {
+    constructor(topic: model.Topic) {
         const div = document.createElement("div");
         div.style.maxHeight = "80vh";
         div.style.overflowY = "auto";

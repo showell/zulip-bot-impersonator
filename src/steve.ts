@@ -1,3 +1,4 @@
+import type { RawStreamMessage } from "./db_types";
 import type { TopicList } from "./topic_list";
 
 import { EventFlavor, EventHandler, ZulipEvent } from "./event";
@@ -66,7 +67,7 @@ class SearchWidget {
         this.channels_hidden = false;
     }
 
-    refresh(raw_stream_message: model.RawStreamMessage): void {
+    refresh(raw_stream_message: RawStreamMessage): void {
         if (this.channel_view) {
             this.channel_view.refresh(raw_stream_message);
         }

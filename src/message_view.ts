@@ -1,4 +1,5 @@
-import type * as model from "./model";
+import type { RawStreamMessage } from "./db_types";
+import type { Topic } from "./model";
 
 import { MessagePane } from "./message_pane";
 import { ReplyPane } from "./reply_pane";
@@ -7,7 +8,7 @@ export class MessageView {
     div: HTMLElement;
     message_pane: MessagePane;
 
-    constructor(topic: model.Topic) {
+    constructor(topic: Topic) {
         const div = document.createElement("div");
 
         div.innerHTML = "";
@@ -23,7 +24,7 @@ export class MessageView {
         this.message_pane = message_pane;
     }
 
-    refresh(raw_stream_message: model.RawStreamMessage) {
+    refresh(raw_stream_message: RawStreamMessage) {
         this.message_pane.refresh(raw_stream_message);
     }
 }

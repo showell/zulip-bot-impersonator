@@ -1,4 +1,4 @@
-import type { RawMessage } from "./model";
+import type { RawMessage } from "./db_types";
 
 import * as model from "./model";
 import { render_message_content } from "./message_content";

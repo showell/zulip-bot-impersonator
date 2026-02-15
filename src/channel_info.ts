@@ -1,3 +1,4 @@
+import type { RawUser } from "./db_types";
 import { render_message_content } from "./message_content";
 import * as model from "./model";
 import { render_pane } from "./render";
@@ -9,7 +10,7 @@ function render_text(text: string) {
     return div;
 }
 
-function render_participants(participants: model.RawUser[]) {
+function render_participants(participants: RawUser[]) {
     const div = document.createElement("div");
 
     for (const user of participants) {

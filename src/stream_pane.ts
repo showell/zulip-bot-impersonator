@@ -1,4 +1,4 @@
-import type { Stream, StreamInfo } from "./model";
+import type { Stream, StreamInfo } from "./db_types";
 
 import { Cursor } from "./cursor";
 import * as model from "./model";
