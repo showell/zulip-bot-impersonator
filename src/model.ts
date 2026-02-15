@@ -75,7 +75,7 @@ class MessageStore {
 export function participants_for_stream(stream_id: number): RawUser[] {
     const map = new Map<number, number>();
 
-    const messages = CurrentMessageStore.messages_for_stream(stream_id).slice(-20);
+    const messages = CurrentMessageStore.messages_for_stream(stream_id);
 
     for (const message of messages) {
         const sender_id = message.sender_id;
