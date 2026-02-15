@@ -2,14 +2,19 @@ import type { MessageStore } from "./message_store";
 import { TopicStore } from "./topic_store";
 
 import * as backend from "./backend";
-import type { RawUser, Stream, StreamInfo, RawMessage, RawStreamMessage } from "./db_types.ts";
+import type {
+    RawUser,
+    Stream,
+    StreamInfo,
+    RawMessage,
+    RawStreamMessage,
+} from "./db_types.ts";
 import { Topic } from "./db_types";
 
 export let UserMap: Map<number, RawUser>;
 export let Streams: Stream[];
 let CurrentMessageStore: MessageStore;
 let CurrentTopicStore: TopicStore;
-
 
 // STREAMS
 //
@@ -84,7 +89,8 @@ export function add_stream_messages_to_cache(message: RawStreamMessage) {
 }
 
 export async function fetch_model_data(): Promise<void> {
-    const { user_map, streams, message_store, topic_store } = await backend.fetch_model_data();
+    const { user_map, streams, message_store, topic_store } =
+        await backend.fetch_model_data();
 
     UserMap = user_map;
     Streams = streams;

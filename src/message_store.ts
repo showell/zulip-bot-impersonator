@@ -31,4 +31,3 @@ export class MessageStore {
         this.raw_stream_messages.push(...messages);
     }
 }
-

@@ -53,4 +53,3 @@ export class Topic {
         this.msg_count += 1;
     }
 }
-

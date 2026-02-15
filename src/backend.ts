@@ -56,7 +56,6 @@ async function fetch_raw_stream_messages(): Promise<RawStreamMessage[]> {
         });
 }
 
-
 export async function fetch_model_data(): Promise<Backend> {
     console.log("starting fetch");
     const users = await fetch_users();
