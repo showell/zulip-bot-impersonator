@@ -180,21 +180,19 @@ export function stream_name_for(stream_id: number): string {
     return stream_for(stream_id).name;
 }
 
-async function get_users(): Promise<void> {
-    const rows = await zulip_client.get_users();
+async function fetch_users(): Promise<RawUser[]> {
+    const rows: any[] = await zulip_client.get_users();
 
-    for (const row of rows) {
-        const raw_user: RawUser = {
+    return rows.map((row) => {
+        return {
             id: row.user_id,
             full_name: row.full_name,
             avatar_url: row.avatar_url,
         };
-
-        UserMap.set(raw_user.id, raw_user);
-    }
+    });
 }
 
-async function get_raw_stream_messages(): Promise<RawStreamMessage[]> {
+async function fetch_raw_stream_messages(): Promise<RawStreamMessage[]> {
     const rows = await zulip_client.get_messages(BATCH_SIZE);
     return rows
         .filter((row: any) => row.type === "stream")
@@ -216,13 +214,18 @@ function num_messages_for_stream(stream: Stream): number {
 
 export async function fetch_model_data(): Promise<void> {
     console.log("starting fetch");
-    await get_users();
+    const users = await fetch_users();
+
+    for (const user of users) {
+        UserMap.set(user.id, user);
+    }
+
     console.log("got users");
 
     Streams = await fetch_streams();
     console.log("got streams");
 
-    const raw_stream_messages = await get_raw_stream_messages();
+    const raw_stream_messages = await fetch_raw_stream_messages();
     console.log("got messages");
 
     CurrentMessageStore = new MessageStore(raw_stream_messages);
