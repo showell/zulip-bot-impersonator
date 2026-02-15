@@ -166,7 +166,7 @@ class TopicTable {
     }
 }
 
-export function get_recent_topics(stream_id: number): Topic[] {
+export function get_topics(stream_id: number): Topic[] {
     return CurrentTopicTable.get_topics(stream_id);
 }
 

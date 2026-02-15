@@ -147,7 +147,7 @@ export class TopicList {
         const stream_id = this.stream_id!;
         const cursor = this.cursor;
 
-        const topics = model.get_recent_topics(stream_id);
+        const topics = model.get_topics(stream_id);
 
         topics.sort((t1, t2) => t2.last_msg_id - t1.last_msg_id);
         // topics.sort((t1, t2) => t1.name.localeCompare(t2.name));
