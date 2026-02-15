@@ -55,6 +55,7 @@ async function fetch_raw_stream_messages(): Promise<RawStreamMessage[]> {
                 topic_name: row.subject,
                 stream_id: row.stream_id,
                 content: row.content,
+                is_super_new: false,
             };
         });
 }

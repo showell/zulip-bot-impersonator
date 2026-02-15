@@ -26,6 +26,7 @@ function build_event(raw_event: any): ZulipEvent | undefined {
                 stream_id: message.stream_id,
                 topic_name: message.subject,
                 content: message.content,
+                is_super_new: true,
             };
             return {
                 flavor: EventFlavor.STREAM_MESSAGE,

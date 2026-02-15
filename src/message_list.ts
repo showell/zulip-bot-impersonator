@@ -35,11 +35,9 @@ export class MessageList {
         }
 
         const sender_id = raw_stream_message.sender_id;
-        const is_super_new = true;
         const message_row = new MessageRow(
             raw_stream_message,
             sender_id,
-            is_super_new,
         );
 
         const was_near_bottom = this.near_bottom();
@@ -80,11 +78,9 @@ export class MessageList {
             size: rows.length,
             get_div(index: number) {
                 const { message, sender_id } = rows[index];
-                const is_super_new = false;
                 const message_row = new MessageRow(
                     message,
                     sender_id,
-                    is_super_new,
                 );
                 return message_row.div;
             },

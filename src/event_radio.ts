@@ -147,7 +147,6 @@ export class EventRadioWidgetSingleton {
         if (event.flavor === EventFlavor.STREAM_MESSAGE) {
             const message = event.raw_stream_message;
             const sender_id = message.sender_id;
-            const is_super_new = true;
 
             const address_div = document.createElement("div");
             const stream = model.stream_for(message.stream_id);
@@ -156,7 +155,6 @@ export class EventRadioWidgetSingleton {
             const message_row = new MessageRow(
                 message,
                 sender_id,
-                is_super_new,
             );
 
             this.main_content.append(address_div);

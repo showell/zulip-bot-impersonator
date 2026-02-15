@@ -56,7 +56,6 @@ export class MessageRow {
     constructor(
         message: RawMessage,
         sender_id: number | undefined,
-        is_super_new: boolean,
     ) {
         const div = document.createElement("div");
 
@@ -69,7 +68,7 @@ export class MessageRow {
         div.style.color = "rgb(38, 38, 38)";
         div.style.lineHeight = "22.4px";
 
-        if (is_super_new) {
+        if (message.is_super_new) {
             div.style.backgroundColor = "violet";
         }
 

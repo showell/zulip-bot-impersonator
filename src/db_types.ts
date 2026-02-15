@@ -7,6 +7,7 @@ export type RawStreamMessage = {
     stream_id: number;
     topic_name: string;
     content: string;
+    is_super_new: boolean;
 };
 
 export type RawMessage = RawStreamMessage;
