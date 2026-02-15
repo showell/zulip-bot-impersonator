@@ -34,7 +34,6 @@ function labeled_input(name: string, input: HTMLInputElement) {
 }
 
 class TopicInput {
-    is_new: boolean;
     div: HTMLElement;
     topic_input: HTMLInputElement;
 
@@ -46,7 +45,6 @@ class TopicInput {
 
         div.append(label);
 
-        this.is_new = (topic_name === "");
         this.topic_input = topic_input;
         this.div = div;
     }
@@ -55,7 +53,7 @@ class TopicInput {
         const input = document.createElement("input");
 
         input.type = "text";
-        input.placeholder = "topic";
+        input.placeholder = topic_name ? "" : "name your new topic";
         input.value = topic_name;
         input.style.width = "300px";
 
