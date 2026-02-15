@@ -98,9 +98,9 @@ export class Topic {
     }
 }
 
-let CurrentTopicTable: TopicTable;
+let CurrentTopicStore: TopicStore;
 
-class TopicTable {
+class TopicStore {
     map: Map<string, Topic>;
 
     constructor() {
@@ -138,7 +138,7 @@ class TopicTable {
 }
 
 export function get_topics(stream_id: number): Topic[] {
-    return CurrentTopicTable.get_topics(stream_id);
+    return CurrentTopicStore.get_topics(stream_id);
 }
 
 export function messages_for_topic(topic: Topic): RawMessage[] {
@@ -150,7 +150,7 @@ export function messages_for_topic(topic: Topic): RawMessage[] {
 
 export function add_stream_messages_to_cache(message: RawStreamMessage) {
     CurrentMessageStore.add_messages([message]);
-    CurrentTopicTable = new TopicTable();
+    CurrentTopicStore = new TopicStore();
 }
 
 async function fetch_streams(): Promise<Stream[]> {
@@ -231,6 +231,6 @@ export async function fetch_model_data(): Promise<void> {
     CurrentMessageStore = new MessageStore(raw_stream_messages);
     console.log("we have messages");
 
-    CurrentTopicTable = new TopicTable();
+    CurrentTopicStore = new TopicStore();
     console.log("we have a model");
 }
