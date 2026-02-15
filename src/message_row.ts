@@ -78,7 +78,7 @@ class MessageSender {
 export class MessageRow {
     div: HTMLElement;
 
-    constructor(message: RawMessage, sender_id: number | undefined) {
+    constructor(message: RawMessage, sender_id: number | undefined, is_super_new: boolean) {
         const div = document.createElement("div");
 
         div.style.paddingTop = "5px";
@@ -89,6 +89,10 @@ export class MessageRow {
         div.style.fontFamily = `"Source Sans 3 VF", sans-serif`;
         div.style.color = "rgb(38, 38, 38)";
         div.style.lineHeight = "22.4px";
+
+        if (is_super_new) {
+            div.style.backgroundColor = "violet";
+        }
 
         if (sender_id) {
             const sender = new MessageSender(sender_id);

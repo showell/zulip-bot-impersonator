@@ -12,6 +12,7 @@ type MessageInfo = {
 export class MessageList {
     div: HTMLElement;
     topic: Topic;
+    smart_list: SmartList;
 
     constructor(topic: Topic) {
         const div = document.createElement("div");
@@ -20,19 +21,24 @@ export class MessageList {
 
         this.topic = topic;
         this.div = div;
-        this.populate();
+
+        const smart_list = this.populate();
         this.scroll_to_bottom();
+
+        this.smart_list = smart_list;
     }
 
     refresh(raw_stream_message: RawStreamMessage) {
-        // TODO: actual append
         if (raw_stream_message.topic_name === this.topic.name) {
-            this.populate();
+            const sender_id = raw_stream_message.sender_id;
+            const is_super_new = true;
+            const message_row = new MessageRow(raw_stream_message, sender_id, is_super_new);
+            this.smart_list.append(message_row.div);
             this.scroll_to_bottom();
         }
     }
 
-    populate() {
+    populate(): SmartList {
         const self = this;
         const div = this.div;
         const topic = this.topic;
@@ -61,7 +67,8 @@ export class MessageList {
             size: rows.length,
             get_div(index: number) {
                 const { message, sender_id } = rows[index];
-                const message_row = new MessageRow(message, sender_id);
+                const is_super_new = false;
+                const message_row = new MessageRow(message, sender_id, is_super_new);
                 return message_row.div;
             },
             when_done() {
@@ -70,6 +77,8 @@ export class MessageList {
         });
 
         div.append(smart_list.div);
+
+        return smart_list;
     }
 
     scroll_to_bottom() {
