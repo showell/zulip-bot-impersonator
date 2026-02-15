@@ -48,9 +48,9 @@ export async function start_polling(event_handler: EventHandler) {
     }
 }
 
-export async function get_stream_messages(num_before: number) {
+export async function get_messages(num_before: number) {
     const url = new URL(`/api/v1/messages`, realm_data.url);
-    url.searchParams.set("narrow", `[{"operator": "is", "operand": "dm", "negated": true}]`);
+    url.searchParams.set("narrow", `[]`);
     url.searchParams.set("num_before", JSON.stringify(num_before));
     url.searchParams.set("anchor", "newest");
     const response = await fetch(url, { headers: get_headers() });

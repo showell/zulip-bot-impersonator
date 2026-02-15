@@ -1,3 +1,4 @@
+import { ChannelInfo } from "./channel_info";
 import { MessageView } from "./message_view";
 import * as model from "./model";
 import { TopicList } from "./topic_list";
@@ -11,11 +12,14 @@ type CallbackType = {
 export class ChannelView {
     div: HTMLElement;
     stream_id: number;
+    channel_info: ChannelInfo;
     topic_pane: TopicPane;
     message_view?: MessageView;
 
     constructor(stream_id: number, callbacks: CallbackType) {
         this.stream_id = stream_id;
+
+        this.channel_info = new ChannelInfo(stream_id);
 
         this.topic_pane = new TopicPane(stream_id, {
             clear_message_view(): void {
@@ -30,6 +34,7 @@ export class ChannelView {
         div.style.display = "flex";
 
         div.append(this.topic_pane.div);
+        div.append(this.channel_info.div);
 
         this.div = div;
     }
@@ -77,6 +82,7 @@ export class ChannelView {
 
         div.innerHTML = "";
         div.append(this.topic_pane.div);
+        div.append(this.channel_info.div);
     }
 
     set_topic_index(index: number): void {

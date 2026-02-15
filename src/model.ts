@@ -23,6 +23,8 @@ export type StreamInfo = {
 export type Stream = {
     stream_id: number;
     name: string;
+    rendered_description: string;
+    stream_weekly_traffic: number;
 };
 
 type RawUser = {
@@ -165,6 +167,8 @@ async function fetch_streams(): Promise<Stream[]> {
     const streams: Stream[] = subscriptions.map((subscription: any) => {
         return {
             stream_id: subscription.stream_id,
+            rendered_description: subscription.rendered_description,
+            stream_weekly_traffic: subscription.stream_weekly_traffic,
             name: subscription.name,
         };
     });
@@ -172,12 +176,16 @@ async function fetch_streams(): Promise<Stream[]> {
     return streams;
 }
 
-export function stream_name_for(stream_id: number): string {
+export function stream_for(stream_id: number): Stream {
     const stream = Streams.find((stream) => {
         return stream.stream_id === stream_id;
     });
 
-    return stream!.name;
+    return stream!;
+}
+
+export function stream_name_for(stream_id: number): string {
+    return stream_for(stream_id).name;
 }
 
 async function get_users(): Promise<void> {
@@ -195,10 +203,11 @@ async function get_users(): Promise<void> {
 }
 
 async function get_raw_stream_messages(): Promise<RawStreamMessage[]> {
-    const rows = await zulip_client.get_stream_messages(BATCH_SIZE);
-    return rows.map((row: any) => {
+    const rows = await zulip_client.get_messages(BATCH_SIZE);
+    return rows.filter((row: any) => row.type === "stream").map((row: any) => {
         return {
             id: row.id,
+            type: row.type,
             sender_id: row.sender_id,
             topic_name: row.subject,
             stream_id: row.stream_id,
@@ -212,10 +221,15 @@ function num_messages_for_stream(stream: Stream): number {
 }
 
 export async function fetch_model_data(): Promise<void> {
+    console.log("starting fetch");
     await get_users();
+    console.log("got users");
+
     Streams = await fetch_streams();
+    console.log("got streams");
 
     const raw_stream_messages = await get_raw_stream_messages();
+    console.log("got messages");
 
     CurrentMessageStore = new MessageStore(raw_stream_messages);
     console.log("we have messages");
