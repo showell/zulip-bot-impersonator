@@ -117,6 +117,18 @@ export class TopicList {
         return this.topics[index];
     }
 
+    refresh_topics_with_topic_name_selected(topic_name: string): void {
+        const new_topics = this.get_topics();
+        const cursor = this.cursor;
+
+        const index = new_topics.findIndex((topic) => {
+            return topic.name === topic_name;
+        });
+        cursor.select_index(index);
+
+        this.populate_from_topics(new_topics);
+    }
+
     refresh(): void {
         const topics = this.topics;
         const topic = this.get_current_topic();

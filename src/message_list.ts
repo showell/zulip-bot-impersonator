@@ -28,23 +28,26 @@ export class MessageList {
         this.smart_list = smart_list;
     }
 
-    refresh(raw_stream_message: RawStreamMessage) {
-        if (raw_stream_message.topic_name === this.topic.name) {
-            const sender_id = raw_stream_message.sender_id;
-            const is_super_new = true;
-            const message_row = new MessageRow(
-                raw_stream_message,
-                sender_id,
-                is_super_new,
-            );
+    append_message(raw_stream_message: RawStreamMessage) {
+        if (raw_stream_message.topic_name !== this.topic.name) {
+            console.log("SOMETHING UPSTREAM BROKE!");
+            return;
+        }
 
-            const was_near_bottom = this.near_bottom();
+        const sender_id = raw_stream_message.sender_id;
+        const is_super_new = true;
+        const message_row = new MessageRow(
+            raw_stream_message,
+            sender_id,
+            is_super_new,
+        );
 
-            this.smart_list.append(message_row.div);
+        const was_near_bottom = this.near_bottom();
 
-            if (was_near_bottom) {
-                this.scroll_to_bottom();
-            }
+        this.smart_list.append(message_row.div);
+
+        if (was_near_bottom) {
+            this.scroll_to_bottom();
         }
     }
 

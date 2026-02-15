@@ -1,8 +1,9 @@
-import type { RawStreamMessage } from "./db_types";
+import type { RawStreamMessage, Topic } from "./db_types";
 
 import { AddTopicPane } from "./add_topic_pane";
 import { ChannelInfo } from "./channel_info";
 import { MessageView } from "./message_view";
+import * as model from "./model";
 import { TopicList } from "./topic_list";
 import { TopicPane } from "./topic_pane";
 
@@ -45,11 +46,9 @@ export class ChannelView {
         return this.topic_pane.topic_selected();
     }
 
-    open_message_view(): void {
+    open_message_view_for_topic(topic: Topic): void {
         const div = this.div;
-        const topic_list = this.get_topic_list();
 
-        const topic = topic_list.get_current_topic();
         const message_view = new MessageView(topic!);
 
         div.innerHTML = "";
@@ -59,19 +58,50 @@ export class ChannelView {
         this.message_view = message_view;
     }
 
+    open_message_view(): void {
+        const topic_list = this.get_topic_list();
+        const topic = topic_list.get_current_topic()!;
+
+        this.open_message_view_for_topic(topic);
+    }
+
     get_topic_list(): TopicList {
         return this.topic_pane.get_topic_list();
     }
 
     refresh(raw_stream_message: RawStreamMessage): void {
-        if (raw_stream_message.stream_id === this.stream_id) {
-            const topic_list = this.get_topic_list();
-            topic_list.refresh();
+        if (raw_stream_message.stream_id !== this.stream_id) {
+            return;
+        }
 
-            if (this.message_view) {
-                this.message_view.refresh(raw_stream_message);
+        const topic_list = this.get_topic_list();
+        const topic = topic_list.get_current_topic();
+        const is_me = model.is_me(raw_stream_message.sender_id);
+
+        if (!topic) {
+            if (is_me) {
+                this.select_topic_and_append(raw_stream_message);
+            } else {
+                topic_list.refresh(); // for counts
+            }
+        } else {
+            if (topic.name === raw_stream_message.topic_name) {
+                topic_list.refresh(); // for counts
+
+                if (this.message_view) {
+                    this.message_view.append_message(raw_stream_message);
+                }
+            } else {
+                this.select_topic_and_append(raw_stream_message);
             }
         }
+    }
+
+    select_topic_and_append(raw_stream_message: RawStreamMessage): void {
+        const topic_list = this.get_topic_list();
+
+        topic_list.refresh_topics_with_topic_name_selected(raw_stream_message.topic_name);
+        this.open_message_view();
     }
 
     clear_message_view(): void {

@@ -23,7 +23,7 @@ export class MessageView {
         this.message_pane = message_pane;
     }
 
-    refresh(raw_stream_message: RawStreamMessage) {
-        this.message_pane.refresh(raw_stream_message);
+    append_message(raw_stream_message: RawStreamMessage) {
+        this.message_pane.append_message(raw_stream_message);
     }
 }

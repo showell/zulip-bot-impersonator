@@ -15,6 +15,13 @@ export let UserMap: Map<number, RawUser>;
 export let Streams: Stream[];
 let CurrentMessageStore: MessageStore;
 let CurrentTopicStore: TopicStore;
+let CurrentUserId = -1;
+
+// USERS (mostly just pull directly from UserMap for now)
+
+export function is_me(user_id: number): boolean {
+    return user_id === CurrentUserId;
+}
 
 // STREAMS
 //
@@ -89,9 +96,10 @@ export function add_stream_messages_to_cache(message: RawStreamMessage) {
 }
 
 export async function fetch_model_data(): Promise<void> {
-    const { user_map, streams, message_store, topic_store } =
+    const { current_user_id, user_map, streams, message_store, topic_store } =
         await backend.fetch_model_data();
 
+    CurrentUserId = current_user_id;
     UserMap = user_map;
     Streams = streams;
     CurrentMessageStore = message_store;
