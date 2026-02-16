@@ -1,99 +1,10 @@
 import type { Topic } from "./db_types";
+import type { CallbackType } from "./topic_row";
 
 import { Cursor } from "./cursor";
 import * as model from "./model";
-import { render_thead, render_th, render_tr, render_big_list } from "./render";
-
-type CallbackType = {
-    clear_message_view(): void;
-    set_topic_index(index: number): void;
-};
-
-function render_topic_count(count: number): HTMLElement {
-    const div = document.createElement("div");
-    div.innerText = `${count}`;
-    div.style.textAlign = "right";
-
-    return div;
-}
-
-function render_unread_count(count: number): HTMLElement {
-    const div = document.createElement("div");
-    div.innerText = count ? `${count}` : "";
-    div.style.textAlign = "right";
-    div.style.padding = "2px";
-
-    if (count > 0) {
-        div.style.backgroundColor = "lavender";
-    }
-
-    return div;
-}
-
-function render_topic_name(topic_name: string): HTMLElement {
-    const div = document.createElement("div");
-    div.innerText = topic_name;
-    div.style.maxWidth = "270px";
-    div.style.overflowWrap = "break-word";
-    div.style.color = "#000080";
-    div.style.cursor = "pointer";
-    div.style.paddingLeft = "3px";
-
-    return div;
-}
-
-class TopicRowName {
-    div: HTMLElement;
-
-    constructor(
-        topic: Topic,
-        index: number,
-        selected: boolean,
-        callbacks: CallbackType,
-    ) {
-        const div = render_topic_name(topic.name);
-
-        div.addEventListener("click", () => {
-            if (selected) {
-                callbacks.clear_message_view();
-            } else {
-                callbacks.set_topic_index(index);
-            }
-        });
-
-        if (selected) {
-            div.style.backgroundColor = "cyan";
-        }
-
-        this.div = div;
-    }
-}
-
-class TopicRow {
-    tr: HTMLElement;
-
-    constructor(
-        topic: Topic,
-        index: number,
-        selected: boolean,
-        callbacks: CallbackType,
-    ) {
-        const topic_row_name = new TopicRowName(
-            topic,
-            index,
-            selected,
-            callbacks,
-        );
-
-        const tr = render_tr([
-            render_topic_count(topic.msg_count),
-            render_unread_count(topic.unread_count),
-            topic_row_name.div,
-        ]);
-
-        this.tr = tr;
-    }
-}
+import { render_thead, render_th, render_big_list } from "./render";
+import { TopicRow } from "./topic_row";
 
 export class TopicList {
     div: HTMLElement;
