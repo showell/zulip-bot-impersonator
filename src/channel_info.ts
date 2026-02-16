@@ -1,4 +1,6 @@
 import type { User } from "./db_types";
+
+import { stream_filter } from "./filter";
 import { render_message_content } from "./message_content";
 import * as model from "./model";
 import { render_pane } from "./render";
@@ -41,8 +43,10 @@ export class ChannelInfo {
             );
         }
 
-        const participants = model.participants_for_stream(stream_id);
-        console.log(participants);
+        const filter = stream_filter(stream);
+        const messages = model.filtered_messages(filter);
+        const participants = model.participants_for_messages(messages);
+
         div.append(render_participants(participants));
 
         this.div = div;

@@ -16,16 +16,6 @@ export class MessageStore {
         return messages.filter(filter.predicate);
     }
 
-    messages_for_stream(stream_id: number): StreamMessage[] {
-        return this.stream_messages.filter((stream_message) => {
-            return stream_message.stream_id === stream_id;
-        });
-    }
-
-    num_messages_for_stream_id(stream_id: number): number {
-        return this.messages_for_stream(stream_id).length;
-    }
-
     add_messages(messages: StreamMessage[]) {
         this.stream_messages.push(...messages);
     }

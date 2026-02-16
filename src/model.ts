@@ -1,10 +1,11 @@
+import type { User, Message, Stream, StreamInfo, StreamMessage } from "./db_types.ts";
 import type { Filter } from "./filter";
 import type { MessageStore } from "./message_store";
-import { TopicStore } from "./topic_store";
 
 import * as backend from "./backend";
-import type { User, Stream, StreamInfo, StreamMessage } from "./db_types.ts";
 import { Topic } from "./db_types";
+import { stream_filter } from "./filter";
+import { TopicStore } from "./topic_store";
 
 export let UserMap: Map<number, User>;
 export let Streams: Stream[];
@@ -41,10 +42,6 @@ export function stream_name_for(stream_id: number): string {
     return stream_for(stream_id).name;
 }
 
-function num_messages_for_stream(stream: Stream): number {
-    return CurrentMessageStore.num_messages_for_stream_id(stream.stream_id);
-}
-
 // TOPICS
 
 export function get_topics(stream_id: number): Topic[] {
@@ -57,12 +54,14 @@ export function filtered_messages(filter: Filter) {
     return CurrentMessageStore.filtered_messages(filter);
 }
 
+function num_messages_for_stream(stream: Stream): number {
+    return filtered_messages(stream_filter(stream)).length;
+}
+
 // MISC
 //
-export function participants_for_stream(stream_id: number): User[] {
+export function participants_for_messages(messages: Message[]): User[] {
     const map = new Map<number, number>();
-
-    const messages = CurrentMessageStore.messages_for_stream(stream_id);
 
     for (const message of messages) {
         const sender_id = message.sender_id;
