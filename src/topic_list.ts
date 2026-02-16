@@ -32,6 +32,7 @@ function render_topic_name(topic_name: string): HTMLElement {
     div.style.overflowWrap = "break-word";
     div.style.color = "#000080";
     div.style.cursor = "pointer";
+    div.style.paddingLeft = "3px";
 
     return div;
 }
@@ -55,12 +56,8 @@ class TopicRowName {
             }
         });
 
-        if (selected) {
-            div.style.backgroundColor = "cyan";
-        }
-
         if (topic.unread_count > 0) {
-            div.style.backgroundColor = "lavender";
+            div.style.borderLeft = "4px lavender solid";
         }
 
         this.div = div;
@@ -88,6 +85,10 @@ class TopicRow {
             render_unread_count(topic.unread_count),
             topic_row_name.div,
         ]);
+
+        if (selected) {
+            tr.style.backgroundColor = "cyan";
+        }
 
         this.tr = tr;
     }
