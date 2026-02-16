@@ -22,6 +22,14 @@ function render_topic_count(count: number): HTMLElement {
     return div;
 }
 
+function render_unread_count(count: number): HTMLElement {
+    const div = document.createElement("div");
+    div.innerText = count ? `${count}` : "";
+    div.style.textAlign = "right";
+
+    return div;
+}
+
 function render_topic_name(topic_name: string): HTMLElement {
     const div = document.createElement("div");
     div.innerText = topic_name;
@@ -76,10 +84,17 @@ class TopicRow {
             callbacks,
         );
 
-        this.tr = render_tr([
+        const tr = render_tr([
             render_topic_count(topic.msg_count),
+            render_unread_count(topic.unread_count),
             topic_row_name.div,
         ]);
+
+        if (topic.unread_count > 0) {
+            tr.style.backgroundColor = "lavender";
+        }
+
+        this.tr = tr;
     }
 }
 
@@ -145,7 +160,8 @@ export class TopicList {
 
     make_thead(): HTMLElement {
         const thead = render_thead([
-            render_th("Count"),
+            render_th("Msgs"),
+            render_th("Unread"),
             render_th("Topic name"),
         ]);
 

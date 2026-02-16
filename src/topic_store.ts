@@ -11,10 +11,12 @@ export class TopicStore {
             const stream_id = message.stream_id;
             const topic_name = message.topic_name;
             const msg_id = message.id;
+            const unread = message.unread;
 
             const topic = this.get_or_create(stream_id, topic_name);
 
             topic.update_last_message(msg_id);
+            topic.update_unread(unread);
         }
     }
 
