@@ -20,11 +20,12 @@ export class ChannelView {
     message_view?: MessageView;
 
     constructor(stream_id: number, callbacks: CallbackType) {
-        this.stream_id = stream_id;
+        const stream = model.stream_for(stream_id);
 
+        this.stream_id = stream_id;
         this.channel_info = new ChannelInfo(stream_id);
 
-        this.topic_pane = new TopicPane(stream_id, {
+        this.topic_pane = new TopicPane(stream, {
             clear_message_view(): void {
                 callbacks.clear_message_view();
             },
