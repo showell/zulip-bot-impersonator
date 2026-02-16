@@ -1,4 +1,4 @@
-import type { StreamMessage, Topic } from "./db_types";
+import type { StreamMessage, TopicRow } from "./db_types";
 
 import { topic_filter } from "./filter";
 import { MessageList } from "./message_list";
@@ -9,14 +9,14 @@ export class MessagePane {
     div: HTMLElement;
     message_list: MessageList;
 
-    constructor(topic: Topic) {
+    constructor(topic_row: TopicRow) {
         const div = render_pane();
 
         div.innerHTML = "";
         div.style.minWidth = "350px";
 
-        const topic_line = new MessageViewHeader(topic);
-        const message_list = new MessageList(topic_filter(topic));
+        const topic_line = new MessageViewHeader(topic_row);
+        const message_list = new MessageList(topic_filter(topic_row.topic));
 
         div.append(topic_line.div);
         div.append(message_list.div);

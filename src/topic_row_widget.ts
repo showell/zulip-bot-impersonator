@@ -71,7 +71,7 @@ class TopicRowName {
     }
 }
 
-export class TopicRow {
+export class TopicRowWidget {
     tr: HTMLElement;
 
     constructor(

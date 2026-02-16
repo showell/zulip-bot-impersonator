@@ -1,4 +1,4 @@
-import type { StreamMessage, Topic } from "./db_types";
+import type { StreamMessage, TopicRow } from "./db_types";
 
 import { MessagePane } from "./message_pane";
 import { ReplyPane } from "./reply_pane";
@@ -7,16 +7,16 @@ export class MessageView {
     div: HTMLElement;
     message_pane: MessagePane;
 
-    constructor(topic: Topic) {
+    constructor(topic_row: TopicRow) {
         const div = document.createElement("div");
 
         div.innerHTML = "";
         div.style.display = "flex";
 
-        const message_pane = new MessagePane(topic);
+        const message_pane = new MessagePane(topic_row);
         div.append(message_pane.div);
 
-        const reply_pane = new ReplyPane(topic);
+        const reply_pane = new ReplyPane(topic_row.topic);
         div.append(reply_pane.div);
 
         this.div = div;

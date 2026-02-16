@@ -4,19 +4,18 @@ import type {
     Stream,
     StreamInfo,
     StreamMessage,
+    TopicRow,
 } from "./db_types.ts";
 import type { Filter } from "./filter";
 import type { MessageStore } from "./message_store";
 
 import * as backend from "./backend";
-import { Topic } from "./db_types";
 import { stream_filter } from "./filter";
-import { TopicStore } from "./topic_store";
+import * as topic_row_query from "./topic_row_query";
 
 export let UserMap: Map<number, User>;
 export let Streams: Stream[];
 let CurrentMessageStore: MessageStore;
-let CurrentTopicStore: TopicStore;
 let CurrentUserId = -1;
 
 // USERS (mostly just pull directly from UserMap for now)
@@ -50,8 +49,12 @@ export function stream_name_for(stream_id: number): string {
 
 // TOPICS
 
-export function get_topics(stream_id: number): Topic[] {
-    return CurrentTopicStore.get_topics(stream_id);
+export function get_topic_rows(stream_id: number): TopicRow[] {
+    function match(message: Message) {
+        return message.stream_id === stream_id;
+    }
+    const stream_messages = CurrentMessageStore.stream_messages.filter(match);
+    return topic_row_query.get_rows(stream_messages);
 }
 
 // MESSAGES
@@ -89,16 +92,14 @@ export function participants_for_messages(messages: Message[]): User[] {
 
 export function add_stream_messages_to_cache(message: StreamMessage) {
     CurrentMessageStore.add_messages([message]);
-    CurrentTopicStore = new TopicStore(CurrentMessageStore);
 }
 
 export async function fetch_model_data(): Promise<void> {
-    const { current_user_id, user_map, streams, message_store, topic_store } =
+    const { current_user_id, user_map, streams, message_store } =
         await backend.fetch_model_data();
 
     CurrentUserId = current_user_id;
     UserMap = user_map;
     Streams = streams;
     CurrentMessageStore = message_store;
-    CurrentTopicStore = topic_store;
 }

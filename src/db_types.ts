@@ -32,36 +32,23 @@ export type User = {
     avatar_url: string;
 };
 
+export type TopicRow = {
+    msg_count: number;
+    last_msg_id: number;
+    unread_count: number;
+    topic: Topic;
+};
+
 export class Topic {
     stream_id: number;
     name: string;
-    last_msg_id: number;
-    msg_count: number;
-    unread_count: number;
 
     constructor(stream_id: number, name: string) {
         this.stream_id = stream_id;
         this.name = name;
-        this.msg_count = 0;
-        this.last_msg_id = -1;
-        this.unread_count = 0;
     }
 
     is_same(other: Topic) {
         return this.stream_id === other.stream_id && this.name === other.name;
-    }
-
-    update_last_message(msg_id: number): void {
-        if (msg_id > this.last_msg_id) {
-            this.last_msg_id = msg_id;
-        }
-        this.msg_count += 1;
-    }
-
-    update_unread(unread: boolean): void {
-        // any call to this makes the topic unread
-        if (unread) {
-            this.unread_count += 1;
-        }
     }
 }

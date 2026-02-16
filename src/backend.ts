@@ -2,7 +2,6 @@ import type { StreamMessage, User, Stream } from "./db_types";
 
 import { config } from "./secrets";
 import { MessageStore } from "./message_store";
-import { TopicStore } from "./topic_store";
 import * as zulip_client from "./zulip_client";
 
 const BATCH_SIZE = 700;
@@ -12,7 +11,6 @@ type Backend = {
     user_map: Map<number, User>;
     streams: Stream[];
     message_store: MessageStore;
-    topic_store: TopicStore;
 };
 
 async function fetch_streams(): Promise<Stream[]> {
@@ -91,9 +89,6 @@ export async function fetch_model_data(): Promise<Backend> {
     const message_store = new MessageStore(stream_messages);
     console.log("we have messages");
 
-    const topic_store = new TopicStore(message_store);
-    console.log("we have a model");
-
     console.log("current_user_id", current_user_id);
 
     return {
@@ -101,6 +96,5 @@ export async function fetch_model_data(): Promise<Backend> {
         user_map,
         streams,
         message_store,
-        topic_store,
     };
 }

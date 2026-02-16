@@ -1,4 +1,4 @@
-import type { Stream, StreamMessage, Topic } from "./db_types";
+import type { Stream, StreamMessage, TopicRow } from "./db_types";
 
 import { AddTopicPane } from "./add_topic_pane";
 import { ChannelInfo } from "./channel_info";
@@ -49,10 +49,10 @@ export class ChannelView {
         return this.topic_pane.topic_selected();
     }
 
-    open_message_view_for_topic(topic: Topic): void {
+    open_message_view_for_topic(topic_row: TopicRow): void {
         const div = this.div;
 
-        const message_view = new MessageView(topic!);
+        const message_view = new MessageView(topic_row);
 
         div.innerHTML = "";
         div.append(this.topic_pane.div);
@@ -63,9 +63,9 @@ export class ChannelView {
 
     open_message_view(): void {
         const topic_list = this.get_topic_list();
-        const topic = topic_list.get_current_topic()!;
+        const topic_row = topic_list.get_current_topic_row()!;
 
-        this.open_message_view_for_topic(topic);
+        this.open_message_view_for_topic(topic_row);
     }
 
     get_topic_list(): TopicList {
