@@ -40,10 +40,10 @@ export async function run() {
         event_radio_widget.add_event(event);
 
         if (event.flavor === EventFlavor.STREAM_MESSAGE) {
-            model.add_stream_messages_to_cache(event.raw_stream_message);
+            model.add_stream_messages_to_cache(event.stream_message);
 
             if (ready) {
-                search_widget.refresh(event.raw_stream_message);
+                search_widget.refresh(event.stream_message);
             } else {
                 console.log("we were told to refresh before finishing fetch");
             }

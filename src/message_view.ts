@@ -23,7 +23,7 @@ export class MessageView {
         this.message_pane = message_pane;
     }
 
-    append_message(raw_stream_message: StreamMessage) {
-        this.message_pane.append_message(raw_stream_message);
+    append_message(stream_message: StreamMessage) {
+        this.message_pane.append_message(stream_message);
     }
 }

@@ -144,7 +144,7 @@ export class EventRadioWidgetSingleton {
         this.button.ready();
 
         if (event.flavor === EventFlavor.STREAM_MESSAGE) {
-            const message = event.raw_stream_message;
+            const message = event.stream_message;
             const sender_id = message.sender_id;
 
             const address_div = document.createElement("div");

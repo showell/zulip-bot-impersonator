@@ -25,7 +25,7 @@ export class MessagePane {
         this.message_list = message_list;
     }
 
-    append_message(raw_stream_message: StreamMessage) {
-        this.message_list.append_message(raw_stream_message);
+    append_message(stream_message: StreamMessage) {
+        this.message_list.append_message(stream_message);
     }
 }

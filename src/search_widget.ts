@@ -62,9 +62,9 @@ export class SearchWidget {
         this.channels_hidden = false;
     }
 
-    refresh(raw_stream_message: StreamMessage): void {
+    refresh(stream_message: StreamMessage): void {
         if (this.channel_view) {
-            this.channel_view.refresh(raw_stream_message);
+            this.channel_view.refresh(stream_message);
         }
     }
 

@@ -2,23 +2,23 @@ import type { StreamMessage } from "./db_types";
 import type { Filter } from "./filter";
 
 export class MessageStore {
-    raw_stream_messages: StreamMessage[];
+    stream_messages: StreamMessage[];
 
-    constructor(raw_stream_messages: StreamMessage[]) {
+    constructor(stream_messages: StreamMessage[]) {
         console.log("building message store");
-        this.raw_stream_messages = raw_stream_messages;
+        this.stream_messages = stream_messages;
     }
 
     filtered_messages(filter: Filter) {
-        const messages = this.raw_stream_messages;
+        const messages = this.stream_messages;
 
         console.log("using filter", filter.label);
         return messages.filter(filter.predicate);
     }
 
     messages_for_stream(stream_id: number): StreamMessage[] {
-        return this.raw_stream_messages.filter((raw_stream_message) => {
-            return raw_stream_message.stream_id === stream_id;
+        return this.stream_messages.filter((stream_message) => {
+            return stream_message.stream_id === stream_id;
         });
     }
 
@@ -27,6 +27,6 @@ export class MessageStore {
     }
 
     add_messages(messages: StreamMessage[]) {
-        this.raw_stream_messages.push(...messages);
+        this.stream_messages.push(...messages);
     }
 }

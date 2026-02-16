@@ -6,7 +6,7 @@ export const enum EventFlavor {
 
 type StreamMessageEvent = {
     flavor: EventFlavor.STREAM_MESSAGE;
-    raw_stream_message: StreamMessage;
+    stream_message: StreamMessage;
     info: string;
 };
 
@@ -20,7 +20,7 @@ function build_event(raw_event: any): ZulipEvent | undefined {
 
         if (message.type === "stream") {
             const unread = true;
-            const raw_stream_message: StreamMessage = {
+            const stream_message: StreamMessage = {
                 id: message.id,
                 type: "stream",
                 sender_id: message.sender_id,
@@ -32,7 +32,7 @@ function build_event(raw_event: any): ZulipEvent | undefined {
             };
             return {
                 flavor: EventFlavor.STREAM_MESSAGE,
-                raw_stream_message,
+                stream_message,
                 info: `stream message id ${message.id}`,
             };
         }

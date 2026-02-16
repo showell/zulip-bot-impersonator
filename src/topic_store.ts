@@ -7,7 +7,7 @@ export class TopicStore {
     constructor(message_store: MessageStore) {
         this.map = new Map<string, Topic>();
 
-        for (const message of message_store.raw_stream_messages) {
+        for (const message of message_store.stream_messages) {
             const stream_id = message.stream_id;
             const topic_name = message.topic_name;
             const msg_id = message.id;

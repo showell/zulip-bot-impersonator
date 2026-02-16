@@ -43,7 +43,7 @@ async function fetch_users(): Promise<User[]> {
     });
 }
 
-async function fetch_raw_stream_messages(): Promise<StreamMessage[]> {
+async function fetch_stream_messages(): Promise<StreamMessage[]> {
     const rows = await zulip_client.get_messages(BATCH_SIZE);
     return rows
         .filter((row: any) => row.type === "stream")
@@ -85,10 +85,10 @@ export async function fetch_model_data(): Promise<Backend> {
     const streams = await fetch_streams();
     console.log("got streams");
 
-    const raw_stream_messages = await fetch_raw_stream_messages();
+    const stream_messages = await fetch_stream_messages();
     console.log("got messages");
 
-    const message_store = new MessageStore(raw_stream_messages);
+    const message_store = new MessageStore(stream_messages);
     console.log("we have messages");
 
     const topic_store = new TopicStore(message_store);

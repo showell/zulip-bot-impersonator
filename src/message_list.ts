@@ -35,15 +35,15 @@ export class MessageList {
         div.append(render_spacer());
     }
 
-    append_message(raw_message: Message) {
+    append_message(message: Message) {
         const filter = this.filter;
 
-        if (!filter.predicate(raw_message)) {
+        if (!filter.predicate(message)) {
             return;
         }
 
-        const sender_id = raw_message.sender_id;
-        const message_row = new MessageRow(raw_message, sender_id);
+        const sender_id = message.sender_id;
+        const message_row = new MessageRow(message, sender_id);
 
         const was_near_bottom = this.near_bottom();
 

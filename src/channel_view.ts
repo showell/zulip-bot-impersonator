@@ -69,41 +69,41 @@ export class ChannelView {
         return this.topic_pane.get_topic_list();
     }
 
-    refresh(raw_stream_message: StreamMessage): void {
-        if (raw_stream_message.stream_id !== this.stream_id) {
+    refresh(stream_message: StreamMessage): void {
+        if (stream_message.stream_id !== this.stream_id) {
             return;
         }
 
         const topic_list = this.get_topic_list();
         const topic = topic_list.get_current_topic();
-        const sent_by_me = model.is_me(raw_stream_message.sender_id);
+        const sent_by_me = model.is_me(stream_message.sender_id);
 
         if (!topic) {
             if (sent_by_me) {
-                this.select_topic_and_append(raw_stream_message);
+                this.select_topic_and_append(stream_message);
             } else {
                 topic_list.refresh(); // for counts
             }
         } else {
-            if (topic.name === raw_stream_message.topic_name) {
+            if (topic.name === stream_message.topic_name) {
                 topic_list.refresh(); // for counts
 
                 if (this.message_view) {
-                    this.message_view.append_message(raw_stream_message);
+                    this.message_view.append_message(stream_message);
                 }
             } else if (sent_by_me) {
-                this.select_topic_and_append(raw_stream_message);
+                this.select_topic_and_append(stream_message);
             } else {
                 topic_list.refresh();
             }
         }
     }
 
-    select_topic_and_append(raw_stream_message: StreamMessage): void {
+    select_topic_and_append(stream_message: StreamMessage): void {
         const topic_list = this.get_topic_list();
 
         topic_list.refresh_topics_with_topic_name_selected(
-            raw_stream_message.topic_name,
+            stream_message.topic_name,
         );
         this.open_message_view();
     }
