@@ -1,3 +1,5 @@
+import type { Stream } from "./db_types";
+
 import { ComposeBox } from "./compose";
 import { Topic } from "./db_types";
 import * as model from "./model";
@@ -16,22 +18,25 @@ export class AddTopicPane {
     div: HTMLElement;
     compose_box: ComposeBox;
 
-    constructor(stream_id: number) {
+    constructor(stream: Stream) {
         const div = render_pane();
+
+        const compose_box = this.make_compose_box(stream);
 
         div.innerHTML = "";
         div.style.height = "fit-content";
 
-        const stream_name = model.stream_name_for(stream_id);
-        div.append(render_heading(stream_name));
-
-        const blank_name = "";
-        const topic = new Topic(stream_id, blank_name);
-        const compose_box = new ComposeBox(topic);
+        div.append(render_heading(stream.name));
         div.append(compose_box.div);
 
         this.div = div;
         this.compose_box = compose_box;
+    }
+
+    make_compose_box(stream: Stream): ComposeBox {
+        const blank_name = "";
+        const topic = new Topic(stream.stream_id, blank_name);
+        return new ComposeBox(topic);
     }
 
     focus_compose_box(): void {

@@ -1,4 +1,4 @@
-import type { StreamMessage, Topic } from "./db_types";
+import type { Stream, StreamMessage, Topic } from "./db_types";
 
 import { AddTopicPane } from "./add_topic_pane";
 import { ChannelInfo } from "./channel_info";
@@ -15,6 +15,7 @@ type CallbackType = {
 export class ChannelView {
     div: HTMLElement;
     stream_id: number;
+    stream: Stream;
     channel_info: ChannelInfo;
     topic_pane: TopicPane;
     message_view?: MessageView;
@@ -22,6 +23,7 @@ export class ChannelView {
     constructor(stream_id: number, callbacks: CallbackType) {
         const stream = model.stream_for(stream_id);
 
+        this.stream = stream;
         this.stream_id = stream_id;
         this.channel_info = new ChannelInfo(stream_id);
 
@@ -132,7 +134,7 @@ export class ChannelView {
 
         // but we replace all other views with our dedicated UI
         // for adding a topic
-        const add_topic_pane = new AddTopicPane(this.stream_id);
+        const add_topic_pane = new AddTopicPane(this.stream);
         div.append(add_topic_pane.div);
 
         add_topic_pane.focus_compose_box();
