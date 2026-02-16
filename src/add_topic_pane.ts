@@ -2,7 +2,6 @@ import type { Stream } from "./db_types";
 
 import { ComposeBox } from "./compose";
 import { Topic } from "./db_types";
-import * as model from "./model";
 import { render_list_heading, render_pane } from "./render";
 
 function render_heading(stream_name: string): HTMLElement {
