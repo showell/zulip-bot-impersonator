@@ -1,8 +1,8 @@
-type StreamType = "stream";
+export type StreamType = "stream";
 
 export type RawStreamMessage = {
     id: number;
-    type: StreamType;
+    type: "stream";
     sender_id: number;
     stream_id: number;
     topic_name: string;

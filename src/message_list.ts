@@ -1,5 +1,6 @@
 import type { RawMessage, RawStreamMessage, Topic } from "./db_types";
 
+import { topic_filter } from "./filter";
 import { MessageRow } from "./message_row";
 import * as model from "./model";
 import { SmartList } from "./smart_list";
@@ -53,7 +54,7 @@ export class MessageList {
 
         div.innerHTML = "";
 
-        const messages = model.messages_for_topic(topic);
+        const messages = model.filtered_messages(topic_filter(topic));
 
         const rows: MessageInfo[] = [];
 

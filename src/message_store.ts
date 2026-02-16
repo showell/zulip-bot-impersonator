@@ -1,4 +1,5 @@
 import type { RawStreamMessage } from "./db_types";
+import type { Filter } from "./filter";
 
 export class MessageStore {
     raw_stream_messages: RawStreamMessage[];
@@ -8,13 +9,11 @@ export class MessageStore {
         this.raw_stream_messages = raw_stream_messages;
     }
 
-    messages_for_topic_name(stream_id: number, topic_name: string) {
-        return this.raw_stream_messages.filter((raw_stream_message) => {
-            return (
-                raw_stream_message.stream_id === stream_id &&
-                raw_stream_message.topic_name === topic_name
-            );
-        });
+    filtered_messages(filter: Filter) {
+        const messages = this.raw_stream_messages;
+
+        console.log("using filter", filter.label);
+        return messages.filter(filter.predicate);
     }
 
     messages_for_stream(stream_id: number): RawStreamMessage[] {

@@ -1,3 +1,4 @@
+import type { Filter } from "./filter";
 import type { MessageStore } from "./message_store";
 import { TopicStore } from "./topic_store";
 
@@ -57,12 +58,9 @@ export function get_topics(stream_id: number): Topic[] {
 }
 
 // MESSAGES
-//
-export function messages_for_topic(topic: Topic): RawMessage[] {
-    return CurrentMessageStore.messages_for_topic_name(
-        topic.stream_id,
-        topic.name,
-    );
+
+export function filtered_messages(filter: Filter) {
+    return CurrentMessageStore.filtered_messages(filter);
 }
 
 // MISC
