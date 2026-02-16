@@ -1,4 +1,4 @@
-import type { Message, StreamMessage } from "./db_types";
+import type { Message } from "./db_types";
 import type { Filter } from "./filter";
 
 import { MessageRow } from "./message_row";

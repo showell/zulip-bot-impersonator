@@ -7,7 +7,6 @@ import type {
     User,
     Stream,
     StreamInfo,
-    Message,
     StreamMessage,
 } from "./db_types.ts";
 import { Topic } from "./db_types";

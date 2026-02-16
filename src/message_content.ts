@@ -30,7 +30,6 @@ function preprocess_anchor_element(ele: HTMLAnchorElement) {
 
         if (url.href.startsWith(origin)) {
             const frag = url.href.slice(origin.length);
-            const new_href = config.realm_url + frag;
             ele.setAttribute("href", config.realm_url + frag);
         }
     }
