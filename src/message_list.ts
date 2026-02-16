@@ -1,6 +1,6 @@
-import type { RawMessage, RawStreamMessage, Topic } from "./db_types";
+import type { RawMessage, RawStreamMessage } from "./db_types";
+import type { Filter } from "./filter";
 
-import { topic_filter } from "./filter";
 import { MessageRow } from "./message_row";
 import * as model from "./model";
 import { SmartList } from "./smart_list";
@@ -12,15 +12,16 @@ type MessageInfo = {
 
 export class MessageList {
     div: HTMLElement;
-    topic: Topic;
+    filter: Filter;
     smart_list: SmartList;
 
-    constructor(topic: Topic) {
+    constructor(filter: Filter) {
+        this.filter = filter;
+
         const div = document.createElement("div");
         div.style.maxHeight = "80vh";
         div.style.overflowY = "auto";
 
-        this.topic = topic;
         this.div = div;
 
         const smart_list = this.populate();
@@ -29,14 +30,15 @@ export class MessageList {
         this.smart_list = smart_list;
     }
 
-    append_message(raw_stream_message: RawStreamMessage) {
-        if (raw_stream_message.topic_name !== this.topic.name) {
-            console.log("SOMETHING UPSTREAM BROKE!");
+    append_message(raw_message: RawMessage) {
+        const filter = this.filter;
+
+        if (!filter.predicate(raw_message)) {
             return;
         }
 
-        const sender_id = raw_stream_message.sender_id;
-        const message_row = new MessageRow(raw_stream_message, sender_id);
+        const sender_id = raw_message.sender_id;
+        const message_row = new MessageRow(raw_message, sender_id);
 
         const was_near_bottom = this.near_bottom();
 
@@ -50,11 +52,11 @@ export class MessageList {
     populate(): SmartList {
         const self = this;
         const div = this.div;
-        const topic = this.topic;
+        const filter = this.filter;
 
         div.innerHTML = "";
 
-        const messages = model.filtered_messages(topic_filter(topic));
+        const messages = model.filtered_messages(filter);
 
         const rows: MessageInfo[] = [];
 

@@ -19,7 +19,7 @@ export function topic_filter(topic: Topic): Filter {
         }
     }
 
-    const label = `by topic ${topic.name}`;
+    const label = topic.name;
 
     return { predicate, label };
 }

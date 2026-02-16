@@ -1,5 +1,6 @@
 import type { RawStreamMessage, Topic } from "./db_types";
 
+import { topic_filter } from "./filter";
 import { MessageList } from "./message_list";
 import { MessageViewHeader } from "./message_view_header";
 import { render_pane } from "./render";
@@ -15,7 +16,7 @@ export class MessagePane {
         div.style.minWidth = "350px";
 
         const topic_line = new MessageViewHeader(topic);
-        const message_list = new MessageList(topic);
+        const message_list = new MessageList(topic_filter(topic));
 
         div.append(topic_line.div);
         div.append(message_list.div);
