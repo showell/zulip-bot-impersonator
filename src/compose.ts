@@ -166,7 +166,7 @@ export class ComposeBox {
     }
 
     get_content_to_send(): string {
-        return this.textarea.contents() + "\n\n*from steve client*";
+        return this.textarea.contents();
     }
 
     send(content: string): void {
