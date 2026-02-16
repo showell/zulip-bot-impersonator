@@ -3,6 +3,7 @@ import type { Filter } from "./filter";
 
 import { MessageRow } from "./message_row";
 import * as model from "./model";
+import { render_spacer } from "./render";
 import { SmartList } from "./smart_list";
 
 type MessageInfo = {
@@ -28,6 +29,10 @@ export class MessageList {
         this.scroll_to_bottom();
 
         this.smart_list = smart_list;
+
+        div.append(smart_list.div);
+        div.append(render_spacer());
+        div.append(render_spacer());
     }
 
     append_message(raw_message: RawMessage) {
@@ -85,8 +90,6 @@ export class MessageList {
                 self.scroll_to_bottom();
             },
         });
-
-        div.append(smart_list.div);
 
         return smart_list;
     }

@@ -1,5 +1,7 @@
 import type { RawUser } from "./db_types";
+import { stream_filter } from "./filter";
 import { render_message_content } from "./message_content";
+import { MessageList } from "./message_list";
 import * as model from "./model";
 import { render_pane } from "./render";
 
@@ -44,6 +46,20 @@ export class ChannelInfo {
         const participants = model.participants_for_stream(stream_id);
         console.log(participants);
         div.append(render_participants(participants));
+
+        /*
+        div.append(render_spacer());
+
+        const heading = render_text("Combined:");
+        heading.style.fontWeight = "bold";
+        div.append(heading);
+
+        div.append(render_spacer());
+
+        const message_list = new MessageList(stream_filter(stream));
+        div.style.overflowY = "auto";
+        div.append(message_list.div);
+        */
 
         this.div = div;
     }

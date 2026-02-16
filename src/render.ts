@@ -1,3 +1,11 @@
+export function render_spacer(): HTMLElement {
+    const div = document.createElement("div");
+    div.innerHTML = "&nbsp;";
+    div.style.padding = "6px";
+
+    return div;
+}
+
 export function render_pane(): HTMLElement {
     const div = document.createElement("div");
     div.style.backgroundColor = "white";
