@@ -76,10 +76,10 @@ export class ChannelView {
 
         const topic_list = this.get_topic_list();
         const topic = topic_list.get_current_topic();
-        const is_me = model.is_me(raw_stream_message.sender_id);
+        const sent_by_me = model.is_me(raw_stream_message.sender_id);
 
         if (!topic) {
-            if (is_me) {
+            if (sent_by_) {
                 this.select_topic_and_append(raw_stream_message);
             } else {
                 topic_list.refresh(); // for counts
@@ -91,8 +91,10 @@ export class ChannelView {
                 if (this.message_view) {
                     this.message_view.append_message(raw_stream_message);
                 }
-            } else {
+            } else if (sent_by_m) {
                 this.select_topic_and_append(raw_stream_message);
+            } else {
+                topic_list.refresh();
             }
         }
     }
