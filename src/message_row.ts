@@ -65,6 +65,10 @@ export class MessageRow {
         div.style.color = "rgb(38, 38, 38)";
         div.style.lineHeight = "22.4px";
 
+        if (message.unread) {
+            div.style.backgroundColor = "lavender";
+        }
+
         if (message.is_super_new) {
             div.style.border = "1px violet solid";
         }

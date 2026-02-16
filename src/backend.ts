@@ -48,6 +48,7 @@ async function fetch_raw_stream_messages(): Promise<RawStreamMessage[]> {
     return rows
         .filter((row: any) => row.type === "stream")
         .map((row: any) => {
+            const unread = row.flags.find((flag: string) => flag === "read") === undefined;
             return {
                 id: row.id,
                 type: row.type,
@@ -56,6 +57,7 @@ async function fetch_raw_stream_messages(): Promise<RawStreamMessage[]> {
                 stream_id: row.stream_id,
                 content: row.content,
                 is_super_new: false,
+                unread,
             };
         });
 }
