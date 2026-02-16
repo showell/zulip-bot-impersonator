@@ -3,12 +3,7 @@ import type { MessageStore } from "./message_store";
 import { TopicStore } from "./topic_store";
 
 import * as backend from "./backend";
-import type {
-    User,
-    Stream,
-    StreamInfo,
-    StreamMessage,
-} from "./db_types.ts";
+import type { User, Stream, StreamInfo, StreamMessage } from "./db_types.ts";
 import { Topic } from "./db_types";
 
 export let UserMap: Map<number, User>;

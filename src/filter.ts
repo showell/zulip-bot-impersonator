@@ -5,7 +5,7 @@ type Predicate = (message: Message) => boolean;
 export type Filter = {
     predicate: Predicate;
     label: string;
-}
+};
 
 export function topic_filter(topic: Topic): Filter {
     function predicate(message: Message): boolean {
@@ -37,4 +37,3 @@ export function stream_filter(stream: Stream): Filter {
 
     return { predicate, label };
 }
-
