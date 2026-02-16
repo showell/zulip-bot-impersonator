@@ -1,4 +1,4 @@
-import type { RawStreamMessage } from "./db_types";
+import type { StreamMessage } from "./db_types";
 
 export const enum EventFlavor {
     STREAM_MESSAGE,
@@ -6,7 +6,7 @@ export const enum EventFlavor {
 
 type StreamMessageEvent = {
     flavor: EventFlavor.STREAM_MESSAGE;
-    raw_stream_message: RawStreamMessage;
+    raw_stream_message: StreamMessage;
     info: string;
 };
 
@@ -20,7 +20,7 @@ function build_event(raw_event: any): ZulipEvent | undefined {
 
         if (message.type === "stream") {
             const unread = true;
-            const raw_stream_message: RawStreamMessage = {
+            const raw_stream_message: StreamMessage = {
                 id: message.id,
                 type: "stream",
                 sender_id: message.sender_id,

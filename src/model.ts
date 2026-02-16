@@ -4,15 +4,15 @@ import { TopicStore } from "./topic_store";
 
 import * as backend from "./backend";
 import type {
-    RawUser,
+    User,
     Stream,
     StreamInfo,
-    RawMessage,
-    RawStreamMessage,
+    Message,
+    StreamMessage,
 } from "./db_types.ts";
 import { Topic } from "./db_types";
 
-export let UserMap: Map<number, RawUser>;
+export let UserMap: Map<number, User>;
 export let Streams: Stream[];
 let CurrentMessageStore: MessageStore;
 let CurrentTopicStore: TopicStore;
@@ -65,7 +65,7 @@ export function filtered_messages(filter: Filter) {
 
 // MISC
 //
-export function participants_for_stream(stream_id: number): RawUser[] {
+export function participants_for_stream(stream_id: number): User[] {
     const map = new Map<number, number>();
 
     const messages = CurrentMessageStore.messages_for_stream(stream_id);
@@ -88,7 +88,7 @@ export function participants_for_stream(stream_id: number): RawUser[] {
 
 // FETCHING and EVENT PROCESSING
 
-export function add_stream_messages_to_cache(message: RawStreamMessage) {
+export function add_stream_messages_to_cache(message: StreamMessage) {
     CurrentMessageStore.add_messages([message]);
     CurrentTopicStore = new TopicStore(CurrentMessageStore);
 }

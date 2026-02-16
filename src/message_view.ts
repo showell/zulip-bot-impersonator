@@ -1,4 +1,4 @@
-import type { RawStreamMessage, Topic } from "./db_types";
+import type { StreamMessage, Topic } from "./db_types";
 
 import { MessagePane } from "./message_pane";
 import { ReplyPane } from "./reply_pane";
@@ -23,7 +23,7 @@ export class MessageView {
         this.message_pane = message_pane;
     }
 
-    append_message(raw_stream_message: RawStreamMessage) {
+    append_message(raw_stream_message: StreamMessage) {
         this.message_pane.append_message(raw_stream_message);
     }
 }

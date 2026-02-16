@@ -1,6 +1,6 @@
-import type { RawMessage, Stream, Topic } from "./db_types";
+import type { Message, Stream, Topic } from "./db_types";
 
-type Predicate = (raw_message: RawMessage) => boolean;
+type Predicate = (raw_message: Message) => boolean;
 
 export type Filter = {
     predicate: Predicate;
@@ -8,7 +8,7 @@ export type Filter = {
 }
 
 export function topic_filter(topic: Topic): Filter {
-    function predicate(raw_message: RawMessage): boolean {
+    function predicate(raw_message: Message): boolean {
         if (raw_message.type === "stream") {
             return (
                 raw_message.stream_id === topic.stream_id &&
@@ -25,7 +25,7 @@ export function topic_filter(topic: Topic): Filter {
 }
 
 export function stream_filter(stream: Stream): Filter {
-    function predicate(raw_message: RawMessage): boolean {
+    function predicate(raw_message: Message): boolean {
         if (raw_message.type === "stream") {
             return raw_message.stream_id === stream.stream_id;
         } else {

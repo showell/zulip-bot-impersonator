@@ -1,4 +1,4 @@
-import type { RawStreamMessage } from "./db_types";
+import type { StreamMessage } from "./db_types";
 import type { TopicList } from "./topic_list";
 
 import { ButtonPanel } from "./nav_button_panel";
@@ -62,7 +62,7 @@ export class SearchWidget {
         this.channels_hidden = false;
     }
 
-    refresh(raw_stream_message: RawStreamMessage): void {
+    refresh(raw_stream_message: StreamMessage): void {
         if (this.channel_view) {
             this.channel_view.refresh(raw_stream_message);
         }

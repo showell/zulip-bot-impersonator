@@ -1,4 +1,4 @@
-import type { RawStreamMessage, RawUser, Stream } from "./db_types";
+import type { StreamMessage, User, Stream } from "./db_types";
 
 import { config } from "./secrets";
 import { MessageStore } from "./message_store";
@@ -9,7 +9,7 @@ const BATCH_SIZE = 700;
 
 type Backend = {
     current_user_id: number;
-    user_map: Map<number, RawUser>;
+    user_map: Map<number, User>;
     streams: Stream[];
     message_store: MessageStore;
     topic_store: TopicStore;
@@ -30,7 +30,7 @@ async function fetch_streams(): Promise<Stream[]> {
     return streams;
 }
 
-async function fetch_users(): Promise<RawUser[]> {
+async function fetch_users(): Promise<User[]> {
     const rows: any[] = await zulip_client.get_users();
 
     return rows.map((row) => {
@@ -43,7 +43,7 @@ async function fetch_users(): Promise<RawUser[]> {
     });
 }
 
-async function fetch_raw_stream_messages(): Promise<RawStreamMessage[]> {
+async function fetch_raw_stream_messages(): Promise<StreamMessage[]> {
     const rows = await zulip_client.get_messages(BATCH_SIZE);
     return rows
         .filter((row: any) => row.type === "stream")
@@ -67,7 +67,7 @@ export async function fetch_model_data(): Promise<Backend> {
     console.log("starting fetch");
     const users = await fetch_users();
 
-    const user_map = new Map<number, RawUser>();
+    const user_map = new Map<number, User>();
 
     let current_user_id = -1;
 

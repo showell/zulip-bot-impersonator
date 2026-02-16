@@ -1,6 +1,6 @@
 export type StreamType = "stream";
 
-export type RawStreamMessage = {
+export type StreamMessage = {
     id: number;
     type: "stream";
     sender_id: number;
@@ -11,7 +11,7 @@ export type RawStreamMessage = {
     is_super_new: boolean;
 };
 
-export type RawMessage = RawStreamMessage;
+export type Message = StreamMessage;
 
 export type StreamInfo = {
     num_messages: number;
@@ -25,7 +25,7 @@ export type Stream = {
     stream_weekly_traffic: number;
 };
 
-export type RawUser = {
+export type User = {
     id: number;
     email: string;
     full_name: string;

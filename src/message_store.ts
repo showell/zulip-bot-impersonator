@@ -1,10 +1,10 @@
-import type { RawStreamMessage } from "./db_types";
+import type { StreamMessage } from "./db_types";
 import type { Filter } from "./filter";
 
 export class MessageStore {
-    raw_stream_messages: RawStreamMessage[];
+    raw_stream_messages: StreamMessage[];
 
-    constructor(raw_stream_messages: RawStreamMessage[]) {
+    constructor(raw_stream_messages: StreamMessage[]) {
         console.log("building message store");
         this.raw_stream_messages = raw_stream_messages;
     }
@@ -16,7 +16,7 @@ export class MessageStore {
         return messages.filter(filter.predicate);
     }
 
-    messages_for_stream(stream_id: number): RawStreamMessage[] {
+    messages_for_stream(stream_id: number): StreamMessage[] {
         return this.raw_stream_messages.filter((raw_stream_message) => {
             return raw_stream_message.stream_id === stream_id;
         });
@@ -26,7 +26,7 @@ export class MessageStore {
         return this.messages_for_stream(stream_id).length;
     }
 
-    add_messages(messages: RawStreamMessage[]) {
+    add_messages(messages: StreamMessage[]) {
         this.raw_stream_messages.push(...messages);
     }
 }

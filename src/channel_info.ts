@@ -1,4 +1,4 @@
-import type { RawUser } from "./db_types";
+import type { User } from "./db_types";
 import { stream_filter } from "./filter";
 import { render_message_content } from "./message_content";
 import { MessageList } from "./message_list";
@@ -12,7 +12,7 @@ function render_text(text: string) {
     return div;
 }
 
-function render_participants(participants: RawUser[]) {
+function render_participants(participants: User[]) {
     const div = document.createElement("div");
 
     for (const user of participants) {

@@ -1,4 +1,4 @@
-import type { RawMessage, RawStreamMessage } from "./db_types";
+import type { Message, StreamMessage } from "./db_types";
 import type { Filter } from "./filter";
 
 import { MessageRow } from "./message_row";
@@ -7,7 +7,7 @@ import { render_spacer } from "./render";
 import { SmartList } from "./smart_list";
 
 type MessageInfo = {
-    message: RawMessage;
+    message: Message;
     sender_id: number | undefined;
 };
 
@@ -35,7 +35,7 @@ export class MessageList {
         div.append(render_spacer());
     }
 
-    append_message(raw_message: RawMessage) {
+    append_message(raw_message: Message) {
         const filter = this.filter;
 
         if (!filter.predicate(raw_message)) {

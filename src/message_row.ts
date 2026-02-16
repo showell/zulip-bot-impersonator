@@ -1,4 +1,4 @@
-import type { RawMessage } from "./db_types";
+import type { Message } from "./db_types";
 
 import * as model from "./model";
 import { render_message_content } from "./message_content";
@@ -53,7 +53,7 @@ class MessageSender {
 export class MessageRow {
     div: HTMLElement;
 
-    constructor(message: RawMessage, sender_id: number | undefined) {
+    constructor(message: Message, sender_id: number | undefined) {
         const div = document.createElement("div");
 
         div.style.paddingTop = "5px";

@@ -1,4 +1,4 @@
-import type { RawStreamMessage, Topic } from "./db_types";
+import type { StreamMessage, Topic } from "./db_types";
 
 import { AddTopicPane } from "./add_topic_pane";
 import { ChannelInfo } from "./channel_info";
@@ -69,7 +69,7 @@ export class ChannelView {
         return this.topic_pane.get_topic_list();
     }
 
-    refresh(raw_stream_message: RawStreamMessage): void {
+    refresh(raw_stream_message: StreamMessage): void {
         if (raw_stream_message.stream_id !== this.stream_id) {
             return;
         }
@@ -99,7 +99,7 @@ export class ChannelView {
         }
     }
 
-    select_topic_and_append(raw_stream_message: RawStreamMessage): void {
+    select_topic_and_append(raw_stream_message: StreamMessage): void {
         const topic_list = this.get_topic_list();
 
         topic_list.refresh_topics_with_topic_name_selected(

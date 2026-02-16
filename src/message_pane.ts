@@ -1,4 +1,4 @@
-import type { RawStreamMessage, Topic } from "./db_types";
+import type { StreamMessage, Topic } from "./db_types";
 
 import { topic_filter } from "./filter";
 import { MessageList } from "./message_list";
@@ -25,7 +25,7 @@ export class MessagePane {
         this.message_list = message_list;
     }
 
-    append_message(raw_stream_message: RawStreamMessage) {
+    append_message(raw_stream_message: StreamMessage) {
         this.message_list.append_message(raw_stream_message);
     }
 }
