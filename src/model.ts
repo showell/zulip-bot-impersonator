@@ -1,4 +1,10 @@
-import type { User, Message, Stream, StreamInfo, StreamMessage } from "./db_types.ts";
+import type {
+    User,
+    Message,
+    Stream,
+    StreamInfo,
+    StreamMessage,
+} from "./db_types.ts";
 import type { Filter } from "./filter";
 import type { MessageStore } from "./message_store";
 
