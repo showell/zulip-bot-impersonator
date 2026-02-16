@@ -1,4 +1,20 @@
-import { config } from "./secrets.ts";
+import { config } from "./secrets";
+
+function preprocess_img_element(img: HTMLImageElement) {
+    console.log("img.src", img.src);
+
+    let src = img.src;
+    const origin = window.location.origin;
+
+    if (src.startsWith(origin)) {
+        src = src.slice(origin.length);
+
+        if (src.startsWith("/user_uploads/thumbnail")) {
+            img.setAttribute("src", config.realm_url + src);
+            console.log("fixed but not authorized", img.src);
+        }
+    }
+}
 
 function preprocess_anchor_element(ele: HTMLAnchorElement) {
     const url = new URL(ele.getAttribute("href")!, window.location.href);
@@ -26,11 +42,13 @@ function preprocess_message_content(html_content: string): DocumentFragment {
     template.content
         .querySelectorAll("a")
         .forEach((ele) => preprocess_anchor_element(ele));
+    template.content
+        .querySelectorAll("img")
+        .forEach((ele) => preprocess_img_element(ele));
     return template.content;
 }
 
 export function render_message_content(content: string): HTMLElement {
-    console.log(content);
     const div = document.createElement("div");
     div.append(preprocess_message_content(content));
     return div;
