@@ -61,6 +61,10 @@ class TopicRowName {
             }
         });
 
+        if (selected) {
+            div.style.backgroundColor = "cyan";
+        }
+
         this.div = div;
     }
 }
@@ -86,10 +90,6 @@ class TopicRow {
             render_unread_count(topic.unread_count),
             topic_row_name.div,
         ]);
-
-        if (selected) {
-            tr.style.backgroundColor = "cyan";
-        }
 
         this.tr = tr;
     }
