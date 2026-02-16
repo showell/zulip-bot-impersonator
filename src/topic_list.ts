@@ -2,12 +2,7 @@ import type { Topic } from "./db_types";
 
 import { Cursor } from "./cursor";
 import * as model from "./model";
-import {
-    render_thead,
-    render_th,
-    render_tr,
-    render_big_list,
-} from "./render";
+import { render_thead, render_th, render_tr, render_big_list } from "./render";
 
 type CallbackType = {
     clear_message_view(): void;
@@ -45,12 +40,12 @@ class TopicRowName {
     div: HTMLElement;
 
     constructor(
-        topic_name: string,
+        topic: Topic,
         index: number,
         selected: boolean,
         callbacks: CallbackType,
     ) {
-        const div = render_topic_name(topic_name);
+        const div = render_topic_name(topic.name);
 
         div.addEventListener("click", () => {
             if (selected) {
@@ -62,6 +57,10 @@ class TopicRowName {
 
         if (selected) {
             div.style.backgroundColor = "cyan";
+        }
+
+        if (topic.unread_count > 0) {
+            div.style.backgroundColor = "lavender";
         }
 
         this.div = div;
@@ -78,7 +77,7 @@ class TopicRow {
         callbacks: CallbackType,
     ) {
         const topic_row_name = new TopicRowName(
-            topic.name,
+            topic,
             index,
             selected,
             callbacks,
@@ -89,10 +88,6 @@ class TopicRow {
             render_unread_count(topic.unread_count),
             topic_row_name.div,
         ]);
-
-        if (topic.unread_count > 0) {
-            tr.style.backgroundColor = "lavender";
-        }
 
         this.tr = tr;
     }

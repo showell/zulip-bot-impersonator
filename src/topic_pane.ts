@@ -1,8 +1,5 @@
 import * as model from "./model";
-import {
-    render_list_heading,
-    render_pane,
-} from "./render";
+import { render_list_heading, render_pane } from "./render";
 import { TopicList } from "./topic_list";
 
 type CallbackType = {
