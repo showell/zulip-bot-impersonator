@@ -168,6 +168,8 @@ export class StreamList {
         table.append(thead);
         table.append(tbody);
 
+        table.style.borderCollapse = "collapse";
+
         return table;
     }
 

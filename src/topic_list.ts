@@ -21,6 +21,11 @@ function render_unread_count(count: number): HTMLElement {
     const div = document.createElement("div");
     div.innerText = count ? `${count}` : "";
     div.style.textAlign = "right";
+    div.style.padding = "2px";
+
+    if (count > 0) {
+        div.style.backgroundColor = "lavender";
+    }
 
     return div;
 }
@@ -55,10 +60,6 @@ class TopicRowName {
                 callbacks.set_topic_index(index);
             }
         });
-
-        if (topic.unread_count > 0) {
-            div.style.borderLeft = "4px lavender solid";
-        }
 
         this.div = div;
     }
@@ -203,6 +204,8 @@ export class TopicList {
         const table = document.createElement("table");
         table.append(thead);
         table.append(tbody);
+
+        table.style.borderCollapse = "collapse";
 
         return table;
     }
