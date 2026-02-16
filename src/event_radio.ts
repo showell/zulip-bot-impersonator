@@ -127,15 +127,15 @@ export class EventRadioWidgetSingleton {
     build_main_content(): HTMLDivElement {
         const main_content = document.createElement("div");
         Object.assign(main_content.style, <CSSStyleDeclaration>{
-            backgroundColor: "tan",
+            backgroundColor: "rgb(255, 230, 230",
             overflowY: "auto",
             overflowX: "hidden",
             overflowWrap: "break-word",
             whiteSpace: "pre-wrap",
             height: "400px",
             borderRadius: "6px",
-            padding: "3px",
-            border: "1px blue solid",
+            padding: "13px",
+            border: "2px blue solid",
         });
         return main_content;
     }
