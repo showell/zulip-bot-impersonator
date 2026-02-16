@@ -79,7 +79,7 @@ export class ChannelView {
         const sent_by_me = model.is_me(raw_stream_message.sender_id);
 
         if (!topic) {
-            if (sent_by_) {
+            if (sent_by_me) {
                 this.select_topic_and_append(raw_stream_message);
             } else {
                 topic_list.refresh(); // for counts
@@ -91,7 +91,7 @@ export class ChannelView {
                 if (this.message_view) {
                     this.message_view.append_message(raw_stream_message);
                 }
-            } else if (sent_by_m) {
+            } else if (sent_by_me) {
                 this.select_topic_and_append(raw_stream_message);
             } else {
                 topic_list.refresh();
