@@ -28,13 +28,16 @@ export class MessageList {
         this.div = div;
 
         const smart_list = this.populate();
-        this.scroll_to_bottom();
-
         this.smart_list = smart_list;
 
         div.append(smart_list.div);
         div.append(render_spacer());
         div.append(render_spacer());
+    }
+
+    refresh_unread(message_ids: number[]): void {
+        console.log("made it to message_list", message_ids);
+        // this.smart_list.refresh_ids(message_ids);
     }
 
     append_message(message: Message) {

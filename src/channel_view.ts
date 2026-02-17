@@ -76,11 +76,9 @@ export class ChannelView {
 
     refresh_unread(message_ids: number[]): void {
         this.get_topic_list().refresh();
-        /*
         if (this.message_view) {
-            this.message_view.refresh();
+            this.message_view.refresh_unread(message_ids);
         }
-       */
     }
 
     refresh(stream_message: StreamMessage): void {

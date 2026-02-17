@@ -25,6 +25,10 @@ export class SmartList {
         this.div = div;
     }
 
+    refresh_unread(message_ids: number[]): void {
+        console.log("made it to smart list", message_ids);
+    }
+
     append(new_div: HTMLElement): void {
         if (this.done) {
             this.div.append(new_div);

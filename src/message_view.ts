@@ -24,7 +24,11 @@ export class MessageView {
         this.message_pane = message_pane;
     }
 
-    append_message(stream_message: StreamMessage) {
+    refresh_unread(message_ids: number[]): void {
+        this.message_pane.refresh_unread(message_ids);
+    }
+
+    append_message(stream_message: StreamMessage): void {
         this.message_pane.append_message(stream_message);
     }
 }
