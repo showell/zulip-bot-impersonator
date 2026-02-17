@@ -20,29 +20,7 @@ export class SearchWidget {
 
         this.div = div;
 
-        this.button_panel = new ButtonPanel({
-            stream_up(): void {
-                self.stream_up();
-            },
-            stream_down(): void {
-                self.stream_down();
-            },
-            surf_channels(): void {
-                self.surf_channels();
-            },
-            add_topic(): void {
-                self.add_topic();
-            },
-            surf_topics(): void {
-                self.surf_topics();
-            },
-            topic_up(): void {
-                self.topic_up();
-            },
-            topic_down(): void {
-                self.topic_down();
-            },
-        });
+        this.button_panel = new ButtonPanel(self);
 
         this.stream_pane = new StreamPane({
             clear_stream(): void {

@@ -1,14 +1,5 @@
 import { Button } from "./button";
-
-type CallbackType = {
-    surf_channels(): void;
-    stream_up(): void;
-    stream_down(): void;
-    add_topic(): void;
-    surf_topics(): void;
-    topic_up(): void;
-    topic_down(): void;
-};
+import type { SearchWidget } from "./search_widget";
 
 export class ButtonPanel {
     div: HTMLElement;
@@ -20,35 +11,35 @@ export class ButtonPanel {
     prev_topic: Button;
     next_topic: Button;
 
-    constructor(callbacks: CallbackType) {
+    constructor(search_widget: SearchWidget) {
         const div = document.createElement("div");
         div.style.display = "flex";
         div.style.paddingBottom = "4px";
 
         this.surf_channels = new Button("surf channels", () => {
-            callbacks.surf_channels();
+            search_widget.surf_channels();
         });
 
         this.next_channel = new Button("next channel", () => {
-            callbacks.stream_down();
+            search_widget.stream_down();
         });
         this.prev_channel = new Button("prev channel", () => {
-            callbacks.stream_up();
+            search_widget.stream_up();
         });
 
         this.add_topic = new Button("add topic", () => {
-            callbacks.add_topic();
+            search_widget.add_topic();
         });
 
         this.surf_topics = new Button("surf topics", () => {
-            callbacks.surf_topics();
+            search_widget.surf_topics();
         });
 
         this.next_topic = new Button("next topic", () => {
-            callbacks.topic_down();
+            search_widget.topic_down();
         });
         this.prev_topic = new Button("prev topic", () => {
-            callbacks.topic_up();
+            search_widget.topic_up();
         });
 
         div.append(this.surf_channels.div);
