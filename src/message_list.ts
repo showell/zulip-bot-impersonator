@@ -49,9 +49,6 @@ export class MessageList {
             rows.push({ message, use_sender });
         }
 
-        // keep track of index for future appends
-        this.index = rows.length;
-
         const smart_list = new SmartList({
             size: rows.length,
             get_div(index: number) {
@@ -100,8 +97,8 @@ export class MessageList {
 
         const use_sender = true;
 
-        this.index_map.set(message.id, rows.length);
-        rows.push(message, use_sender);
+        rows.push({ message, use_sender });
+        this.index_map.set(message.id, rows.length - 1);
 
         const message_row = new MessageRow(message);
         const message_row_widget = new MessageRowWidget(message_row, use_sender);
