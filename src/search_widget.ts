@@ -1,4 +1,6 @@
 import type { StreamMessage } from "./backend/db_types";
+
+import type { MessageList } from "./message_list";
 import type { TopicList } from "./topic_list";
 
 import { ButtonPanel } from "./nav_button_panel";
@@ -68,6 +70,13 @@ export class SearchWidget {
             return undefined;
         }
         return this.channel_view.get_topic_list();
+    }
+
+    get_message_list(): MessageList | undefined {
+        if (this.channel_view === undefined) {
+            return undefined;
+        }
+        return this.channel_view.get_message_list();
     }
 
     topic_selected(): boolean {
@@ -191,6 +200,16 @@ export class SearchWidget {
         }
         this.channel_view.add_topic();
         this.hide_channels();
+    }
+
+    mark_topic_read(): void {
+        const message_list = this.get_message_list();
+
+        if (!message_list) {
+            console.log("unexpected lack of message_list");
+            return;
+        }
+        message_list.mark_topic_read();
     }
 
     surf_topics(): void {

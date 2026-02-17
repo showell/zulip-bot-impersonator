@@ -72,7 +72,7 @@ class StreamRow {
             channel_row,
             index,
             selected,
-            search_widget
+            search_widget,
         );
 
         this.tr = render_tr([

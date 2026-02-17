@@ -78,6 +78,19 @@ export class MessageList {
         this.smart_list = smart_list;
     }
 
+    mark_topic_read() {
+        const unread_message_ids = this.rows
+            .map((row) => {
+                return row.message;
+            })
+            .filter((message) => message.unread)
+            .map((message) => message.id);
+
+        if (unread_message_ids) {
+            console.log("mark_topic_read", unread_message_ids);
+        }
+    }
+
     refresh_unread(message_ids: number[]): void {
         const index_map = this.index_map;
 
