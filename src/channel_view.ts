@@ -74,6 +74,15 @@ export class ChannelView {
         return this.topic_pane.get_topic_list();
     }
 
+    refresh_unread(message_ids: number[]): void {
+        this.get_topic_list().refresh();
+        /*
+        if (this.message_view) {
+            this.message_view.refresh();
+        }
+       */
+    }
+
     refresh(stream_message: StreamMessage): void {
         if (stream_message.stream_id !== this.stream_id) {
             return;

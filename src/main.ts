@@ -52,10 +52,12 @@ export async function run() {
         }
 
         if (event.flavor === EventFlavor.UNREAD_ADD) {
-            model.mark_message_ids_as_read(event.message_ids);
+            const message_ids = event.message_ids;
+
+            model.mark_message_ids_as_read(message_ids);
 
             if (ready) {
-                // search_widget.refresh_all();
+                search_widget.refresh_unread(message_ids);
             } else {
                 console.log("we were told to refresh before finishing fetch");
             }

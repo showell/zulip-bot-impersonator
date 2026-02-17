@@ -62,6 +62,12 @@ export class SearchWidget {
         this.channels_hidden = false;
     }
 
+    refresh_unread(message_ids: number[]): void {
+        if (this.channel_view) {
+            this.channel_view.refresh_unread(message_ids);
+        }
+    }
+
     refresh(stream_message: StreamMessage): void {
         if (this.channel_view) {
             this.channel_view.refresh(stream_message);
