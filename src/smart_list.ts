@@ -20,6 +20,7 @@ class Dummy {
 }
 
 export class SmartList {
+    opts: Opts;
     div: HTMLElement;
     dummies: Dummy[];
     queue: HTMLElement[];
@@ -30,6 +31,7 @@ export class SmartList {
         const div = document.createElement("div");
         div.innerText = "loading";
 
+        this.opts = opts;
         this.done = false;
 
         this.dummies = [];
@@ -40,11 +42,21 @@ export class SmartList {
         }
 
         setTimeout(() => {
-            self.populate(opts);
+            self.populate();
         }, 0);
 
         this.queue = [];
         this.div = div;
+    }
+
+    replace(index: number) {
+        const dummies = this.dummies;
+        const get_div = this.opts.get_div;
+
+        if (index < dummies.length) {
+            dummies[index].hydrate(get_div(index));
+        }
+        // otherwise it will get drawn later, presumably
     }
 
     append(new_div: HTMLElement): void {
@@ -62,8 +74,8 @@ export class SmartList {
         this.dummies.push(dummy);
     }
 
-    populate(opts: Opts): void {
-        const { size, get_div } = opts;
+    populate(): void {
+        const { size, get_div, when_done } = this.opts;
         const div = this.div;
         const dummies = this.dummies;
 
@@ -78,6 +90,6 @@ export class SmartList {
         }
         this.queue = [];
 
-        opts.when_done();
+        when_done();
     }
 }

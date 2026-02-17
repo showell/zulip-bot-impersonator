@@ -17,56 +17,19 @@ export class MessageList {
     div: HTMLElement;
     filter: Filter;
     smart_list: SmartList;
+    index_map: Map<number, number>;
+    rows: MessageInfo[];
 
     constructor(filter: Filter) {
+        const self = this;
+
         this.filter = filter;
+
+        this.index_map = new Map<number, number>();
 
         const div = document.createElement("div");
         div.style.maxHeight = "80vh";
         div.style.overflowY = "auto";
-
-        this.div = div;
-
-        const smart_list = this.populate();
-        this.smart_list = smart_list;
-
-        div.append(smart_list.div);
-        div.append(render_spacer());
-        div.append(render_spacer());
-    }
-
-    refresh_unread(message_ids: number[]): void {
-        console.log("made it to message_list", message_ids);
-        // this.smart_list.refresh_ids(message_ids);
-    }
-
-    append_message(message: Message) {
-        const filter = this.filter;
-
-        if (!filter.predicate(message)) {
-            return;
-        }
-
-        const use_sender = true;
-
-        const message_row = new MessageRow(message);
-        const message_row_widget = new MessageRowWidget(message_row, use_sender);
-
-        const was_near_bottom = this.near_bottom();
-
-        this.smart_list.append(message_row_widget.div);
-
-        if (was_near_bottom) {
-            this.scroll_to_bottom();
-        }
-    }
-
-    populate(): SmartList {
-        const self = this;
-        const div = this.div;
-        const filter = this.filter;
-
-        div.innerHTML = "";
 
         const messages = model.filtered_messages(filter);
 
@@ -86,10 +49,16 @@ export class MessageList {
             rows.push({ message, use_sender });
         }
 
+        // keep track of index for future appends
+        this.index = rows.length;
+
         const smart_list = new SmartList({
             size: rows.length,
             get_div(index: number) {
                 const { message, use_sender } = rows[index];
+
+                // remember our index for updates
+                self.index_map.set(message.id, index);
 
                 const message_row = new MessageRow(message);
                 const message_row_widget = new MessageRowWidget(message_row, use_sender);
@@ -100,7 +69,50 @@ export class MessageList {
             },
         });
 
-        return smart_list;
+        div.append(smart_list.div);
+        div.append(render_spacer());
+        div.append(render_spacer());
+
+        this.div = div;
+        this.rows = rows;
+        this.smart_list = smart_list;
+    }
+
+    refresh_unread(message_ids: number[]): void {
+        const index_map = this.index_map;
+
+        for (const message_id of message_ids) {
+            const index = index_map.get(message_id);
+
+            if (index !== undefined) {
+                this.smart_list.replace(index);
+            }
+        }
+    }
+
+    append_message(message: Message) {
+        const filter = this.filter;
+        const rows = this.rows;
+
+        if (!filter.predicate(message)) {
+            return;
+        }
+
+        const use_sender = true;
+
+        this.index_map.set(message.id, rows.length);
+        rows.push(message, use_sender);
+
+        const message_row = new MessageRow(message);
+        const message_row_widget = new MessageRowWidget(message_row, use_sender);
+
+        const was_near_bottom = this.near_bottom();
+
+        this.smart_list.append(message_row_widget.div);
+
+        if (was_near_bottom) {
+            this.scroll_to_bottom();
+        }
     }
 
     near_bottom(): boolean {
