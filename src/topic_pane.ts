@@ -1,23 +1,20 @@
 import type { Stream } from "./backend/db_types";
 
+import type { SearchWidget } from "./search_widget";
+
 import { render_list_heading, render_pane } from "./render";
 import { TopicList } from "./topic_list";
-
-type CallbackType = {
-    clear_message_view(): void;
-    set_topic_index(index: number): void;
-};
 
 export class TopicPane {
     div: HTMLElement;
     topic_list: TopicList;
 
-    constructor(stream: Stream, callbacks: CallbackType) {
+    constructor(stream: Stream, search_widget: SearchWidget) {
         const div = render_pane();
 
         const stream_id = stream.stream_id;
 
-        this.topic_list = new TopicList(stream_id, callbacks);
+        this.topic_list = new TopicList(stream_id, search_widget);
         this.topic_list.populate();
 
         div.innerHTML = "";

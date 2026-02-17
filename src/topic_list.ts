@@ -1,8 +1,9 @@
 import type { Topic } from "./backend/db_types";
-import type { CallbackType } from "./topic_row_widget";
 import type { TopicRow } from "./backend/row_types";
 
 import * as model from "./backend/model";
+
+import type { SearchWidget } from "./search_widget";
 
 import { Cursor } from "./cursor";
 import { render_thead, render_th, render_big_list } from "./render";
@@ -13,10 +14,10 @@ export class TopicList {
     topic_rows: TopicRow[];
     cursor: Cursor;
     stream_id: number;
-    callbacks: CallbackType;
+    search_widget: SearchWidget;
 
-    constructor(stream_id: number, callbacks: CallbackType) {
-        this.callbacks = callbacks;
+    constructor(stream_id: number, search_widget: SearchWidget) {
+        this.search_widget = search_widget;
 
         const div = render_big_list();
 
@@ -103,7 +104,7 @@ export class TopicList {
     }
 
     make_tbody(topic_rows: TopicRow[]): HTMLElement {
-        const callbacks = this.callbacks;
+        const search_widget = this.search_widget;
         const cursor = this.cursor;
 
         const tbody = document.createElement("tbody");
@@ -120,7 +121,7 @@ export class TopicList {
                 topic_row_data,
                 i,
                 selected,
-                callbacks,
+                search_widget,
             );
             tbody.append(topic_row_widget.tr);
         }

@@ -44,14 +44,7 @@ export class SearchWidget {
         const self = this;
 
         const stream_id = this.get_stream_id();
-        this.channel_view = new ChannelView(stream_id!, {
-            clear_message_view(): void {
-                self.clear_message_view();
-            },
-            set_topic_index(index: number): void {
-                self.set_topic_index(index);
-            },
-        });
+        this.channel_view = new ChannelView(stream_id!, self);
     }
 
     populate(): void {
@@ -134,7 +127,7 @@ export class SearchWidget {
         });
     }
 
-    get_stream_id(): number {
+    get_stream_id(): number | undefined {
         return this.get_stream_list().get_stream_id();
     }
 

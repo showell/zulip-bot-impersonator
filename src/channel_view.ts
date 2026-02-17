@@ -1,5 +1,6 @@
 import type { Stream, StreamMessage } from "./backend/db_types";
 import type { TopicRow } from "./backend/row_types";
+import type { SearchWidget } from "./search_widget";
 
 import * as model from "./backend/model";
 
@@ -9,11 +10,6 @@ import { MessageView } from "./message_view";
 import { TopicList } from "./topic_list";
 import { TopicPane } from "./topic_pane";
 
-type CallbackType = {
-    clear_message_view(): void;
-    set_topic_index(index: number): void;
-};
-
 export class ChannelView {
     div: HTMLElement;
     stream_id: number;
@@ -22,21 +18,14 @@ export class ChannelView {
     topic_pane: TopicPane;
     message_view?: MessageView;
 
-    constructor(stream_id: number, callbacks: CallbackType) {
+    constructor(stream_id: number, search_widget: SearchWidget) {
         const stream = model.stream_for(stream_id);
 
         this.stream = stream;
         this.stream_id = stream_id;
         this.channel_info = new ChannelInfo(stream_id);
 
-        this.topic_pane = new TopicPane(stream, {
-            clear_message_view(): void {
-                callbacks.clear_message_view();
-            },
-            set_topic_index(index: number): void {
-                callbacks.set_topic_index(index);
-            },
-        });
+        this.topic_pane = new TopicPane(stream, search_widget);
 
         const div = document.createElement("div");
         div.style.display = "flex";

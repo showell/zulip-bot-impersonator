@@ -1,9 +1,6 @@
-import { render_tr } from "./render";
+import type { SearchWidget } from "./search_widget";
 
-export type CallbackType = {
-    clear_message_view(): void;
-    set_topic_index(index: number): void;
-};
+import { render_tr } from "./render";
 
 type TopicRowData = {
     name: string;
@@ -51,15 +48,15 @@ class TopicRowName {
         topic_name: string,
         index: number,
         selected: boolean,
-        callbacks: CallbackType,
+        search_widget: SearchWidget,
     ) {
         const div = render_topic_name(topic_name);
 
         div.addEventListener("click", () => {
             if (selected) {
-                callbacks.clear_message_view();
+                search_widget.clear_message_view();
             } else {
-                callbacks.set_topic_index(index);
+                search_widget.set_topic_index(index);
             }
         });
 
@@ -78,13 +75,13 @@ export class TopicRowWidget {
         row_data: TopicRowData,
         index: number,
         selected: boolean,
-        callbacks: CallbackType,
+        search_widget: SearchWidget,
     ) {
         const topic_row_name = new TopicRowName(
             row_data.name,
             index,
             selected,
-            callbacks,
+            search_widget,
         );
 
         const tr = render_tr([
