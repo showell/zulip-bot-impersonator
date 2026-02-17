@@ -1,6 +1,8 @@
 import type { Message } from "./backend/db_types";
 import type { Filter } from "./backend/filter";
+
 import * as model from "./backend/model";
+import * as outbound from "./backend/outbound";
 
 import { MessageRow } from "./backend/row_types";
 
@@ -87,7 +89,7 @@ export class MessageList {
             .map((message) => message.id);
 
         if (unread_message_ids) {
-            console.log("mark_topic_read", unread_message_ids);
+            outbound.mark_message_ids_unread(unread_message_ids);
         }
     }
 
