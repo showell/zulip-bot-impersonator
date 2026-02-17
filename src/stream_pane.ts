@@ -1,5 +1,6 @@
 import * as model from "./backend/model";
 import type { ChannelRow } from "./backend/row_types";
+
 import type { SearchWidget } from "./search_widget";
 
 import { Cursor } from "./cursor";

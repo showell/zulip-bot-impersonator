@@ -4,6 +4,8 @@ import type { SearchWidget } from "./search_widget";
 
 import * as model from "./backend/model";
 
+import type { MessageList } from "./message_list";
+
 import { AddTopicPane } from "./add_topic_pane";
 import { ChannelInfo } from "./channel_info";
 import { MessageView } from "./message_view";
@@ -65,8 +67,11 @@ export class ChannelView {
 
     refresh_unread(message_ids: number[]): void {
         this.get_topic_list().refresh();
-        if (this.message_view) {
-            this.message_view.refresh_unread(message_ids);
+
+        const message_list = this.get_message_list();
+
+        if (message_list) {
+            message_list.refresh_unread(message_ids);
         }
     }
 
@@ -90,7 +95,7 @@ export class ChannelView {
                 topic_list.refresh(); // for counts
 
                 if (this.message_view) {
-                    this.message_view.append_message(stream_message);
+                    this.get_message_list()!.append_message(stream_message);
                 }
             } else if (sent_by_me) {
                 this.select_topic_and_append(stream_message);
@@ -98,6 +103,13 @@ export class ChannelView {
                 topic_list.refresh();
             }
         }
+    }
+
+    get_message_list(): MessageList | undefined {
+        if (this.message_view === undefined) {
+            return undefined;
+        }
+        return this.message_view.get_message_list();
     }
 
     select_topic_and_append(stream_message: StreamMessage): void {

@@ -26,11 +26,7 @@ export class MessagePane {
         this.message_list = message_list;
     }
 
-    refresh_unread(message_ids: number[]): void {
-        this.message_list.refresh_unread(message_ids);
-    }
-
-    append_message(stream_message: StreamMessage) {
-        this.message_list.append_message(stream_message);
+    get_message_list(): MessageList {
+        return this.message_list;
     }
 }

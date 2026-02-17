@@ -1,6 +1,8 @@
 import type { StreamMessage } from "./backend/db_types";
 import type { TopicRow } from "./backend/row_types";
 
+import type { MessageList } from "./message_list";
+
 import { MessagePane } from "./message_pane";
 import { ReplyPane } from "./reply_pane";
 
@@ -24,11 +26,7 @@ export class MessageView {
         this.message_pane = message_pane;
     }
 
-    refresh_unread(message_ids: number[]): void {
-        this.message_pane.refresh_unread(message_ids);
-    }
-
-    append_message(stream_message: StreamMessage): void {
-        this.message_pane.append_message(stream_message);
+    get_message_list(): MessageList {
+        return this.message_pane.get_message_list();
     }
 }
