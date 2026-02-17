@@ -2,6 +2,7 @@ import type { StreamMessage } from "./db_types";
 
 export const enum EventFlavor {
     STREAM_MESSAGE,
+    UNREAD_ADD,
 }
 
 type StreamMessageEvent = {
@@ -10,34 +11,55 @@ type StreamMessageEvent = {
     info: string;
 };
 
-export type ZulipEvent = StreamMessageEvent;
+type UnreadAddEvent = {
+    flavor: EventFlavor.UNREAD_ADD;
+    message_ids: number[];
+}
+
+export type ZulipEvent = StreamMessageEvent | UnreadAddEvent;
 
 function build_event(raw_event: any): ZulipEvent | undefined {
-    console.log(raw_event);
+    if (raw_event.type !== "heartbeat") {
+        console.log(JSON.stringify(raw_event, null, 4));
+    }
 
-    if (raw_event.type === "message") {
-        const message: any = raw_event.message;
+    switch (raw_event.type) {
+        case "message": {
+            const message: any = raw_event.message;
 
-        if (message.type === "stream") {
-            const unread = true;
-            const stream_message: StreamMessage = {
-                id: message.id,
-                type: "stream",
-                sender_id: message.sender_id,
-                stream_id: message.stream_id,
-                topic_name: message.subject,
-                content: message.content,
-                unread,
-                is_super_new: true,
-            };
-            return {
-                flavor: EventFlavor.STREAM_MESSAGE,
-                stream_message,
-                info: `stream message id ${message.id}`,
-            };
+            if (message.type === "stream") {
+                const unread = true;
+                const stream_message: StreamMessage = {
+                    id: message.id,
+                    type: "stream",
+                    sender_id: message.sender_id,
+                    stream_id: message.stream_id,
+                    topic_name: message.subject,
+                    content: message.content,
+                    unread,
+                    is_super_new: true,
+                };
+                return {
+                    flavor: EventFlavor.STREAM_MESSAGE,
+                    stream_message,
+                    info: `stream message id ${message.id}`,
+                };
+            }
+
+            return undefined;
         }
 
-        return undefined;
+        case "update_message_flags": {
+            if (raw_event.op === "add" && raw_event.op === "add" && raw_event.flag === "read") {
+                return {
+                    flavor: EventFlavor.UNREAD_ADD,
+                    message_ids: raw_event.messages,
+                };
+            }
+
+            return undefined;
+        }
+
     }
 
     return undefined;

@@ -63,6 +63,10 @@ function num_messages_for_stream(stream: Stream): number {
     return filtered_messages(stream_filter(stream)).length;
 }
 
+export function mark_message_ids_as_read(message_ids: number[]): void {
+    CurrentMessageStore.mark_ids_as_read(message_ids);
+}
+
 // MISC
 //
 export function participants_for_messages(messages: Message[]): User[] {

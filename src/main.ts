@@ -38,7 +38,7 @@ export async function run() {
 
     let ready = false;
 
-    const event_manager = new EventHandler((event: ZulipEvent) => {
+    function handle_event(event: ZulipEvent) {
         event_radio_widget.add_event(event);
 
         if (event.flavor === EventFlavor.STREAM_MESSAGE) {
@@ -50,7 +50,19 @@ export async function run() {
                 console.log("we were told to refresh before finishing fetch");
             }
         }
-    });
+
+        if (event.flavor === EventFlavor.UNREAD_ADD) {
+            model.mark_message_ids_as_read(event.message_ids);
+
+            if (ready) {
+                // search_widget.refresh_all();
+            } else {
+                console.log("we were told to refresh before finishing fetch");
+            }
+        }
+    }
+
+    const event_manager = new EventHandler(handle_event);
 
     // we wait for register to finish, but then polling goes
     // on "forever" asynchronously
