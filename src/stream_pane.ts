@@ -1,5 +1,6 @@
 import * as model from "./backend/model";
 import type { ChannelRow } from "./backend/row_types";
+import type { SearchWidget } from "./search_widget";
 
 import { Cursor } from "./cursor";
 import {
@@ -10,11 +11,6 @@ import {
     render_big_list,
     render_pane,
 } from "./render";
-
-type CallbackType = {
-    clear_stream(): void;
-    set_stream_index(index: number): void;
-};
 
 function render_stream_count(count: number): HTMLElement {
     const div = document.createElement("div");
@@ -42,15 +38,15 @@ class StreamRowName {
         channel_row: ChannelRow,
         index: number,
         selected: boolean,
-        callbacks: CallbackType,
+        search_widget: SearchWidget,
     ) {
         const div = render_stream_name(channel_row.name());
 
         div.addEventListener("click", () => {
             if (selected) {
-                callbacks.clear_stream();
+                search_widget.clear_stream();
             } else {
-                callbacks.set_stream_index(index);
+                search_widget.set_stream_index(index);
             }
         });
 
@@ -69,13 +65,13 @@ class StreamRow {
         channel_row: ChannelRow,
         index: number,
         selected: boolean,
-        callbacks: CallbackType,
+        search_widget: SearchWidget,
     ) {
         const stream_row_name = new StreamRowName(
             channel_row,
             index,
             selected,
-            callbacks,
+            search_widget
         );
 
         this.tr = render_tr([
@@ -86,19 +82,19 @@ class StreamRow {
 }
 
 export class StreamList {
-    callbacks: CallbackType;
+    search_widget: SearchWidget;
     div: HTMLElement;
     stream_ids: number[];
     cursor: Cursor;
 
-    constructor(callbacks: CallbackType) {
+    constructor(search_widget: SearchWidget) {
         const div = render_big_list();
 
         this.stream_ids = [];
         this.cursor = new Cursor();
         this.get_channel_rows();
 
-        this.callbacks = callbacks;
+        this.search_widget = search_widget;
         this.div = div;
     }
 
@@ -140,7 +136,7 @@ export class StreamList {
     }
 
     make_tbody(): HTMLElement {
-        const callbacks = this.callbacks;
+        const search_widget = this.search_widget;
         const cursor = this.cursor;
         const channel_rows = this.get_channel_rows();
 
@@ -153,7 +149,7 @@ export class StreamList {
                 channel_row,
                 i,
                 selected,
-                callbacks,
+                search_widget,
             );
             tbody.append(stream_row.tr);
         }
@@ -211,10 +207,10 @@ export class StreamPane {
     div: HTMLElement;
     stream_list: StreamList;
 
-    constructor(callbacks: CallbackType) {
+    constructor(search_widget: SearchWidget) {
         const div = render_pane();
 
-        this.stream_list = new StreamList(callbacks);
+        this.stream_list = new StreamList(search_widget);
 
         this.div = div;
         this.populate();

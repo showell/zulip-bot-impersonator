@@ -21,16 +21,7 @@ export class SearchWidget {
         this.div = div;
 
         this.button_panel = new ButtonPanel(self);
-
-        this.stream_pane = new StreamPane({
-            clear_stream(): void {
-                self.clear_stream();
-            },
-            set_stream_index(index: number): void {
-                self.set_stream_index(index);
-            },
-        });
-
+        this.stream_pane = new StreamPane(self);
         this.main_section = this.build_main_section();
         this.show_only_channels();
 
