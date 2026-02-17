@@ -1,5 +1,4 @@
-import type { Message } from "./backend/db_types";
-import * as model from "./backend/model";
+import type { MessageRow } from "./backend/row_types";
 
 import { render_message_content } from "./message_content";
 
@@ -17,22 +16,20 @@ function render_sender_name(sender_name: string): HTMLElement {
 class MessageSender {
     div: HTMLElement;
 
-    constructor(sender_id: number) {
+    constructor(message_row: MessageRow) {
         const div = document.createElement("div");
         div.style.display = "flex";
 
-        const user = model.UserMap.get(sender_id);
-
-        div.append(render_sender_name(user?.full_name ?? "unknown"));
+        div.append(render_sender_name(message_row.sender_name()));
 
         this.div = div;
     }
 }
 
-export class MessageRow {
+export class MessageRowWidget {
     div: HTMLElement;
 
-    constructor(message: Message, sender_id: number | undefined) {
+    constructor(message_row: MessageRow, show_sender: boolean) {
         const div = document.createElement("div");
 
         div.style.paddingTop = "5px";
@@ -44,20 +41,21 @@ export class MessageRow {
         div.style.color = "rgb(38, 38, 38)";
         div.style.lineHeight = "22.4px";
 
-        if (message.unread) {
+        if (message_row.unread()) {
             div.style.backgroundColor = "lavender";
         }
 
-        if (message.is_super_new) {
+        if (message_row.is_super_new()) {
             div.style.border = "1px violet solid";
         }
 
-        if (sender_id) {
-            const sender = new MessageSender(sender_id);
+        if (show_sender) {
+            const sender = new MessageSender(message_row);
             div.append(sender.div);
         }
 
-        const content_div = render_message_content(message.content);
+        const content = message_row.content();
+        const content_div = render_message_content(content);
         content_div.classList.add("rendered_markdown");
 
         div.append(content_div);

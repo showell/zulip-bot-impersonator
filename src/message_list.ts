@@ -2,13 +2,15 @@ import type { Message } from "./backend/db_types";
 import type { Filter } from "./backend/filter";
 import * as model from "./backend/model";
 
-import { MessageRow } from "./message_row";
+import { MessageRow } from "./backend/row_types";
+
+import { MessageRowWidget } from "./message_row_widget";
 import { render_spacer } from "./render";
 import { SmartList } from "./smart_list";
 
 type MessageInfo = {
     message: Message;
-    sender_id: number | undefined;
+    use_sender: boolean;
 };
 
 export class MessageList {
@@ -42,12 +44,14 @@ export class MessageList {
             return;
         }
 
-        const sender_id = message.sender_id;
-        const message_row = new MessageRow(message, sender_id);
+        const use_sender = true;
+
+        const message_row = new MessageRow(message);
+        const message_row_widget = new MessageRowWidget(message_row, use_sender);
 
         const was_near_bottom = this.near_bottom();
 
-        this.smart_list.append(message_row.div);
+        this.smart_list.append(message_row_widget.div);
 
         if (was_near_bottom) {
             this.scroll_to_bottom();
@@ -70,21 +74,23 @@ export class MessageList {
         for (const message of messages) {
             let sender_id: number | undefined = message.sender_id;
 
-            if (sender_id === prev_sender_id) {
-                sender_id = undefined;
-            } else {
+            const use_sender = sender_id !== prev_sender_id;
+
+            if (use_sender) {
                 prev_sender_id = sender_id;
             }
 
-            rows.push({ message, sender_id });
+            rows.push({ message, use_sender });
         }
 
         const smart_list = new SmartList({
             size: rows.length,
             get_div(index: number) {
-                const { message, sender_id } = rows[index];
-                const message_row = new MessageRow(message, sender_id);
-                return message_row.div;
+                const { message, use_sender } = rows[index];
+
+                const message_row = new MessageRow(message);
+                const message_row_widget = new MessageRowWidget(message_row, use_sender);
+                return message_row_widget.div;
             },
             when_done() {
                 self.scroll_to_bottom();
