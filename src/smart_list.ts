@@ -4,8 +4,24 @@ type Opts = {
     when_done: () => void;
 };
 
+class Dummy {
+    div: HTMLElement;
+
+    constructor() {
+        const div = document.createElement("div");
+        div.innerText = "loading...";
+        this.div = div;
+    }
+
+    hydrate(new_div: HTMLElement): void {
+        this.div.innerHTML = "";
+        this.div.append(new_div);
+    }
+}
+
 export class SmartList {
     div: HTMLElement;
+    dummies: Dummy[];
     queue: HTMLElement[];
     done: boolean;
 
@@ -16,41 +32,49 @@ export class SmartList {
 
         this.done = false;
 
+        this.dummies = [];
+        for (let i = 0; i < opts.size; ++i) {
+            const dummy = new Dummy();
+            div.append(dummy.div);
+            this.dummies.push(dummy);
+        }
+
         setTimeout(() => {
             self.populate(opts);
         }, 0);
 
         this.queue = [];
-
         this.div = div;
-    }
-
-    refresh_unread(message_ids: number[]): void {
-        console.log("made it to smart list", message_ids);
     }
 
     append(new_div: HTMLElement): void {
         if (this.done) {
-            this.div.append(new_div);
+            this.actually_append(new_div);
         } else {
             this.queue.push(new_div);
         }
     }
 
+    actually_append(new_div: HTMLElement): void {
+        const dummy = new Dummy();
+        dummy.hydrate(new_div);
+        this.div.append(dummy.div);
+        this.dummies.push(dummy);
+    }
+
     populate(opts: Opts): void {
         const { size, get_div } = opts;
         const div = this.div;
-
-        div.innerHTML = "";
+        const dummies = this.dummies;
 
         for (let i = 0; i < size; ++i) {
-            div.append(get_div(i));
+            dummies[i].hydrate(get_div(i));
         }
 
         this.done = true;
 
         for (const new_div of this.queue) {
-            div.append(new_div);
+            this.actually_append(new_div)
         }
         this.queue = [];
 
