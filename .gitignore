@@ -1,3 +1,5 @@
 *.swp
+foo.txt
+bar.txt
 node_modules
 src/secrets.ts
