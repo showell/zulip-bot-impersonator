@@ -28,7 +28,7 @@ function build_event(raw_event: any): ZulipEvent | undefined {
             const message: any = raw_event.message;
 
             if (message.type === "stream") {
-                const unread = true;
+                const unread = raw_event.flags.find((flag: string) => flag === "read") === undefined;
                 const stream_message: StreamMessage = {
                     id: message.id,
                     type: "stream",
