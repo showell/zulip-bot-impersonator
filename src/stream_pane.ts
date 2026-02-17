@@ -1,5 +1,5 @@
-import type { Stream, StreamInfo } from "./backend/db_types";
 import * as model from "./backend/model";
+import type { ChannelRow } from "./backend/row_types";
 
 import { Cursor } from "./cursor";
 import {
@@ -39,14 +39,12 @@ class StreamRowName {
     div: HTMLElement;
 
     constructor(
-        stream: Stream,
+        channel_row: ChannelRow,
         index: number,
         selected: boolean,
         callbacks: CallbackType,
     ) {
-        const stream_name = stream.name;
-
-        const div = render_stream_name(stream_name);
+        const div = render_stream_name(channel_row.name());
 
         div.addEventListener("click", () => {
             if (selected) {
@@ -68,21 +66,20 @@ class StreamRow {
     tr: HTMLElement;
 
     constructor(
-        stream_info: StreamInfo,
+        channel_row: ChannelRow,
         index: number,
         selected: boolean,
         callbacks: CallbackType,
     ) {
-        const stream = stream_info.stream;
         const stream_row_name = new StreamRowName(
-            stream,
+            channel_row,
             index,
             selected,
             callbacks,
         );
 
         this.tr = render_tr([
-            render_stream_count(stream_info.num_messages),
+            render_stream_count(channel_row.num_messages()),
             stream_row_name.div,
         ]);
     }
@@ -99,7 +96,7 @@ export class StreamList {
 
         this.stream_ids = [];
         this.cursor = new Cursor();
-        this.get_streams();
+        this.get_channel_rows();
 
         this.callbacks = callbacks;
         this.div = div;
@@ -123,37 +120,36 @@ export class StreamList {
         return thead;
     }
 
-    sort(stream_infos: StreamInfo[]) {
-        stream_infos.sort();
-        // stream_infos.sort((s1, s2) => s2.num_messages - s1.num_messages);
+    sort(channel_rows: ChannelRow[]) {
+        channel_rows.sort((c1, c2) => {
+            return c2.num_messages() - c1.num_messages();
+        });
     }
 
-    get_streams(): StreamInfo[] {
+    get_channel_rows(): ChannelRow[] {
         const cursor = this.cursor;
 
-        const stream_infos = model.get_streams();
-        this.sort(stream_infos);
+        const channel_rows = model.get_channel_rows();
+        this.sort(channel_rows);
 
-        cursor.set_count(stream_infos.length);
+        cursor.set_count(channel_rows.length);
 
-        this.stream_ids = stream_infos.map(
-            (stream_info) => stream_info.stream.stream_id,
-        );
+        this.stream_ids = channel_rows.map((c) => c.stream_id());
 
-        return stream_infos;
+        return channel_rows;
     }
 
     make_tbody(): HTMLElement {
         const callbacks = this.callbacks;
         const cursor = this.cursor;
-        const streams = this.get_streams();
+        const channel_rows = this.get_channel_rows();
 
         const tbody = document.createElement("tbody");
 
-        for (let i = 0; i < streams.length; ++i) {
-            const stream = streams[i];
+        for (let i = 0; i < channel_rows.length; ++i) {
+            const channel_row = channel_rows[i];
             const selected = cursor.is_selecting(i);
-            const stream_row = new StreamRow(stream, i, selected, callbacks);
+            const stream_row = new StreamRow(channel_row, i, selected, callbacks);
             tbody.append(stream_row.tr);
         }
 

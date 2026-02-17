@@ -1,9 +1,31 @@
-import type { Message, Topic, User } from "./db_types.ts";
+import type { Message, Stream, Topic, User } from "./db_types.ts";
 
 import { UserMap } from "./model";
 
-// TODO: make class
+export class ChannelRow {
+    _channel: Stream;
+    _num_messages: number;
+
+    constructor(channel: Stream, num_messages: number) {
+        this._channel = channel;
+        this._num_messages = num_messages;
+    }
+
+    stream_id(): number {
+        return this._channel.stream_id;
+    }
+
+    name(): string {
+        return this._channel.name;
+    }
+
+    num_messages(): number {
+        return this._num_messages;
+    }
+}
+
 export type TopicRow = {
+    // TODO: make class
     msg_count: number;
     last_msg_id: number;
     unread_count: number;

@@ -13,11 +13,6 @@ export type StreamMessage = {
 
 export type Message = StreamMessage;
 
-export type StreamInfo = {
-    num_messages: number;
-    stream: Stream;
-};
-
 export type Stream = {
     stream_id: number;
     name: string;

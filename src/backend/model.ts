@@ -2,7 +2,6 @@ import type {
     User,
     Message,
     Stream,
-    StreamInfo,
     StreamMessage,
 } from "./db_types";
 import type { Filter } from "./filter";
@@ -11,6 +10,7 @@ import type { TopicRow } from "./row_types";
 
 import * as fetch from "./fetch";
 import { stream_filter } from "./filter";
+import { ChannelRow } from "./row_types";
 import * as topic_row_query from "./topic_row_query";
 
 export let UserMap: Map<number, User>;
@@ -26,12 +26,11 @@ export function is_me(user_id: number): boolean {
 
 // STREAMS
 //
-export function get_streams(): StreamInfo[] {
+export function get_channel_rows(): ChannelRow[] {
+    // TODO: use smarter query strategy
     return Streams.map((stream) => {
-        return {
-            num_messages: num_messages_for_stream(stream),
-            stream,
-        };
+        const num_messages = num_messages_for_stream(stream);
+        return new ChannelRow(stream, num_messages);
     });
 }
 
