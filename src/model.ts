@@ -9,7 +9,7 @@ import type {
 import type { Filter } from "./filter";
 import type { MessageStore } from "./message_store";
 
-import * as backend from "./backend";
+import * as fetch from "./fetch";
 import { stream_filter } from "./filter";
 import * as topic_row_query from "./topic_row_query";
 
@@ -96,7 +96,7 @@ export function add_stream_messages_to_cache(message: StreamMessage) {
 
 export async function fetch_model_data(): Promise<void> {
     const { current_user_id, user_map, streams, message_store } =
-        await backend.fetch_model_data();
+        await fetch.fetch_model_data();
 
     CurrentUserId = current_user_id;
     UserMap = user_map;
