@@ -32,9 +32,6 @@ export class SearchWidget {
             },
             add_topic(): void {
                 self.add_topic();
-                if (self.channel_view) {
-                    self.channel_view.add_topic();
-                }
             },
             surf_topics(): void {
                 self.surf_topics();
