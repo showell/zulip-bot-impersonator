@@ -50,7 +50,7 @@ function build_event(raw_event: any): ZulipEvent | undefined {
         }
 
         case "update_message_flags": {
-            if (raw_event.op === "add" && raw_event.op === "add" && raw_event.flag === "read") {
+            if (raw_event.op === "add" && raw_event.flag === "read") {
                 return {
                     flavor: EventFlavor.UNREAD_ADD,
                     message_ids: raw_event.messages,

@@ -76,7 +76,6 @@ export class SmartList {
 
     populate(): void {
         const { size, get_div, when_done } = this.opts;
-        const div = this.div;
         const dummies = this.dummies;
 
         for (let i = 0; i < size; ++i) {

@@ -10,7 +10,6 @@ import type { TopicRow } from "./row_types";
 
 import * as channel_row_query from "./channel_row_query";
 import * as fetch from "./fetch";
-import { stream_filter } from "./filter";
 import { ChannelRow } from "./row_types";
 import * as topic_row_query from "./topic_row_query";
 
@@ -57,10 +56,6 @@ export function get_topic_rows(stream_id: number): TopicRow[] {
 
 export function filtered_messages(filter: Filter) {
     return CurrentMessageStore.filtered_messages(filter);
-}
-
-function num_messages_for_stream(stream: Stream): number {
-    return filtered_messages(stream_filter(stream)).length;
 }
 
 export function mark_message_ids_as_read(message_ids: number[]): void {

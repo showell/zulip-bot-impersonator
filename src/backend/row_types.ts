@@ -1,4 +1,4 @@
-import type { Message, Stream, Topic, User } from "./db_types.ts";
+import type { Message, Stream, Topic } from "./db_types.ts";
 
 import { UserMap } from "./model";
 
