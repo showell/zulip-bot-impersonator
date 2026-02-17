@@ -1,4 +1,5 @@
-import { StreamMessage, Topic, TopicRow } from "./db_types";
+import { StreamMessage, Topic } from "./db_types";
+import { TopicRow } from "./row_types";
 
 export function get_rows(stream_messages: StreamMessage[]): TopicRow[] {
     const topic_map = new Map<string, Topic>();

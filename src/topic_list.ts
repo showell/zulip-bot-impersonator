@@ -1,5 +1,6 @@
-import type { Topic, TopicRow } from "./backend/db_types";
+import type { Topic } from "./backend/db_types";
 import type { CallbackType } from "./topic_row_widget";
+import type { TopicRow } from "./backend/row_types";
 
 import * as model from "./backend/model";
 

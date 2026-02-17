@@ -4,10 +4,10 @@ import type {
     Stream,
     StreamInfo,
     StreamMessage,
-    TopicRow,
-} from "./db_types.ts";
+} from "./db_types";
 import type { Filter } from "./filter";
 import type { MessageStore } from "./message_store";
+import type { TopicRow } from "./row_types";
 
 import * as fetch from "./fetch";
 import { stream_filter } from "./filter";

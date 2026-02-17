@@ -1,4 +1,5 @@
-import type { StreamMessage, TopicRow } from "./backend/db_types";
+import type { StreamMessage } from "./backend/db_types";
+import type { TopicRow } from "./backend/row_types";
 
 import { MessagePane } from "./message_pane";
 import { ReplyPane } from "./reply_pane";

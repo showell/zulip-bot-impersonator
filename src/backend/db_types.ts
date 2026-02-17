@@ -32,13 +32,6 @@ export type User = {
     avatar_url: string;
 };
 
-export type TopicRow = {
-    msg_count: number;
-    last_msg_id: number;
-    unread_count: number;
-    topic: Topic;
-};
-
 export class Topic {
     stream_id: number;
     name: string;

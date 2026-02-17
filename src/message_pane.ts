@@ -1,5 +1,6 @@
-import type { StreamMessage, TopicRow } from "./backend/db_types";
+import type { StreamMessage } from "./backend/db_types";
 import { topic_filter } from "./backend/filter";
+import type { TopicRow } from "./backend/row_types";
 
 import { MessageList } from "./message_list";
 import { MessageViewHeader } from "./message_view_header";

@@ -1,4 +1,5 @@
-import type { Stream, StreamMessage, TopicRow } from "./backend/db_types";
+import type { Stream, StreamMessage } from "./backend/db_types";
+import type { TopicRow } from "./backend/row_types";
 
 import * as model from "./backend/model";
 
