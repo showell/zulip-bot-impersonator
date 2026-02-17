@@ -8,6 +8,7 @@ import type { Filter } from "./filter";
 import type { MessageStore } from "./message_store";
 import type { TopicRow } from "./row_types";
 
+import * as channel_row_query from "./channel_row_query";
 import * as fetch from "./fetch";
 import { stream_filter } from "./filter";
 import { ChannelRow } from "./row_types";
@@ -27,11 +28,7 @@ export function is_me(user_id: number): boolean {
 // STREAMS
 //
 export function get_channel_rows(): ChannelRow[] {
-    // TODO: use smarter query strategy
-    return Streams.map((stream) => {
-        const num_messages = num_messages_for_stream(stream);
-        return new ChannelRow(stream, num_messages);
-    });
+    return channel_row_query.get_rows(Streams, CurrentMessageStore.stream_messages);
 }
 
 export function stream_for(stream_id: number): Stream {
