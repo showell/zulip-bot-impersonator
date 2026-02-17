@@ -149,7 +149,12 @@ export class StreamList {
         for (let i = 0; i < channel_rows.length; ++i) {
             const channel_row = channel_rows[i];
             const selected = cursor.is_selecting(i);
-            const stream_row = new StreamRow(channel_row, i, selected, callbacks);
+            const stream_row = new StreamRow(
+                channel_row,
+                i,
+                selected,
+                callbacks,
+            );
             tbody.append(stream_row.tr);
         }
 

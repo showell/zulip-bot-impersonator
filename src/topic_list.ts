@@ -116,7 +116,12 @@ export class TopicList {
                 msg_count: topic_row.msg_count,
                 unread_count: topic_row.unread_count,
             };
-            const topic_row_widget = new TopicRowWidget(topic_row_data, i, selected, callbacks);
+            const topic_row_widget = new TopicRowWidget(
+                topic_row_data,
+                i,
+                selected,
+                callbacks,
+            );
             tbody.append(topic_row_widget.tr);
         }
 

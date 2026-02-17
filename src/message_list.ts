@@ -58,7 +58,10 @@ export class MessageList {
                 self.index_map.set(message.id, index);
 
                 const message_row = new MessageRow(message);
-                const message_row_widget = new MessageRowWidget(message_row, use_sender);
+                const message_row_widget = new MessageRowWidget(
+                    message_row,
+                    use_sender,
+                );
                 return message_row_widget.div;
             },
             when_done() {
@@ -101,7 +104,10 @@ export class MessageList {
         this.index_map.set(message.id, rows.length - 1);
 
         const message_row = new MessageRow(message);
-        const message_row_widget = new MessageRowWidget(message_row, use_sender);
+        const message_row_widget = new MessageRowWidget(
+            message_row,
+            use_sender,
+        );
 
         const was_near_bottom = this.near_bottom();
 

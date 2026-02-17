@@ -154,7 +154,10 @@ export class EventRadioWidgetSingleton {
             address_div.innerText = `${stream.name} > ${message.topic_name}`;
 
             const message_row = new MessageRow(message);
-            const message_row_widget = new MessageRowWidget(message_row, use_sender);
+            const message_row_widget = new MessageRowWidget(
+                message_row,
+                use_sender,
+            );
 
             this.main_content.append(address_div);
             this.main_content.append(message_row_widget.div);
