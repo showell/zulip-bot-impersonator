@@ -14,21 +14,6 @@ function render_sender_name(sender_name: string): HTMLElement {
     return div;
 }
 
-function render_avatar(avatar_url: string): HTMLElement {
-    const div = document.createElement("div");
-    const img = document.createElement("img");
-
-    img.width = 20;
-    img.height = 20;
-    img.style.objectFit = "cover";
-
-    img.src = avatar_url;
-
-    div.append(img);
-
-    return div;
-}
-
 class MessageSender {
     div: HTMLElement;
 
@@ -37,12 +22,6 @@ class MessageSender {
         div.style.display = "flex";
 
         const user = model.UserMap.get(sender_id);
-
-        const avatar_url = user?.avatar_url;
-
-        if (avatar_url) {
-            div.append(render_avatar(avatar_url));
-        }
 
         div.append(render_sender_name(user?.full_name ?? "unknown"));
 

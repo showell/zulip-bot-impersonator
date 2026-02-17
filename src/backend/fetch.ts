@@ -37,7 +37,6 @@ async function fetch_users(): Promise<User[]> {
             id: row.user_id,
             email: row.email,
             full_name: row.full_name,
-            avatar_url: row.avatar_url,
         };
     });
 }
