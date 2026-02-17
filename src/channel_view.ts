@@ -1,9 +1,10 @@
-import type { Stream, StreamMessage, TopicRow } from "./db_types";
+import type { Stream, StreamMessage, TopicRow } from "./backend/db_types";
+
+import * as model from "./backend/model";
 
 import { AddTopicPane } from "./add_topic_pane";
 import { ChannelInfo } from "./channel_info";
 import { MessageView } from "./message_view";
-import * as model from "./model";
 import { TopicList } from "./topic_list";
 import { TopicPane } from "./topic_pane";
 

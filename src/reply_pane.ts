@@ -1,7 +1,8 @@
-import type { Topic } from "./db_types";
+import type { Topic } from "./backend/db_types";
+
+import * as model from "./backend/model";
 
 import { ComposeBox } from "./compose";
-import * as model from "./model";
 import { render_list_heading, render_pane } from "./render";
 
 function render_heading(stream_name: string): HTMLElement {

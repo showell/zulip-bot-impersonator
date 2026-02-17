@@ -1,8 +1,9 @@
-import type { User } from "./db_types";
+import type { User } from "./backend/db_types";
 
-import { stream_filter } from "./filter";
+import { stream_filter } from "./backend/filter";
+import * as model from "./backend/model";
+
 import { render_message_content } from "./message_content";
-import * as model from "./model";
 import { render_pane } from "./render";
 
 function render_text(text: string) {

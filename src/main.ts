@@ -1,9 +1,11 @@
-import { EventFlavor, EventHandler, ZulipEvent } from "./event";
-import { EventRadioWidgetSingleton } from "./event_radio";
-import * as model from "./model";
+import { EventFlavor, EventHandler, ZulipEvent } from "./backend/event";
+import * as model from "./backend/model";
+import * as zulip_client from "./backend/zulip_client";
+
 import { config } from "./secrets";
+
+import { EventRadioWidgetSingleton } from "./event_radio";
 import { SearchWidget } from "./search_widget";
-import * as zulip_client from "./zulip_client";
 
 class Page {
     div: HTMLElement;

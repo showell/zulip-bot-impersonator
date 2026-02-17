@@ -1,4 +1,4 @@
-import type { Stream } from "./db_types";
+import type { Stream } from "./backend/db_types";
 
 import { render_list_heading, render_pane } from "./render";
 import { TopicList } from "./topic_list";

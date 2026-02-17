@@ -1,8 +1,8 @@
-import type { Message } from "./db_types";
-import type { Filter } from "./filter";
+import type { Message } from "./backend/db_types";
+import type { Filter } from "./backend/filter";
+import * as model from "./backend/model";
 
 import { MessageRow } from "./message_row";
-import * as model from "./model";
 import { render_spacer } from "./render";
 import { SmartList } from "./smart_list";
 

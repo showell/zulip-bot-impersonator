@@ -1,4 +1,4 @@
-import type { StreamMessage } from "./db_types";
+import type { StreamMessage } from "./backend/db_types";
 import type { TopicList } from "./topic_list";
 
 import { ButtonPanel } from "./nav_button_panel";

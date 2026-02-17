@@ -1,7 +1,7 @@
-import type { Stream, StreamInfo } from "./db_types";
+import type { Stream, StreamInfo } from "./backend/db_types";
+import * as model from "./backend/model";
 
 import { Cursor } from "./cursor";
-import * as model from "./model";
 import {
     render_list_heading,
     render_thead,

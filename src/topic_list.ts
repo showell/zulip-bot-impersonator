@@ -1,8 +1,9 @@
-import type { Topic, TopicRow } from "./db_types";
+import type { Topic, TopicRow } from "./backend/db_types";
 import type { CallbackType } from "./topic_row_widget";
 
+import * as model from "./backend/model";
+
 import { Cursor } from "./cursor";
-import * as model from "./model";
 import { render_thead, render_th, render_big_list } from "./render";
 import { TopicRowWidget } from "./topic_row_widget";
 

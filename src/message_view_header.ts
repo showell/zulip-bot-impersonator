@@ -1,4 +1,4 @@
-import type { TopicRow } from "./db_types";
+import type { TopicRow } from "./backend/db_types";
 
 function render_topic_heading_count(count: number): HTMLElement {
     const div = document.createElement("div");

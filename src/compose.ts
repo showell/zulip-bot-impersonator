@@ -1,4 +1,4 @@
-import type { Topic } from "./db_types";
+import type { Topic } from "./backend/db_types";
 
 import { Button } from "./button";
 import { config } from "./secrets";

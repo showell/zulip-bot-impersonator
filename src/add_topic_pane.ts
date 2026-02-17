@@ -1,7 +1,8 @@
-import type { Stream } from "./db_types";
+import type { Stream } from "./backend/db_types";
+
+import { Topic } from "./backend/db_types";
 
 import { ComposeBox } from "./compose";
-import { Topic } from "./db_types";
 import { render_list_heading, render_pane } from "./render";
 
 function render_heading(stream_name: string): HTMLElement {

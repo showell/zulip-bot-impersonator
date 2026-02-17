@@ -1,6 +1,6 @@
-import type { Message } from "./db_types";
+import type { Message } from "./backend/db_types";
+import * as model from "./backend/model";
 
-import * as model from "./model";
 import { render_message_content } from "./message_content";
 
 function render_sender_name(sender_name: string): HTMLElement {

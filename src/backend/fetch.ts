@@ -1,6 +1,7 @@
 import type { StreamMessage, User, Stream } from "./db_types";
 
-import { config } from "./secrets";
+import { config } from "../secrets";
+
 import { MessageStore } from "./message_store";
 import * as zulip_client from "./zulip_client";
 

@@ -1,7 +1,8 @@
-import type { ZulipEvent } from "./event";
+import type { ZulipEvent } from "./backend/event";
 
-import { EventFlavor } from "./event";
-import * as model from "./model";
+import { EventFlavor } from "./backend/event";
+import * as model from "./backend/model";
+
 import { MessageRow } from "./message_row";
 import { ModalManager } from "./modal_manager";
 
