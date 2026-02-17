@@ -43,7 +43,7 @@ export class SearchWidget {
     make_channel_view() {
         const self = this;
 
-        const stream_id = this.get_stream_list().get_stream_id();
+        const stream_id = this.get_stream_id();
         this.channel_view = new ChannelView(stream_id!, {
             clear_message_view(): void {
                 self.clear_message_view();
@@ -132,6 +132,10 @@ export class SearchWidget {
             topic_selected: this.topic_selected(),
             channels_hidden: this.channels_hidden,
         });
+    }
+
+    get_stream_id(): number {
+        return this.get_stream_list().get_stream_id();
     }
 
     get_stream_list(): StreamList {
