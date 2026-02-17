@@ -1,13 +1,8 @@
 import type { Topic } from "./backend/db_types";
 
-import { Button } from "./button";
-import { config } from "./secrets";
+import * as outbound from "./backend/outbound";
 
-type SendInfo = {
-    stream_id: number;
-    topic_name: string;
-    content: string;
-};
+import { Button } from "./button";
 
 function render_textarea(): HTMLTextAreaElement {
     const elem = document.createElement("textarea");
@@ -92,33 +87,6 @@ class TextArea {
     }
 }
 
-async function send_message(info: SendInfo): Promise<void> {
-    const body = new URLSearchParams({
-        type: "stream",
-        to: `${info.stream_id}`,
-        topic: info.topic_name,
-        content: info.content,
-    });
-
-    const email = config.user_creds.email;
-    const api_key = config.user_creds.api_key;
-
-    const credentials = btoa(`${email}:${api_key}`);
-    const api_url = `${config.realm_url}/api/v1/messages`;
-
-    const response = await fetch(api_url, {
-        method: "POST",
-        headers: {
-            Authorization: `Basic ${credentials}`,
-            "Content-Type": "application/x-www-form-urlencoded",
-        },
-        body: body.toString(),
-    });
-
-    const data = await response.json();
-    console.log(data);
-}
-
 export class ComposeBox {
     div: HTMLElement;
     topic_input: TopicInput;
@@ -173,7 +141,7 @@ export class ComposeBox {
         const stream_id = this.topic.stream_id;
         const topic_name = this.topic_input.topic_name();
 
-        send_message({ stream_id, topic_name, content });
+        outbound.send_message({ stream_id, topic_name, content });
     }
 
     focus_topic_input(): void {
