@@ -86,6 +86,7 @@ export class ChannelList {
     search_widget: SearchWidget;
     div: HTMLElement;
     stream_ids: number[];
+    channel_rows?: ChannelRow[];
     cursor: Cursor;
 
     constructor(search_widget: SearchWidget) {
@@ -109,6 +110,17 @@ export class ChannelList {
         if (index === undefined) return undefined;
 
         return this.stream_ids[index];
+    }
+
+    get_channel_row(): ChannelRow | undefined {
+        const index = this.cursor.selected_index;
+        const channel_rows = this.channel_rows;
+
+        if (index === undefined) return undefined;
+
+        if (channel_rows === undefined) return undefined;
+
+        return channel_rows[index];
     }
 
     make_thead(): HTMLElement {
@@ -136,6 +148,8 @@ export class ChannelList {
         cursor.set_count(channel_rows.length);
 
         this.stream_ids = channel_rows.map((c) => c.stream_id());
+
+        this.channel_rows = channel_rows;
 
         return channel_rows;
     }

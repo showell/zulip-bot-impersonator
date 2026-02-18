@@ -56,6 +56,11 @@ export class TabHelper {
     refresh() {
         this.button.refresh();
     }
+
+    update_label(label: string) {
+        this.label = label;
+        this.refresh();
+    }
 }
 
 export class Page {

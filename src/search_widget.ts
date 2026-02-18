@@ -1,4 +1,5 @@
 import type { StreamMessage } from "./backend/db_types";
+import type { ChannelRow } from "./backend/row_types";
 
 import type { ChannelList } from "./channel_list";
 import type { MessageList } from "./message_list";
@@ -66,6 +67,7 @@ export class SearchWidget {
     }
 
     start(tab_helper: TabHelper) {
+        this.tab_helper = tab_helper;
         tab_helper.label = "search";
         this.update_button_panel();
         this.button_panel.start();
@@ -146,16 +148,16 @@ export class SearchWidget {
         return this.get_stream_list().get_stream_id();
     }
 
-    get_stream_list(): ChannelList {
-        return this.stream_pane.get_stream_list();
+    get_channel_row(): ChannelRow {
+        return this.get_stream_list().get_channel_row()!;
     }
 
-    set_stream_index(index: number): void {
-        this.get_stream_list().select_index(index);
-        this.make_channel_view();
-        this.update_button_panel();
-        this.show_channels();
-        this.button_panel.focus_surf_topics_button();
+    get_channel_name(): string {
+        return this.get_channel_row().name();
+    }
+
+    get_stream_list(): ChannelList {
+        return this.stream_pane.get_stream_list();
     }
 
     clear_stream(): void {
@@ -163,26 +165,30 @@ export class SearchWidget {
         this.show_only_channels();
         this.update_button_panel();
         this.button_panel.focus_next_channel_button();
+        this.tab_helper!.update_label("search");
+    }
+
+    update_channel(): void {
+        this.make_channel_view();
+        this.update_button_panel();
+        this.show_channels();
+        this.tab_helper!.update_label("#" + this.get_channel_name());
+    }
+
+    set_stream_index(index: number): void {
+        this.get_stream_list().select_index(index);
+        this.update_channel();
+        this.button_panel.focus_surf_topics_button();
     }
 
     stream_up(): void {
         this.get_stream_list().up();
-        this.make_channel_view();
-        this.show_channels();
-        this.update_button_panel();
+        this.update_channel();
     }
 
     stream_down(): void {
         this.get_stream_list().down();
-        this.make_channel_view();
-        this.show_channels();
-        this.update_button_panel();
-    }
-
-    clear_message_view(): void {
-        this.channel_view!.clear_message_view();
-        this.update_button_panel();
-        this.button_panel.focus_surf_topics_button();
+        this.update_channel();
     }
 
     surf_channels(): void {
@@ -193,9 +199,7 @@ export class SearchWidget {
         }
         this.get_stream_list().surf();
         this.stream_pane.populate();
-        this.make_channel_view();
-        this.show_channels();
-        this.update_button_panel();
+        this.update_channel();
         this.button_panel.focus_next_channel_button();
     }
 
@@ -240,5 +244,11 @@ export class SearchWidget {
     topic_down(): void {
         this.channel_view!.topic_down();
         this.update_button_panel();
+    }
+
+    clear_message_view(): void {
+        this.channel_view!.clear_message_view();
+        this.update_button_panel();
+        this.button_panel.focus_surf_topics_button();
     }
 }
