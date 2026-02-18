@@ -119,7 +119,7 @@ export class ChannelList {
 
     sort(channel_rows: ChannelRow[]) {
         channel_rows.sort((c1, c2) => {
-            return c2.num_messages() - c1.num_messages();
+            return c2.last_msg_id() - c1.last_msg_id();
         });
     }
 
