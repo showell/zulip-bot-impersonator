@@ -2,6 +2,7 @@ import type { StreamMessage } from "./backend/db_types";
 
 import type { ChannelList } from "./channel_list";
 import type { MessageList } from "./message_list";
+import type { TabHelper } from "./page";
 import type { TopicList } from "./topic_list";
 
 import { ButtonPanel } from "./nav_button_panel";
@@ -15,6 +16,7 @@ export class SearchWidget {
     stream_pane: StreamPane;
     channel_view?: ChannelView;
     channels_hidden: boolean;
+    tab_helper?: TabHelper;
 
     constructor() {
         const self = this;
@@ -63,7 +65,8 @@ export class SearchWidget {
         div.append(this.main_section);
     }
 
-    start() {
+    start(tab_helper: TabHelper) {
+        tab_helper.label = "search";
         this.update_button_panel();
         this.button_panel.start();
     }

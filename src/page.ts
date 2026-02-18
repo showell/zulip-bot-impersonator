@@ -1,47 +1,73 @@
 type Widget = {
     div: HTMLElement;
-    start: () => void;
-}
-
-type TabInfo = {
-    open: boolean;
-    widget: Widget;
+    start: (tab_helper: TabHelper) => void;
 }
 
 class Button {
+    tab_helper: TabHelper;
+    button: HTMLElement;
     div: HTMLElement;
 
-    constructor(tab_info: TabInfo, page: Page) {
+    constructor(tab_helper: TabHelper, page: Page) {
         const div = document.createElement("div");
         const button = document.createElement("button");
-        button.innerText = `some tab`;
 
-        if (tab_info.open) {
-            button.style.backgroundColor = "lightgreen";
-        }
+        this.tab_helper = tab_helper;
+        this.div = div;
+        this.button = button;
 
         button.addEventListener("click", () => {
-            page.open(tab_info);
+            page.open(tab_helper);
         });
 
         div.append(button);
 
-        this.div = div;
+        this.refresh();
+    }
+
+    refresh(): void {
+        const button = this.button;
+        const tab_helper = this.tab_helper;
+
+        button.innerText = tab_helper.label;
+
+        if (tab_helper.open) {
+            button.style.backgroundColor = "lightgreen";
+        } else {
+            button.style.backgroundColor = "lightblue";
+        }
     }
 }
 
+export class TabHelper {
+    open: boolean;
+    widget: Widget;
+    label: string;
+    button: Button;
+
+    constructor(widget: Widget, page: Page) {
+        this.open = false;
+        this.widget = widget;
+        this.label = "widget";
+        this.button = new Button(this, page);
+    }
+
+    refresh() {
+        this.button.refresh();
+    }
+}
 
 export class Page {
     div: HTMLElement;
     container_div: HTMLElement;
-    tab_infos: TabInfo[];
+    tab_helpers: TabHelper[];
 
     constructor() {
         const div = document.createElement("div");
         div.innerText =
             "Welcome to Zulip! loading users and recent messages...";
 
-        this.tab_infos = [];
+        this.tab_helpers = [];
 
         const container_div = document.createElement("div");
 
@@ -51,15 +77,14 @@ export class Page {
 
     make_button_bar(): HTMLElement {
         const page = this;
-        const tab_infos = this.tab_infos;
+        const tab_helpers = this.tab_helpers;
 
         const button_bar = document.createElement("div");
         button_bar.style.display = "flex";
         button_bar.style.marginBottom = "5px";
 
-        for (const tab_info of tab_infos) {
-            const button = new Button(tab_info, page);
-            button_bar.append(button.div);
+        for (const tab_helper of tab_helpers) {
+            button_bar.append(tab_helper.button.div);
         }
 
         return button_bar;
@@ -67,35 +92,38 @@ export class Page {
 
 
     add_widget(widget: Widget): void {
-        const tab_infos = this.tab_infos;
+        const page = this;
+        const tab_helpers = this.tab_helpers;
 
-        const open = false;
-        const tab_info = { widget, open }
+        const tab_helper = new TabHelper(widget, page);
 
-        tab_infos.push(tab_info);
+        tab_helpers.push(tab_helper);
 
-        this.open(tab_info);
-        widget.start();
+        widget.start(tab_helper);
+        this.open(tab_helper);
     }
 
     close_all(): void {
-        for (const tab_info of this.tab_infos) {
-            tab_info.open = false;
+        for (const tab_helper of this.tab_helpers) {
+            if (tab_helper.open) {
+                tab_helper.open = false;
+                tab_helper.refresh();
+            }
         }
     }
 
-    open(tab_info: TabInfo): void {
+    open(tab_helper: TabHelper): void {
         const div = this.div;
         const container_div = this.container_div;
 
-
         this.close_all();
-        tab_info.open = true;
+        tab_helper.open = true;
+        tab_helper.refresh();
 
         const button_bar = this.make_button_bar();
 
         container_div.innerHTML = "";
-        container_div.append(tab_info.widget.div);
+        container_div.append(tab_helper.widget.div);
 
         div.innerHTML = "";
         div.append(button_bar);
