@@ -1,3 +1,4 @@
+import type { ZulipEvent } from "./event";
 import type {
     User,
     Message,
@@ -8,6 +9,7 @@ import type { Filter } from "./filter";
 import type { MessageStore } from "./message_store";
 import type { TopicRow } from "./row_types";
 
+import { EventFlavor } from "./event";
 import * as channel_row_query from "./channel_row_query";
 import * as fetch from "./fetch";
 import { ChannelRow } from "./row_types";
@@ -82,6 +84,19 @@ export function participants_for_messages(messages: Message[]): User[] {
         .map((sender_id) => UserMap.get(sender_id)!)
         .filter((user) => user !== undefined);
 }
+
+// EVENTS
+
+export function handle_event(event: ZulipEvent): void {
+    if (event.flavor === EventFlavor.STREAM_MESSAGE) {
+        add_stream_messages_to_cache(event.stream_message);
+    }
+
+    if (event.flavor === EventFlavor.UNREAD_ADD) {
+        mark_message_ids_as_read(event.message_ids);
+    }
+}
+
 
 // FETCHING and EVENT PROCESSING
 

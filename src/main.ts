@@ -1,4 +1,4 @@
-import { EventFlavor, EventHandler, ZulipEvent } from "./backend/event";
+import { EventHandler, ZulipEvent } from "./backend/event";
 import * as model from "./backend/model";
 import * as zulip_client from "./backend/zulip_client";
 
@@ -22,14 +22,7 @@ export async function run() {
     const search_widgets: SearchWidget[] = [];
 
     function handle_event(event: ZulipEvent) {
-        if (event.flavor === EventFlavor.STREAM_MESSAGE) {
-            model.add_stream_messages_to_cache(event.stream_message);
-        }
-
-        if (event.flavor === EventFlavor.UNREAD_ADD) {
-            model.mark_message_ids_as_read(event.message_ids);
-        }
-
+        model.handle_event(event);
         page.handle_event(event);
     }
 
