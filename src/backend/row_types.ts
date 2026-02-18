@@ -1,14 +1,15 @@
 import type { Message, Stream, Topic } from "./db_types.ts";
+import type { ListInfo } from "./message_list.ts";
 
 import { UserMap } from "./model";
 
 export class ChannelRow {
     _channel: Stream;
-    _num_messages: number;
+    _list_info: ListInfo;
 
-    constructor(channel: Stream, num_messages: number) {
+    constructor(channel: Stream, list_info: ListInfo) {
         this._channel = channel;
-        this._num_messages = num_messages;
+        this._list_info = list_info;
     }
 
     stream_id(): number {
@@ -20,7 +21,15 @@ export class ChannelRow {
     }
 
     num_messages(): number {
-        return this._num_messages;
+        return this._list_info.count;
+    }
+
+    last_msg_id(): number {
+        return this._list_info.last_msg_id;
+    }
+
+    unread_count(): number {
+        return this._list_info.unread_count;
     }
 }
 

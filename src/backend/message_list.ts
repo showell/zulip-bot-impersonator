@@ -1,6 +1,6 @@
 import { Message } from "./db_types";
 
-type ListInfo = {
+export type ListInfo = {
     last_msg_id: number;
     count: number;
     unread_count: number;

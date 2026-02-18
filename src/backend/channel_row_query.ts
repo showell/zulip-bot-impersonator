@@ -24,10 +24,8 @@ export function get_rows(streams: Stream[], messages: Message[]): ChannelRow[] {
     for (const stream of streams) {
         const stream_id = stream.stream_id;
         const message_list = message_list_map.get(stream_id) ?? new MessageList();
-
         const list_info = message_list.list_info();
-
-        const channel_row = new ChannelRow(stream, list_info.count);
+        const channel_row = new ChannelRow(stream, list_info);
 
         rows.push(channel_row);
     }
