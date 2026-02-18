@@ -5,7 +5,7 @@ import { config } from "../secrets";
 import { MessageStore } from "./message_store";
 import * as zulip_client from "./zulip_client";
 
-const BATCH_SIZE = 700;
+const BATCH_SIZE = 5000;
 
 type Backend = {
     current_user_id: number;
