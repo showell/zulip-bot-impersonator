@@ -5,7 +5,6 @@ export class MessageStore {
     stream_messages: StreamMessage[];
 
     constructor(stream_messages: StreamMessage[]) {
-        console.log("building message store");
         this.stream_messages = stream_messages;
     }
 
@@ -21,7 +20,6 @@ export class MessageStore {
     filtered_messages(filter: Filter) {
         const messages = this.stream_messages;
 
-        console.log("using filter", filter.label);
         return messages.filter(filter.predicate);
     }
 

@@ -55,7 +55,6 @@ export async function get_messages(num_before: number) {
     url.searchParams.set("anchor", "newest");
     const response = await fetch(url, { headers: get_headers() });
     const data = await response.json();
-    console.log("found oldest", data.found_oldest);
     return data.messages;
 }
 

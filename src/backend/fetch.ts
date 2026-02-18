@@ -42,7 +42,6 @@ async function fetch_users(): Promise<User[]> {
 }
 
 export async function fetch_model_data(): Promise<Backend> {
-    console.log("starting fetch");
     const users = await fetch_users();
 
     const user_map = new Map<number, User>();
@@ -53,18 +52,13 @@ export async function fetch_model_data(): Promise<Backend> {
         user_map.set(user.id, user);
 
         if (user.email === config.user_creds.email) {
-            console.log("me?", user);
             current_user_id = user.id;
         }
     }
 
-    console.log("got users");
-
     const streams = await fetch_streams();
-    console.log("got streams");
 
     const rows = await zulip_client.get_messages(BATCH_SIZE);
-    console.log("got messages");
 
     const stream_messages = rows
         .filter((row: any) => row.type === "stream")
@@ -89,15 +83,11 @@ export async function fetch_model_data(): Promise<Backend> {
             const email = row.sender_email;
             const full_name = row.sender_full_name;
             const user = { id, email, full_name };
-            console.log("need to ghetto-get", email);
             user_map.set(id, user);
         }
     }
 
     const message_store = new MessageStore(stream_messages);
-    console.log("we have messages");
-
-    console.log("current_user_id", current_user_id);
 
     return {
         current_user_id,
