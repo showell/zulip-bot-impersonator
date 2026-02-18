@@ -1,11 +1,9 @@
-type Cat = {
-    name: string;
-    sound: string;
-};
+import * as model from "./backend/model";
 
-const oliver: Cat = {
-    name: "Oliver",
-    sound: "meow",
-};
+async function test(): Promise<void> {
+    const data = await model.fetch_model_data();
 
-console.log(oliver);
+    console.log(model.get_channel_rows().slice(0, 2));
+}
+
+test();
