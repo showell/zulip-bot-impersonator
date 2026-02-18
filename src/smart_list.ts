@@ -29,7 +29,6 @@ export class SmartList {
     constructor(opts: Opts) {
         const self = this;
         const div = document.createElement("div");
-        div.innerText = "loading";
 
         this.opts = opts;
         this.done = false;
