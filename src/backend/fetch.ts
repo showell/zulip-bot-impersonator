@@ -41,26 +41,6 @@ async function fetch_users(): Promise<User[]> {
     });
 }
 
-async function fetch_stream_messages(): Promise<StreamMessage[]> {
-    const rows = await zulip_client.get_messages(BATCH_SIZE);
-    return rows
-        .filter((row: any) => row.type === "stream")
-        .map((row: any) => {
-            const unread =
-                row.flags.find((flag: string) => flag === "read") === undefined;
-            return {
-                id: row.id,
-                type: row.type,
-                sender_id: row.sender_id,
-                topic_name: row.subject,
-                stream_id: row.stream_id,
-                content: row.content,
-                is_super_new: false,
-                unread,
-            };
-        });
-}
-
 export async function fetch_model_data(): Promise<Backend> {
     console.log("starting fetch");
     const users = await fetch_users();
@@ -83,8 +63,36 @@ export async function fetch_model_data(): Promise<Backend> {
     const streams = await fetch_streams();
     console.log("got streams");
 
-    const stream_messages = await fetch_stream_messages();
+    const rows = await zulip_client.get_messages(BATCH_SIZE);
     console.log("got messages");
+
+    const stream_messages = rows
+        .filter((row: any) => row.type === "stream")
+        .map((row: any) => {
+            const unread =
+                row.flags.find((flag: string) => flag === "read") === undefined;
+            return {
+                id: row.id,
+                type: row.type,
+                sender_id: row.sender_id,
+                topic_name: row.subject,
+                stream_id: row.stream_id,
+                content: row.content,
+                is_super_new: false,
+                unread,
+            };
+        });
+
+   for (const row of rows) {
+       if (!user_map.has(row.sender_id)) {
+            const id = row.sender_id;
+            const email = row.sender_email;
+            const full_name = row.sender_full_name;
+            const user = { id, email, full_name };
+            console.log("need to ghetto-get", email);
+            user_map.set(id, user);
+        }
+    }
 
     const message_store = new MessageStore(stream_messages);
     console.log("we have messages");
