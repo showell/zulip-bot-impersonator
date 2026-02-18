@@ -1,4 +1,3 @@
-import type { StreamMessage } from "./backend/db_types";
 import type { TopicRow } from "./backend/row_types";
 
 import type { MessageList } from "./message_list";

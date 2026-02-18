@@ -1,4 +1,3 @@
-import type { StreamMessage } from "./backend/db_types";
 import { topic_filter } from "./backend/filter";
 import type { TopicRow } from "./backend/row_types";
 

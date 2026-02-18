@@ -93,4 +93,3 @@ export function render_unread_count(count: number): HTMLElement {
 
     return div;
 }
-

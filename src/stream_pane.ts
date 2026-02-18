@@ -2,10 +2,7 @@ import type { SearchWidget } from "./search_widget";
 
 import { ChannelList } from "./channel_list";
 
-import {
-    render_list_heading,
-    render_pane,
-} from "./render";
+import { render_list_heading, render_pane } from "./render";
 
 export class StreamPane {
     div: HTMLElement;

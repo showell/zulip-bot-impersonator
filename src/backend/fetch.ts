@@ -1,4 +1,4 @@
-import type { StreamMessage, User, Stream } from "./db_types";
+import type { User, Stream } from "./db_types";
 
 import { config } from "../secrets";
 

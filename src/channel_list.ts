@@ -112,7 +112,11 @@ export class ChannelList {
     }
 
     make_thead(): HTMLElement {
-        const thead = render_thead([render_th("Msgs"), render_th("Unread"), render_th("Channel")]);
+        const thead = render_thead([
+            render_th("Msgs"),
+            render_th("Unread"),
+            render_th("Channel"),
+        ]);
 
         return thead;
     }
