@@ -3,6 +3,7 @@ import type { StreamMessage } from "./db_types";
 export const enum EventFlavor {
     STREAM_MESSAGE,
     UNREAD_ADD,
+    UNREAD_REMOVE,
     UNKNOWN,
 }
 
@@ -17,12 +18,17 @@ type UnreadAddEvent = {
     message_ids: number[];
 }
 
+type UnreadRemoveEvent = {
+    flavor: EventFlavor.UNREAD_REMOVE;
+    message_ids: number[];
+}
+
 type UnknownEvent = {
     flavor: EventFlavor.UNKNOWN;
     raw_event: any;
 }
 
-export type ZulipEvent = StreamMessageEvent | UnreadAddEvent | UnknownEvent;
+export type ZulipEvent = StreamMessageEvent | UnreadAddEvent | UnreadRemoveEvent | UnknownEvent;
 
 function build_event(raw_event: any): ZulipEvent | undefined {
     if (raw_event.type !== "heartbeat") {
@@ -59,6 +65,13 @@ function build_event(raw_event: any): ZulipEvent | undefined {
             if (raw_event.op === "add" && raw_event.flag === "read") {
                 return {
                     flavor: EventFlavor.UNREAD_ADD,
+                    message_ids: raw_event.messages,
+                };
+            }
+
+            if (raw_event.op === "remove" && raw_event.flag === "read") {
+                return {
+                    flavor: EventFlavor.UNREAD_REMOVE,
                     message_ids: raw_event.messages,
                 };
             }

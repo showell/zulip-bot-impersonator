@@ -65,13 +65,13 @@ export class ChannelView {
         return this.topic_pane.get_topic_list();
     }
 
-    refresh_unread(message_ids: number[]): void {
+    refresh_message_ids(message_ids: number[]): void {
         this.get_topic_list().refresh();
 
         const message_list = this.get_message_list();
 
         if (message_list) {
-            message_list.refresh_unread(message_ids);
+            message_list.refresh_message_ids(message_ids);
         }
     }
 

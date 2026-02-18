@@ -93,7 +93,7 @@ export class MessageList {
         }
     }
 
-    refresh_unread(message_ids: number[]): void {
+    refresh_message_ids(message_ids: number[]): void {
         const index_map = this.index_map;
 
         for (const message_id of message_ids) {

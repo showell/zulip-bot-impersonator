@@ -64,6 +64,10 @@ export function mark_message_ids_as_read(message_ids: number[]): void {
     CurrentMessageStore.mark_ids_as_read(message_ids);
 }
 
+export function mark_message_ids_as_unread(message_ids: number[]): void {
+    CurrentMessageStore.mark_ids_as_unread(message_ids);
+}
+
 // MISC
 //
 export function participants_for_messages(messages: Message[]): User[] {
@@ -94,6 +98,10 @@ export function handle_event(event: ZulipEvent): void {
 
     if (event.flavor === EventFlavor.UNREAD_ADD) {
         mark_message_ids_as_read(event.message_ids);
+    }
+
+    if (event.flavor === EventFlavor.UNREAD_REMOVE) {
+        mark_message_ids_as_unread(event.message_ids);
     }
 }
 

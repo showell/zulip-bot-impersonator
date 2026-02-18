@@ -17,6 +17,15 @@ export class MessageStore {
         }
     }
 
+    mark_ids_as_unread(message_ids: number[]): void {
+        const set = new Set(message_ids);
+        for (const message of this.stream_messages) {
+            if (set.has(message.id)) {
+                message.unread = true;
+            }
+        }
+    }
+
     filtered_messages(filter: Filter) {
         const messages = this.stream_messages;
 

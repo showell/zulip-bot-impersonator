@@ -37,10 +37,10 @@ export class SearchWidget {
         this.channels_hidden = false;
     }
 
-    refresh_unread(message_ids: number[]): void {
+    refresh_message_ids(message_ids: number[]): void {
         this.stream_pane.populate();
         if (this.channel_view) {
-            this.channel_view.refresh_unread(message_ids);
+            this.channel_view.refresh_message_ids(message_ids);
         }
     }
 
@@ -261,7 +261,11 @@ export class SearchWidget {
         }
 
         if (event.flavor === EventFlavor.UNREAD_ADD) {
-            this.refresh_unread(event.message_ids);
+            this.refresh_message_ids(event.message_ids);
+        }
+
+        if (event.flavor === EventFlavor.UNREAD_REMOVE) {
+            this.refresh_message_ids(event.message_ids);
         }
     }
 }
