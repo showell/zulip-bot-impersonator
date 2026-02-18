@@ -195,7 +195,7 @@ export class SearchWidget {
         tab_helper.update_label(label);
     }
 
-    clear_stream(): void {
+    clear_channel(): void {
         this.get_stream_list().clear_selection();
         this.show_only_channels();
         this.update_button_panel();
@@ -210,18 +210,18 @@ export class SearchWidget {
         this.update_label();
     }
 
-    set_stream_index(index: number): void {
+    set_channel_index(index: number): void {
         this.get_stream_list().select_index(index);
         this.update_channel();
         this.button_panel.focus_surf_topics_button();
     }
 
-    stream_up(): void {
+    channel_up(): void {
         this.get_stream_list().up();
         this.update_channel();
     }
 
-    stream_down(): void {
+    channel_down(): void {
         this.get_stream_list().down();
         this.update_channel();
     }

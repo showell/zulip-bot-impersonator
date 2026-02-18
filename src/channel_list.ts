@@ -44,9 +44,9 @@ class ChannelRowName {
 
         div.addEventListener("click", () => {
             if (selected) {
-                search_widget.clear_stream();
+                search_widget.clear_channel();
             } else {
-                search_widget.set_stream_index(index);
+                search_widget.set_channel_index(index);
             }
         });
 

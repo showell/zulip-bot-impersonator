@@ -22,10 +22,10 @@ export class ButtonPanel {
         });
 
         this.next_channel = new Button("next channel", () => {
-            search_widget.stream_down();
+            search_widget.channel_down();
         });
         this.prev_channel = new Button("prev channel", () => {
-            search_widget.stream_up();
+            search_widget.channel_up();
         });
 
         this.add_topic = new Button("add topic", () => {
