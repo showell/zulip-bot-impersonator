@@ -1,6 +1,11 @@
+type Widget = {
+    div: HTMLElement;
+    start: () => void;
+}
+
 type TabInfo = {
     open: boolean;
-    widget_div: HTMLElement;
+    widget: Widget;
 }
 
 class Button {
@@ -61,15 +66,16 @@ export class Page {
     }
 
 
-    add_widget(widget_div: HTMLElement): void {
+    add_widget(widget: Widget): void {
         const tab_infos = this.tab_infos;
 
         const open = false;
-        const tab_info = { widget_div, open }
+        const tab_info = { widget, open }
 
         tab_infos.push(tab_info);
 
         this.open(tab_info);
+        widget.start();
     }
 
     close_all(): void {
@@ -89,7 +95,7 @@ export class Page {
         const button_bar = this.make_button_bar();
 
         container_div.innerHTML = "";
-        container_div.append(tab_info.widget_div);
+        container_div.append(tab_info.widget.div);
 
         div.innerHTML = "";
         div.append(button_bar);

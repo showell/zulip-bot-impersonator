@@ -57,8 +57,7 @@ export async function run() {
     for (let i = 0; i < 3; ++i) {
         const search_widget = new SearchWidget();
         search_widget.populate();
-        page.add_widget(search_widget.div);
-        search_widget.start();
+        page.add_widget(search_widget);
         search_widgets.push(search_widget);
     }
 
