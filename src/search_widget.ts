@@ -32,12 +32,14 @@ export class SearchWidget {
     }
 
     refresh_unread(message_ids: number[]): void {
+        this.stream_pane.populate();
         if (this.channel_view) {
             this.channel_view.refresh_unread(message_ids);
         }
     }
 
     refresh(stream_message: StreamMessage): void {
+        this.stream_pane.populate();
         if (this.channel_view) {
             this.channel_view.refresh(stream_message);
         }
