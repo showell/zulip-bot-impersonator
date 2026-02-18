@@ -1,6 +1,6 @@
 import type { SearchWidget } from "./search_widget";
 
-import { render_tr } from "./render";
+import { render_tr, render_unread_count } from "./render";
 
 type TopicRowData = {
     name: string;
@@ -12,19 +12,6 @@ function render_topic_count(count: number): HTMLElement {
     const div = document.createElement("div");
     div.innerText = `${count}`;
     div.style.textAlign = "right";
-
-    return div;
-}
-
-function render_unread_count(count: number): HTMLElement {
-    const div = document.createElement("div");
-    div.innerText = count ? `${count}` : "";
-    div.style.textAlign = "right";
-    div.style.padding = "2px";
-
-    if (count > 0) {
-        div.style.backgroundColor = "lavender";
-    }
 
     return div;
 }

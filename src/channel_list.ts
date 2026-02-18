@@ -9,6 +9,7 @@ import {
     render_th,
     render_tr,
     render_big_list,
+    render_unread_count,
 } from "./render";
 
 function render_channel_count(count: number): HTMLElement {
@@ -75,6 +76,7 @@ class ChannelRowWidget {
 
         this.tr = render_tr([
             render_channel_count(channel_row.num_messages()),
+            render_unread_count(channel_row.unread_count()),
             channel_row_name.div,
         ]);
     }
@@ -110,7 +112,7 @@ export class ChannelList {
     }
 
     make_thead(): HTMLElement {
-        const thead = render_thead([render_th("Count"), render_th("Channel")]);
+        const thead = render_thead([render_th("Msgs"), render_th("Unread"), render_th("Channel")]);
 
         return thead;
     }
