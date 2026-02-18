@@ -29,7 +29,7 @@ export class EventRadio {
         tab_helper.update_label("Events");
     }
 
-    add_event(event: ZulipEvent): void {
+    handle_event(event: ZulipEvent): void {
         const div = this.div;
 
         if (event.flavor === EventFlavor.STREAM_MESSAGE) {

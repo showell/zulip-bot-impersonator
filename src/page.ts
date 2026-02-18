@@ -1,6 +1,9 @@
+import { ZulipEvent } from "./backend/event";
+
 type Widget = {
     div: HTMLElement;
     start: (tab_helper: TabHelper) => void;
+    handle_event: (event: ZulipEvent) => void;
 };
 
 class Button {
@@ -140,5 +143,11 @@ export class Page {
         div.innerHTML = "";
         div.append(button_bar);
         div.append(container_div);
+    }
+
+    handle_event(event: ZulipEvent): void {
+        for (const tab_helper of this.tab_helpers) {
+            tab_helper.widget.handle_event(event);
+        }
     }
 }

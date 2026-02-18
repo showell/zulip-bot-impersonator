@@ -30,11 +30,7 @@ export async function run() {
             model.mark_message_ids_as_read(event.message_ids);
         }
 
-        for (const search_widget of search_widgets) {
-            search_widget.handle_event(event);
-        }
-
-        event_radio_widget.add_event(event);
+        page.handle_event(event);
     }
 
     const event_manager = new EventHandler(handle_event);
