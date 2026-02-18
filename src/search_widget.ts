@@ -156,11 +156,26 @@ export class SearchWidget {
     }
 
     get_channel_name(): string {
-        return this.get_channel_row().name();
+        const channel_row = this.get_channel_row();
+
+        return channel_row?.name();
     }
 
     get_stream_list(): ChannelList {
         return this.stream_pane.get_stream_list();
+    }
+
+    update_label(): void {
+        const tab_helper = this.tab_helper!;
+        const channel_name = this.get_channel_name();
+
+        let label = "Search";
+
+        if (channel_name) {
+            label = "#" + channel_name;
+        }
+
+        tab_helper.update_label(label);
     }
 
     clear_stream(): void {
@@ -168,14 +183,14 @@ export class SearchWidget {
         this.show_only_channels();
         this.update_button_panel();
         this.button_panel.focus_next_channel_button();
-        this.tab_helper!.update_label("search");
+        this.update_label();
     }
 
     update_channel(): void {
         this.make_channel_view();
         this.update_button_panel();
         this.show_channels();
-        this.tab_helper!.update_label("#" + this.get_channel_name());
+        this.update_label();
     }
 
     set_stream_index(index: number): void {
