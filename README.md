@@ -18,3 +18,11 @@ Use oxlint every now and then:
 npm add -D oxlint
 npx oxlint
 ```
+
+## Node stuff
+
+I did:
+
+```
+npm install vite-node --save-dev
+```
