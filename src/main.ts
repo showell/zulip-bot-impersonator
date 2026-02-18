@@ -22,25 +22,19 @@ export async function run() {
     const search_widgets: SearchWidget[] = [];
 
     function handle_event(event: ZulipEvent) {
-        event_radio_widget.add_event(event);
-
         if (event.flavor === EventFlavor.STREAM_MESSAGE) {
             model.add_stream_messages_to_cache(event.stream_message);
-
-            for (const search_widget of search_widgets) {
-                search_widget.refresh(event.stream_message);
-            }
         }
 
         if (event.flavor === EventFlavor.UNREAD_ADD) {
-            const message_ids = event.message_ids;
-
-            model.mark_message_ids_as_read(message_ids);
-
-            for (const search_widget of search_widgets) {
-                search_widget.refresh_unread(message_ids);
-            }
+            model.mark_message_ids_as_read(event.message_ids);
         }
+
+        for (const search_widget of search_widgets) {
+            search_widget.handle_event(event);
+        }
+
+        event_radio_widget.add_event(event);
     }
 
     const event_manager = new EventHandler(handle_event);

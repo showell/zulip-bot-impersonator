@@ -1,5 +1,8 @@
+import type { ZulipEvent } from "./backend/event";
 import type { StreamMessage } from "./backend/db_types";
 import type { ChannelRow } from "./backend/row_types";
+
+import { EventFlavor } from "./backend/event";
 
 import type { ChannelList } from "./channel_list";
 import type { MessageList } from "./message_list";
@@ -250,5 +253,15 @@ export class SearchWidget {
         this.channel_view!.clear_message_view();
         this.update_button_panel();
         this.button_panel.focus_surf_topics_button();
+    }
+
+    handle_event(event: ZulipEvent): void {
+        if (event.flavor === EventFlavor.STREAM_MESSAGE) {
+            this.refresh(event.stream_message);
+        }
+
+        if (event.flavor === EventFlavor.UNREAD_ADD) {
+            this.refresh_unread(event.message_ids);
+        }
     }
 }
