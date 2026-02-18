@@ -55,14 +55,17 @@ export class ChannelView {
     }
 
     open_message_view(): void {
-        const topic_list = this.get_topic_list();
-        const topic_row = topic_list.get_current_topic_row()!;
-
+        const topic_row = this.get_topic_row()!;
         this.open_message_view_for_topic(topic_row);
     }
 
     get_topic_list(): TopicList {
         return this.topic_pane.get_topic_list();
+    }
+
+    get_topic_row(): TopicRow | undefined {
+        const topic_list = this.get_topic_list();
+        return topic_list.get_topic_row()!;
     }
 
     refresh_message_ids(message_ids: number[]): void {

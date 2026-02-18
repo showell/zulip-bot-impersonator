@@ -83,6 +83,17 @@ export class SearchWidget {
         return this.channel_view.get_topic_list();
     }
 
+    get_topic_name(): string | undefined {
+        const topic_list = this.get_topic_list();
+
+        if (topic_list === undefined) {
+            return undefined;
+        }
+
+        const topic_row = topic_list.get_topic_row();
+        return topic_row?.topic.name;
+    }
+
     get_message_list(): MessageList | undefined {
         if (this.channel_view === undefined) {
             return undefined;
@@ -155,7 +166,7 @@ export class SearchWidget {
         return this.get_stream_list().get_channel_row()!;
     }
 
-    get_channel_name(): string {
+    get_channel_name(): string | undefined {
         const channel_row = this.get_channel_row();
 
         return channel_row?.name();
@@ -173,6 +184,12 @@ export class SearchWidget {
 
         if (channel_name) {
             label = "#" + channel_name;
+
+            const topic_name = this.get_topic_name();
+
+            if (topic_name !== undefined) {
+                label += " > " + topic_name;
+            }
         }
 
         tab_helper.update_label(label);
@@ -240,33 +257,37 @@ export class SearchWidget {
         message_list.mark_topic_read();
     }
 
-    surf_topics(): void {
-        this.channel_view!.surf_topics();
+    update_topic(): void {
         this.hide_channels();
         this.update_button_panel();
         this.button_panel.focus_next_topic_button();
+        this.update_label();
+    }
+
+    surf_topics(): void {
+        this.channel_view!.surf_topics();
+        this.update_topic();
     }
 
     set_topic_index(index: number): void {
         this.channel_view!.set_topic_index(index);
-        this.hide_channels();
-        this.update_button_panel();
-        this.button_panel.focus_next_topic_button();
+        this.update_topic();
     }
 
     topic_up(): void {
         this.channel_view!.topic_up();
-        this.update_button_panel();
+        this.update_topic();
     }
 
     topic_down(): void {
         this.channel_view!.topic_down();
-        this.update_button_panel();
+        this.update_topic();
     }
 
     clear_message_view(): void {
         this.channel_view!.clear_message_view();
         this.update_button_panel();
+        this.update_label();
         this.button_panel.focus_surf_topics_button();
     }
 

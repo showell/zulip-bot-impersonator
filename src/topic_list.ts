@@ -33,7 +33,7 @@ export class TopicList {
         return this.cursor.has_selection();
     }
 
-    get_current_topic_row(): TopicRow | undefined {
+    get_topic_row(): TopicRow | undefined {
         const index = this.cursor.selected_index;
 
         if (index === undefined) return undefined;
