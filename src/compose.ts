@@ -85,6 +85,10 @@ class TextArea {
     clear(): void {
         this.elem.value = "";
     }
+
+    focus(): void {
+        this.elem.focus();
+    }
 }
 
 export class ComposeBox {
@@ -125,6 +129,7 @@ export class ComposeBox {
             // TODO: save draft
             const content = self.get_content_to_send();
             this.textarea.clear();
+            this.textarea.focus();
             self.send(content);
         });
 
