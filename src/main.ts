@@ -5,26 +5,8 @@ import * as zulip_client from "./backend/zulip_client";
 import { config } from "./secrets";
 
 import { EventRadioWidgetSingleton } from "./event_radio";
+import { Page } from "./page";
 import { SearchWidget } from "./search_widget";
-
-class Page {
-    div: HTMLElement;
-
-    constructor() {
-        const div = document.createElement("div");
-        div.innerText =
-            "Welcome to Zulip! loading users and recent messages...";
-
-        document.body.append(div);
-
-        this.div = div;
-    }
-
-    populate(inner_div: HTMLElement) {
-        this.div.innerHTML = "";
-        this.div.append(inner_div);
-    }
-}
 
 export async function run() {
     document.title = config.nickname;
@@ -76,7 +58,7 @@ export async function run() {
 
     const search_widget = new SearchWidget();
     search_widget.populate();
-    page.populate(search_widget.div);
+    page.add_widget(search_widget.div);
     search_widget.start();
 
     ready = true;
