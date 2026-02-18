@@ -1,10 +1,11 @@
 import type { StreamMessage } from "./backend/db_types";
 
+import type { ChannelList } from "./channel_list";
 import type { MessageList } from "./message_list";
 import type { TopicList } from "./topic_list";
 
 import { ButtonPanel } from "./nav_button_panel";
-import { StreamList, StreamPane } from "./stream_pane";
+import { StreamPane } from "./stream_pane";
 import { ChannelView } from "./channel_view";
 
 export class SearchWidget {
@@ -140,7 +141,7 @@ export class SearchWidget {
         return this.get_stream_list().get_stream_id();
     }
 
-    get_stream_list(): StreamList {
+    get_stream_list(): ChannelList {
         return this.stream_pane.get_stream_list();
     }
 
