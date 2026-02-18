@@ -3,6 +3,7 @@ import type { StreamMessage } from "./db_types";
 export const enum EventFlavor {
     STREAM_MESSAGE,
     UNREAD_ADD,
+    UNKNOWN,
 }
 
 type StreamMessageEvent = {
@@ -16,7 +17,12 @@ type UnreadAddEvent = {
     message_ids: number[];
 }
 
-export type ZulipEvent = StreamMessageEvent | UnreadAddEvent;
+type UnknownEvent = {
+    flavor: EventFlavor.UNKNOWN;
+    raw_event: any;
+}
+
+export type ZulipEvent = StreamMessageEvent | UnreadAddEvent | UnknownEvent;
 
 function build_event(raw_event: any): ZulipEvent | undefined {
     if (raw_event.type !== "heartbeat") {
@@ -76,7 +82,10 @@ export class EventHandler {
 
     process_events(raw_events: any): void {
         for (const raw_event of raw_events) {
-            const event = build_event(raw_event);
+            const event = build_event(raw_event) ?? {
+                flavor: EventFlavor.UNKNOWN,
+                raw_event,
+            };
 
             if (event) {
                 this.callback(event);
