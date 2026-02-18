@@ -17,7 +17,6 @@ export async function run() {
     const page = new Page();
     document.body.append(page.div);
 
-
     const event_radio_widget = new EventRadioWidgetSingleton();
 
     const search_widgets: SearchWidget[] = [];

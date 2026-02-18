@@ -1,7 +1,7 @@
 type Widget = {
     div: HTMLElement;
     start: (tab_helper: TabHelper) => void;
-}
+};
 
 class Button {
     tab_helper: TabHelper;
@@ -77,7 +77,6 @@ export class Page {
     }
 
     make_button_bar(): HTMLElement {
-        const page = this;
         const tab_helpers = this.tab_helpers;
 
         const button_bar = document.createElement("div");
@@ -90,7 +89,6 @@ export class Page {
 
         return button_bar;
     }
-
 
     add_widget(widget: Widget): void {
         const page = this;
