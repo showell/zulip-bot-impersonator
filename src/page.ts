@@ -20,6 +20,7 @@ class Button {
             page.open(tab_helper);
         });
 
+        div.style.marginRight = "7px";
         div.append(button);
 
         this.refresh();
