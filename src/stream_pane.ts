@@ -17,7 +17,7 @@ export class StreamPane {
         this.populate();
     }
 
-    stream_selected(): boolean {
+    channel_selected(): boolean {
         return this.channel_list.has_selection();
     }
 

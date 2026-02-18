@@ -108,8 +108,8 @@ export class SearchWidget {
         return this.channel_view.topic_selected();
     }
 
-    stream_selected(): boolean {
-        return this.stream_pane.stream_selected();
+    channel_selected(): boolean {
+        return this.stream_pane.channel_selected();
     }
 
     build_main_section(): HTMLElement {
@@ -152,7 +152,7 @@ export class SearchWidget {
 
     update_button_panel(): void {
         this.button_panel.update({
-            stream_selected: this.stream_selected(),
+            channel_selected: this.channel_selected(),
             topic_selected: this.topic_selected(),
             channels_hidden: this.channels_hidden,
         });
