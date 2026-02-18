@@ -1,13 +1,22 @@
+type TabInfo = {
+    open: boolean;
+    widget_div: HTMLElement;
+}
+
 class Button {
     div: HTMLElement;
 
-    constructor(index: number, page: Page) {
+    constructor(tab_info: TabInfo, page: Page) {
         const div = document.createElement("div");
         const button = document.createElement("button");
-        button.innerText = `tab ${index}`;
+        button.innerText = `some tab`;
+
+        if (tab_info.open) {
+            button.style.backgroundColor = "lightgreen";
+        }
 
         button.addEventListener("click", () => {
-            page.open(index);
+            page.open(tab_info);
         });
 
         div.append(button);
@@ -19,54 +28,68 @@ class Button {
 
 export class Page {
     div: HTMLElement;
-    button_bar: HTMLElement;
     container_div: HTMLElement;
-    widget_divs: HTMLElement[];
+    tab_infos: TabInfo[];
 
     constructor() {
         const div = document.createElement("div");
         div.innerText =
             "Welcome to Zulip! loading users and recent messages...";
 
-        const button_bar = document.createElement("div");
-        button_bar.style.display = "flex";
-        button_bar.style.marginBottom = "5px";
+        this.tab_infos = [];
 
         const container_div = document.createElement("div");
 
-        this.widget_divs = [];
-
-        this.button_bar = button_bar;
         this.container_div = container_div;
         this.div = div;
     }
 
-    add_widget(widget_div: HTMLElement): void {
+    make_button_bar(): HTMLElement {
         const page = this;
-        const div = this.div;
-        const widget_divs = this.widget_divs;
-        const button_bar = this.button_bar;
+        const tab_infos = this.tab_infos;
 
-        const index = widget_divs.length;
+        const button_bar = document.createElement("div");
+        button_bar.style.display = "flex";
+        button_bar.style.marginBottom = "5px";
 
-        const button = new Button(index, page);
+        for (const tab_info of tab_infos) {
+            const button = new Button(tab_info, page);
+            button_bar.append(button.div);
+        }
 
-        widget_divs.push(widget_div);
-
-        this.button_bar.append(button.div);
-
-        this.open(index);
+        return button_bar;
     }
 
-    open(index: number) {
+
+    add_widget(widget_div: HTMLElement): void {
+        const tab_infos = this.tab_infos;
+
+        const open = false;
+        const tab_info = { widget_div, open }
+
+        tab_infos.push(tab_info);
+
+        this.open(tab_info);
+    }
+
+    close_all(): void {
+        for (const tab_info of this.tab_infos) {
+            tab_info.open = false;
+        }
+    }
+
+    open(tab_info: TabInfo): void {
         const div = this.div;
-        const button_bar = this.button_bar;
         const container_div = this.container_div;
-        const widget_div = this.widget_divs[index];
+
+
+        this.close_all();
+        tab_info.open = true;
+
+        const button_bar = this.make_button_bar();
 
         container_div.innerHTML = "";
-        container_div.append(widget_div);
-
+        container_div.append(tab_info.widget_div);
 
         div.innerHTML = "";
         div.append(button_bar);
