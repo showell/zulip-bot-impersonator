@@ -4,7 +4,7 @@ import * as zulip_client from "./backend/zulip_client";
 
 import { config } from "./secrets";
 
-import { EventRadioWidgetSingleton } from "./event_radio";
+import { EventRadio } from "./event_radio";
 import { Page } from "./page";
 import { SearchWidget } from "./search_widget";
 
@@ -17,7 +17,7 @@ export async function run() {
     const page = new Page();
     document.body.append(page.div);
 
-    const event_radio_widget = new EventRadioWidgetSingleton();
+    const event_radio_widget = new EventRadio();
 
     const search_widgets: SearchWidget[] = [];
 
@@ -53,14 +53,14 @@ export async function run() {
 
     zulip_client.start_polling(event_manager);
 
+    page.add_widget(event_radio_widget);
+
     for (let i = 0; i < 3; ++i) {
         const search_widget = new SearchWidget();
         search_widget.populate();
         page.add_widget(search_widget);
         search_widgets.push(search_widget);
     }
-
-    page.div.append(event_radio_widget.div);
 }
 
 run();

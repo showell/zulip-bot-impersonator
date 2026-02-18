@@ -38,6 +38,10 @@ class Button {
             button.style.backgroundColor = "lightblue";
         }
     }
+
+    violet(): void {
+        this.button.style.backgroundColor = "violet";
+    }
 }
 
 export class TabHelper {
@@ -60,6 +64,10 @@ export class TabHelper {
     update_label(label: string) {
         this.label = label;
         this.refresh();
+    }
+
+    violet() {
+        this.button.violet();
     }
 }
 
