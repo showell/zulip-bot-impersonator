@@ -108,6 +108,10 @@ export class ChannelView {
         }
     }
 
+    get_message_view(): MessageView | undefined {
+        return this.message_view;
+    }
+
     get_message_list(): MessageList | undefined {
         if (this.message_view === undefined) {
             return undefined;

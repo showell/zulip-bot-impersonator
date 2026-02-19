@@ -6,6 +6,7 @@ import { EventFlavor } from "./backend/event";
 
 import type { ChannelList } from "./channel_list";
 import type { MessageList } from "./message_list";
+import type { MessageView } from "./message_view";
 import type { TabHelper } from "./page";
 import type { TopicList } from "./topic_list";
 
@@ -281,6 +282,21 @@ export class SearchWidget {
         this.update_button_panel();
         this.update_label();
         this.button_panel.focus_surf_topics_button();
+    }
+
+    get_message_view(): MessageView | undefined {
+        if (this.channel_view) {
+            return this.channel_view.get_message_view();
+        }
+
+        return undefined;
+    }
+
+    reply(): void {
+        const message_view = this.get_message_view();
+        if (message_view) {
+            message_view.reply();
+        }
     }
 
     close(): void {

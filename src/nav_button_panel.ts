@@ -12,6 +12,7 @@ export class ButtonPanel {
     prev_topic: Button;
     next_topic: Button;
     mark_topic_read: Button;
+    reply: Button;
 
     constructor(search_widget: SearchWidget) {
         const div = document.createElement("div");
@@ -55,6 +56,11 @@ export class ButtonPanel {
             search_widget.mark_topic_read();
         });
 
+        this.reply = new Button("reply", () => {
+            search_widget.reply();
+        });
+
+
         div.append(this.close.div);
 
         div.append(this.surf_channels.div);
@@ -69,6 +75,7 @@ export class ButtonPanel {
         div.append(this.next_topic.div);
 
         div.append(this.mark_topic_read.div);
+        div.append(this.reply.div);
 
         this.div = div;
     }
@@ -99,6 +106,7 @@ export class ButtonPanel {
         show_if(this.prev_topic, topic_selected);
 
         show_if(this.mark_topic_read, topic_selected);
+        show_if(this.reply, topic_selected);
     }
 
     focus_next_channel_button(): void {
