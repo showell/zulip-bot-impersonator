@@ -50,16 +50,25 @@ class Button {
 }
 
 export class TabHelper {
+    deleted: boolean;
+    page: Page;
     open: boolean;
     widget: Widget;
     label: string;
     button: Button;
 
     constructor(widget: Widget, page: Page) {
-        this.open = false;
         this.widget = widget;
+        this.page = page;
+        this.deleted = false;
+        this.open = false;
         this.label = "widget";
         this.button = new Button(this, page);
+    }
+
+    delete_me(): void {
+        this.deleted = true;
+        this.page.go_to_top();
     }
 
     refresh() {
@@ -95,6 +104,10 @@ export class Page {
     }
 
     make_button_bar(): HTMLElement {
+        this.tab_helpers = this.tab_helpers.filter((tab_helper) => {
+            return !tab_helper.deleted;
+        });
+
         const tab_helpers = this.tab_helpers;
 
         const button_bar = document.createElement("div");
@@ -148,12 +161,19 @@ export class Page {
     }
 
     open(tab_helper: TabHelper): void {
-        const div = this.div;
-        const container_div = this.container_div;
-
         this.close_all();
         tab_helper.open = true;
         tab_helper.refresh();
+        this.redraw(tab_helper);
+    }
+
+    go_to_top(): void {
+        this.redraw(this.tab_helpers[0]);
+    }
+
+    redraw(tab_helper: TabHelper): void {
+        const div = this.div;
+        const container_div = this.container_div;
 
         const button_bar = this.make_button_bar();
 

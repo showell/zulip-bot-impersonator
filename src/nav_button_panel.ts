@@ -3,6 +3,7 @@ import type { SearchWidget } from "./search_widget";
 
 export class ButtonPanel {
     div: HTMLElement;
+    close: Button;
     surf_channels: Button;
     prev_channel: Button;
     next_channel: Button;
@@ -16,6 +17,13 @@ export class ButtonPanel {
         const div = document.createElement("div");
         div.style.display = "flex";
         div.style.paddingBottom = "4px";
+
+        this.close = new Button("close", () => {
+            search_widget.close();
+        });
+
+        this.close.button.style.color = "white";
+        this.close.button.style.backgroundColor = "red";
 
         this.surf_channels = new Button("surf channels", () => {
             search_widget.surf_channels();
@@ -47,6 +55,8 @@ export class ButtonPanel {
             search_widget.mark_topic_read();
         });
 
+        div.append(this.close.div);
+
         div.append(this.surf_channels.div);
         div.append(this.prev_channel.div);
         div.append(this.next_channel.div);
@@ -73,6 +83,8 @@ export class ButtonPanel {
                 button.hide();
             }
         }
+
+        show_if(this.close, true);
 
         show_if(this.surf_channels, !channel_selected || topic_selected);
 

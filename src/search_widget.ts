@@ -283,6 +283,10 @@ export class SearchWidget {
         this.button_panel.focus_surf_topics_button();
     }
 
+    close(): void {
+        this.tab_helper!.delete_me();
+    }
+
     handle_event(event: ZulipEvent): void {
         if (event.flavor === EventFlavor.STREAM_MESSAGE) {
             this.refresh(event.stream_message);
