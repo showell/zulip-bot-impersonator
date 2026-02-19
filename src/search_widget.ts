@@ -71,6 +71,7 @@ export class SearchWidget {
         tab_helper.label = "search";
         this.update_button_panel();
         this.button_panel.start();
+        tab_helper.update_label("Search");
     }
 
     get_topic_list(): TopicList | undefined {
