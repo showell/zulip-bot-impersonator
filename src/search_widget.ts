@@ -10,14 +10,14 @@ import type { TabHelper } from "./page";
 import type { TopicList } from "./topic_list";
 
 import { ButtonPanel } from "./nav_button_panel";
-import { StreamPane } from "./stream_pane";
+import { ChannelPane } from "./channel_pane";
 import { ChannelView } from "./channel_view";
 
 export class SearchWidget {
     div: HTMLElement;
     button_panel: ButtonPanel;
     main_section: HTMLElement;
-    stream_pane: StreamPane;
+    channel_pane: ChannelPane;
     channel_view?: ChannelView;
     channels_hidden: boolean;
     tab_helper?: TabHelper;
@@ -30,7 +30,7 @@ export class SearchWidget {
         this.div = div;
 
         this.button_panel = new ButtonPanel(self);
-        this.stream_pane = new StreamPane(self);
+        this.channel_pane = new ChannelPane(self);
         this.main_section = this.build_main_section();
         this.show_only_channels();
 
@@ -38,14 +38,14 @@ export class SearchWidget {
     }
 
     refresh_message_ids(message_ids: number[]): void {
-        this.stream_pane.populate();
+        this.channel_pane.populate();
         if (this.channel_view) {
             this.channel_view.refresh_message_ids(message_ids);
         }
     }
 
     refresh(stream_message: StreamMessage): void {
-        this.stream_pane.populate();
+        this.channel_pane.populate();
         if (this.channel_view) {
             this.channel_view.refresh(stream_message);
         }
@@ -109,7 +109,7 @@ export class SearchWidget {
     }
 
     channel_selected(): boolean {
-        return this.stream_pane.channel_selected();
+        return this.channel_pane.channel_selected();
     }
 
     build_main_section(): HTMLElement {
@@ -123,7 +123,7 @@ export class SearchWidget {
 
         div.innerHTML = "";
 
-        div.append(this.stream_pane.div);
+        div.append(this.channel_pane.div);
 
         this.channel_view = undefined;
         this.channels_hidden = false;
@@ -134,7 +134,7 @@ export class SearchWidget {
 
         div.innerHTML = "";
 
-        div.append(this.stream_pane.div);
+        div.append(this.channel_pane.div);
         div.append(this.channel_view!.div);
 
         this.channels_hidden = false;
@@ -173,7 +173,7 @@ export class SearchWidget {
     }
 
     get_stream_list(): ChannelList {
-        return this.stream_pane.get_stream_list();
+        return this.channel_pane.get_stream_list();
     }
 
     update_label(): void {
@@ -233,7 +233,7 @@ export class SearchWidget {
             topic_list.clear_selection();
         }
         this.get_stream_list().surf();
-        this.stream_pane.populate();
+        this.channel_pane.populate();
         this.update_channel();
         this.button_panel.focus_next_channel_button();
     }

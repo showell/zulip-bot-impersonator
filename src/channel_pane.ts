@@ -4,7 +4,7 @@ import { ChannelList } from "./channel_list";
 
 import { render_list_heading, render_pane } from "./render";
 
-export class StreamPane {
+export class ChannelPane {
     div: HTMLElement;
     channel_list: ChannelList;
 
