@@ -118,6 +118,10 @@ export class ComposeBox {
         this.textarea = textarea;
     }
 
+    focus_textarea(): void {
+        this.textarea.focus();
+    }
+
     button_row(): HTMLElement {
         const self = this;
         const div = document.createElement("div");

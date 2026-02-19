@@ -2,6 +2,7 @@ import type { TopicRow } from "./backend/row_types";
 
 import type { MessageList } from "./message_list";
 
+import { ComposeBox } from "./compose";
 import { MessagePane } from "./message_pane";
 import { ReplyPane } from "./reply_pane";
 
@@ -26,19 +27,17 @@ export class MessageView {
     }
 
     reply(): void {
-        if (this.reply_pane) {
-            // TODO: focus compose box maybe?
-            // or we should hide button
-            return;
-        }
-
         const div = this.div;
         const topic_row = this.topic_row;
 
-        const reply_pane = new ReplyPane(topic_row.topic);
-        div.append(reply_pane.div);
+        if (!this.reply_pane) {
+            const reply_pane = new ReplyPane(topic_row.topic);
+            div.append(reply_pane.div);
+            this.reply_pane = reply_pane;
+        }
 
-        this.reply_pane = reply_pane;
+        const compose_box: ComposeBox = this.reply_pane.get_compose_box();
+        compose_box.focus_textarea();
     }
 
     get_message_list(): MessageList {

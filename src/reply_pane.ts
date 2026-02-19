@@ -16,6 +16,7 @@ function render_heading(stream_name: string): HTMLElement {
 
 export class ReplyPane {
     div: HTMLElement;
+    compose_box: ComposeBox;
 
     constructor(topic: Topic) {
         const div = render_pane();
@@ -30,5 +31,10 @@ export class ReplyPane {
         div.append(compose_box.div);
 
         this.div = div;
+        this.compose_box = compose_box;
+    }
+
+    get_compose_box(): ComposeBox {
+        return this.compose_box;
     }
 }
