@@ -63,10 +63,7 @@ export class ButtonPanel {
         this.div = div;
     }
 
-    update(info: {
-        channel_selected: boolean;
-        topic_selected: boolean;
-    }): void {
+    update(info: { channel_selected: boolean; topic_selected: boolean }): void {
         const { channel_selected, topic_selected } = info;
 
         function show_if(button: Button, cond: boolean): void {

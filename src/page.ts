@@ -1,5 +1,7 @@
 import { ZulipEvent } from "./backend/event";
 
+import { SearchWidget } from "./search_widget";
+
 type Widget = {
     div: HTMLElement;
     start: (tab_helper: TabHelper) => void;
@@ -99,11 +101,29 @@ export class Page {
         button_bar.style.display = "flex";
         button_bar.style.marginBottom = "5px";
 
+        const add_search_button = this.add_search_button();
+        button_bar.append(add_search_button);
+
         for (const tab_helper of tab_helpers) {
             button_bar.append(tab_helper.button.div);
         }
 
         return button_bar;
+    }
+
+    add_search_button(): HTMLElement {
+        const self = this;
+
+        const elem = document.createElement("button");
+        elem.style.backgroundColor = "white";
+        elem.style.marginRight = "10px";
+        elem.innerText = "Add search tab";
+
+        elem.addEventListener("click", () => {
+            self.add_search_widget();
+        });
+
+        return elem;
     }
 
     add_widget(widget: Widget): void {
@@ -143,6 +163,12 @@ export class Page {
         div.innerHTML = "";
         div.append(button_bar);
         div.append(container_div);
+    }
+
+    add_search_widget(): void {
+        const search_widget = new SearchWidget();
+        search_widget.populate();
+        this.add_widget(search_widget);
     }
 
     handle_event(event: ZulipEvent): void {

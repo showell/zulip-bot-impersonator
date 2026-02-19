@@ -6,7 +6,6 @@ import { config } from "./secrets";
 
 import { EventRadio } from "./event_radio";
 import { Page } from "./page";
-import { SearchWidget } from "./search_widget";
 
 export async function run() {
     document.title = config.nickname;
@@ -18,8 +17,6 @@ export async function run() {
     document.body.append(page.div);
 
     const event_radio_widget = new EventRadio();
-
-    const search_widgets: SearchWidget[] = [];
 
     function handle_event(event: ZulipEvent) {
         model.handle_event(event);
@@ -38,12 +35,7 @@ export async function run() {
 
     page.add_widget(event_radio_widget);
 
-    for (let i = 0; i < 3; ++i) {
-        const search_widget = new SearchWidget();
-        search_widget.populate();
-        page.add_widget(search_widget);
-        search_widgets.push(search_widget);
-    }
+    page.add_search_widget();
 }
 
 run();
