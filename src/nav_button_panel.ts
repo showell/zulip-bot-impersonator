@@ -66,9 +66,8 @@ export class ButtonPanel {
     update(info: {
         channel_selected: boolean;
         topic_selected: boolean;
-        channels_hidden: boolean;
     }): void {
-        const { channel_selected, topic_selected, channels_hidden } = info;
+        const { channel_selected, topic_selected } = info;
 
         function show_if(button: Button, cond: boolean): void {
             if (cond) {
@@ -78,7 +77,7 @@ export class ButtonPanel {
             }
         }
 
-        show_if(this.surf_channels, !channel_selected || channels_hidden);
+        show_if(this.surf_channels, !channel_selected || topic_selected);
 
         show_if(this.next_channel, !topic_selected && channel_selected);
         show_if(this.prev_channel, !topic_selected && channel_selected);

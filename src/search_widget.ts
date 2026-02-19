@@ -19,7 +19,6 @@ export class SearchWidget {
     main_section: HTMLElement;
     channel_pane: ChannelPane;
     channel_view?: ChannelView;
-    channels_hidden: boolean;
     tab_helper?: TabHelper;
 
     constructor() {
@@ -33,8 +32,6 @@ export class SearchWidget {
         this.channel_pane = new ChannelPane(self);
         this.main_section = this.build_main_section();
         this.show_only_channels();
-
-        this.channels_hidden = false;
     }
 
     refresh_message_ids(message_ids: number[]): void {
@@ -126,7 +123,6 @@ export class SearchWidget {
         div.append(this.channel_pane.div);
 
         this.channel_view = undefined;
-        this.channels_hidden = false;
     }
 
     show_channels(): void {
@@ -136,8 +132,6 @@ export class SearchWidget {
 
         div.append(this.channel_pane.div);
         div.append(this.channel_view!.div);
-
-        this.channels_hidden = false;
     }
 
     hide_channels(): void {
@@ -146,15 +140,12 @@ export class SearchWidget {
         div.innerHTML = "";
 
         div.append(this.channel_view!.div);
-
-        this.channels_hidden = true;
     }
 
     update_button_panel(): void {
         this.button_panel.update({
             channel_selected: this.channel_selected(),
             topic_selected: this.topic_selected(),
-            channels_hidden: this.channels_hidden,
         });
     }
 
