@@ -147,8 +147,8 @@ export class Page {
 
         tab_helpers.push(tab_helper);
 
-        widget.start(tab_helper);
         this.open(tab_helper);
+        widget.start(tab_helper);
     }
 
     close_all(): void {

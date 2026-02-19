@@ -252,13 +252,13 @@ export class SearchWidget {
     update_topic(): void {
         this.hide_channels();
         this.update_button_panel();
-        this.button_panel.focus_next_topic_button();
         this.update_label();
     }
 
     surf_topics(): void {
         this.channel_view!.surf_topics();
         this.update_topic();
+        this.button_panel.focus_next_topic_button();
     }
 
     set_topic_index(index: number): void {
