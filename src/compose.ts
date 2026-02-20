@@ -36,7 +36,7 @@ class TopicInput {
         const div = document.createElement("div");
 
         const topic_input = this.make_topic_input(topic_name);
-        const label = labeled_input("Topic:", topic_input);
+        const label = labeled_input("Topic: >", topic_input);
 
         div.append(label);
 

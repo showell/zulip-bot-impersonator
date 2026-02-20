@@ -20,9 +20,9 @@ function render_channel_count(count: number): HTMLElement {
     return div;
 }
 
-function render_channel_name(topic_name: string): HTMLElement {
+function render_channel_name(channel_name: string): HTMLElement {
     const div = document.createElement("div");
-    div.innerText = topic_name;
+    div.innerText = "#" + channel_name;
     div.style.maxWidth = "270px";
     div.style.overflowWrap = "break-word";
     div.style.color = "#000080";
