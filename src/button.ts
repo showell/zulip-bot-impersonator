@@ -45,12 +45,12 @@ export class Button {
     }
 
     show(): void {
-        this.div.style.visibility = "visible";
+        this.div.style.display = "inline-block";
         this.div.style.width = this.width;
     }
 
     hide(): void {
-        this.div.style.visibility = "hidden";
+        this.div.style.display = "none";
         this.div.style.width = "0px";
     }
 
