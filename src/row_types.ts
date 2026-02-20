@@ -1,7 +1,14 @@
-import type { Message, Stream, Topic } from "./db_types.ts";
-import type { ListInfo } from "./message_list.ts";
+import type { Message, Stream, Topic } from "./backend/db_types.ts";
+import type { ListInfo } from "./backend/message_list.ts";
 
-import { UserMap } from "./model";
+import { UserMap } from "./backend/model";
+
+/*
+ *  In some ways this code would more logically belong in the
+ *  "backend" directory (and that's where it was originally),
+ *  but all of these classes are **supposed** to be consumed
+ *  by our UI classes, including our plugins.
+ */
 
 export class ChannelRow {
     _channel: Stream;

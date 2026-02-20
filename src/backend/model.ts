@@ -7,12 +7,11 @@ import type {
 } from "./db_types";
 import type { Filter } from "./filter";
 import type { MessageStore } from "./message_store";
-import type { TopicRow } from "./row_types";
+import type { ChannelRow, TopicRow } from "../row_types";
 
 import { EventFlavor } from "./event";
 import * as channel_row_query from "./channel_row_query";
 import * as fetch from "./fetch";
-import { ChannelRow } from "./row_types";
 import * as topic_row_query from "./topic_row_query";
 
 export let UserMap: Map<number, User>;

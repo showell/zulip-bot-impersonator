@@ -1,5 +1,5 @@
 import { topic_filter } from "./backend/filter";
-import type { TopicRow } from "./backend/row_types";
+import type { TopicRow } from "./row_types";
 
 import { MessageList } from "./message_list";
 import { MessageViewHeader } from "./message_view_header";

@@ -1,6 +1,5 @@
-import type { TopicRow } from "./backend/row_types";
-
 import type { MessageList } from "./message_list";
+import type { TopicRow } from "./row_types";
 
 import { ComposeBox } from "./compose";
 import { MessagePane } from "./message_pane";

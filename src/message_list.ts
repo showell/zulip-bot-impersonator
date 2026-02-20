@@ -4,10 +4,9 @@ import type { Filter } from "./backend/filter";
 import * as model from "./backend/model";
 import * as outbound from "./backend/outbound";
 
-import { MessageRow } from "./backend/row_types";
-
 import { MessageRowWidget } from "./message_row_widget";
 import { render_spacer } from "./render";
+import { MessageRow } from "./row_types";
 import { SmartList } from "./smart_list";
 
 type MessageInfo = {

@@ -1,4 +1,4 @@
-import type { MessageRow } from "./backend/row_types";
+import type { MessageRow } from "./row_types";
 
 import { render_message_content } from "./message_content";
 

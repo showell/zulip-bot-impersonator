@@ -1,6 +1,5 @@
 import type { ZulipEvent } from "./backend/event";
 import type { StreamMessage } from "./backend/db_types";
-import type { ChannelRow } from "./backend/row_types";
 
 import { EventFlavor } from "./backend/event";
 
@@ -8,6 +7,7 @@ import type { ChannelList } from "./channel_list";
 import type { MessageList } from "./message_list";
 import type { MessageView } from "./message_view";
 import type { PluginHelper } from "./plugin_helper";
+import type { ChannelRow } from "./row_types";
 import type { TopicList } from "./topic_list";
 
 import { ButtonPanel } from "./nav_button_panel";

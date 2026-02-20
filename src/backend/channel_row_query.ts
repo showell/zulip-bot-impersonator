@@ -1,7 +1,7 @@
 import type { Message, Stream } from "./db_types";
 
 import { MessageList } from "./message_list";
-import { ChannelRow } from "./row_types";
+import { ChannelRow } from "../row_types";
 
 export function get_rows(streams: Stream[], messages: Message[]): ChannelRow[] {
     const message_list_map = new Map<number, MessageList>();

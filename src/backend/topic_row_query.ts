@@ -2,7 +2,7 @@ import type { Message } from "./db_types";
 
 import { Topic } from "./db_types";
 import { MessageList } from "./message_list";
-import { TopicRow } from "./row_types";
+import { TopicRow } from "../row_types";
 
 export function get_rows(messages: Message[]): TopicRow[] {
     const topic_map = new Map<string, Topic>();

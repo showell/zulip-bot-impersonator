@@ -1,8 +1,8 @@
 import type { Topic } from "./backend/db_types";
-import type { TopicRow } from "./backend/row_types";
 
 import * as model from "./backend/model";
 
+import type { TopicRow } from "./row_types";
 import type { SearchWidget } from "./search_widget";
 
 import { Cursor } from "./cursor";
