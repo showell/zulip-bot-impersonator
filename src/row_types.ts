@@ -38,6 +38,10 @@ export class ChannelRow {
     unread_count(): number {
         return this._list_info.unread_count;
     }
+
+    num_topics(): number {
+        return this._list_info.num_topics;
+    }
 }
 
 export class TopicRow {

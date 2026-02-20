@@ -12,7 +12,7 @@ import {
     render_unread_count,
 } from "./render";
 
-function render_channel_count(count: number): HTMLElement {
+function render_num_topics(count: number): HTMLElement {
     const div = document.createElement("div");
     div.innerText = `${count}`;
     div.style.textAlign = "right";
@@ -78,7 +78,7 @@ class ChannelRowWidget {
         this.tr = render_tr([
             render_unread_count(channel_row.unread_count()),
             channel_row_name.div,
-            render_channel_count(channel_row.num_messages()),
+            render_num_topics(channel_row.num_topics()),
         ]);
     }
 }
@@ -128,7 +128,7 @@ export class ChannelList {
         const thead = render_thead([
             render_th("Unread"),
             render_th("Channel"),
-            render_th("Messages"),
+            render_th("Topics"),
         ]);
 
         return thead;

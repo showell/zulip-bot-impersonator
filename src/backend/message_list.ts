@@ -4,6 +4,7 @@ export type ListInfo = {
     last_msg_id: number;
     count: number;
     unread_count: number;
+    num_topics: number;
 };
 
 export class MessageList {
@@ -21,14 +22,29 @@ export class MessageList {
         const messages = this.messages;
 
         if (messages.length === 0) {
-            return { last_msg_id: -1, count: 0, unread_count: 0 };
+            return { last_msg_id: -1, count: 0, unread_count: 0, num_topics: 0 };
         }
 
         messages.sort((m1, m2) => m2.id - m1.id);
         const last_msg_id = messages[0].id;
         const count = messages.length;
         const unread_count = messages.filter((msg) => msg.unread).length;
+        const num_topics = this.num_topics();
 
-        return { last_msg_id, count, unread_count};
+        return { last_msg_id, count, unread_count, num_topics };
+    }
+
+    num_topics(): number {
+        const messages = this.messages;
+        const set = new Set<string>();
+
+        for (const message of messages) {
+            const stream_id = message.stream_id;
+            const topic_name = message.topic_name;
+            const key = `${stream_id},${topic_name}`;
+            set.add(key);
+        }
+
+        return set.size;
     }
 }
