@@ -19,6 +19,7 @@ export class ChannelView {
     channel_info: ChannelInfo;
     topic_pane: TopicPane;
     message_view?: MessageView;
+    add_topic_pane?: AddTopicPane;
 
     constructor(stream_id: number, search_widget: SearchWidget) {
         const stream = model.stream_for(stream_id);
@@ -28,6 +29,7 @@ export class ChannelView {
         this.channel_info = new ChannelInfo(stream_id);
 
         this.topic_pane = new TopicPane(stream, search_widget);
+        this.add_topic_pane = undefined;
 
         const div = document.createElement("div");
         div.style.display = "flex";
@@ -42,21 +44,21 @@ export class ChannelView {
         return this.topic_pane.topic_selected();
     }
 
-    open_message_view_for_topic(topic_row: TopicRow): void {
+    open_message_view(): void {
         const div = this.div;
 
+        const topic_row = this.get_topic_row()!;
         const message_view = new MessageView(topic_row);
 
         div.innerHTML = "";
         div.append(this.topic_pane.div);
         div.append(message_view.div);
 
-        this.message_view = message_view;
-    }
+        if (this.add_topic_pane) {
+            div.append(this.add_topic_pane.div);
+        }
 
-    open_message_view(): void {
-        const topic_row = this.get_topic_row()!;
-        this.open_message_view_for_topic(topic_row);
+        this.message_view = message_view;
     }
 
     get_topic_list(): TopicList {
@@ -137,6 +139,8 @@ export class ChannelView {
         div.innerHTML = "";
         div.append(this.topic_pane.div);
         div.append(this.channel_info.div);
+
+        this.add_topic_pane = undefined;
     }
 
     add_topic(): void {
@@ -155,12 +159,15 @@ export class ChannelView {
         div.append(add_topic_pane.div);
 
         add_topic_pane.focus_compose_box();
+
+        this.add_topic_pane = add_topic_pane;
     }
 
     set_topic_index(index: number): void {
         const topic_list = this.get_topic_list();
 
         topic_list.select_index(index);
+        this.add_topic_pane = undefined;
         this.open_message_view();
     }
 
@@ -168,6 +175,7 @@ export class ChannelView {
         const topic_list = this.get_topic_list();
 
         topic_list.surf();
+        this.add_topic_pane = undefined;
         this.open_message_view();
     }
 
@@ -175,6 +183,7 @@ export class ChannelView {
         const topic_list = this.get_topic_list();
 
         topic_list.up();
+        this.add_topic_pane = undefined;
         this.open_message_view();
     }
 
@@ -182,6 +191,7 @@ export class ChannelView {
         const topic_list = this.get_topic_list();
 
         topic_list.down();
+        this.add_topic_pane = undefined;
         this.open_message_view();
     }
 }

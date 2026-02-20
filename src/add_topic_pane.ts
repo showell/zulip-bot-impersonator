@@ -4,6 +4,7 @@ import { Topic } from "./backend/db_types";
 
 import { ComposeBox } from "./compose";
 import { render_list_heading, render_pane } from "./render";
+import { StatusBar } from "./status_bar";
 
 function render_heading(stream_name: string): HTMLElement {
     const title = `Start new topic on channel: ${stream_name}`;
@@ -20,6 +21,8 @@ export class AddTopicPane {
 
     constructor(stream: Stream) {
         const div = render_pane();
+
+        StatusBar.inform("Choose a fairly short topic name, please.");
 
         const compose_box = this.make_compose_box(stream);
 
