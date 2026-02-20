@@ -7,7 +7,7 @@ import { EventFlavor } from "./backend/event";
 import type { ChannelList } from "./channel_list";
 import type { MessageList } from "./message_list";
 import type { MessageView } from "./message_view";
-import type { TabHelper } from "./page";
+import type { PluginHelper } from "./plugin_helper";
 import type { TopicList } from "./topic_list";
 
 import { ButtonPanel } from "./nav_button_panel";
@@ -21,7 +21,7 @@ export class SearchWidget {
     main_section: HTMLElement;
     channel_pane: ChannelPane;
     channel_view?: ChannelView;
-    tab_helper?: TabHelper;
+    plugin_helper?: PluginHelper;
 
     constructor() {
         const self = this;
@@ -68,13 +68,13 @@ export class SearchWidget {
         div.append(this.main_section);
     }
 
-    start(tab_helper: TabHelper) {
-        this.tab_helper = tab_helper;
-        tab_helper.label = "search";
+    start(plugin_helper: PluginHelper) {
+        this.plugin_helper = plugin_helper;
+        plugin_helper.label = "search";
         this.update_button_panel();
         this.button_panel.start();
         StatusBar.inform("Begin finding messages by clicking on a channel.");
-        tab_helper.update_label("Channels");
+        plugin_helper.update_label("Channels");
     }
 
     get_topic_list(): TopicList | undefined {
@@ -175,7 +175,7 @@ export class SearchWidget {
     }
 
     update_label(): void {
-        const tab_helper = this.tab_helper!;
+        const plugin_helper = this.plugin_helper!;
         const channel_name = this.get_channel_name();
 
         let label = "Channels";
@@ -190,7 +190,7 @@ export class SearchWidget {
             }
         }
 
-        tab_helper.update_label(label);
+        plugin_helper.update_label(label);
     }
 
     clear_channel(): void {
@@ -305,7 +305,7 @@ export class SearchWidget {
     }
 
     close(): void {
-        this.tab_helper!.delete_me();
+        this.plugin_helper!.delete_me();
     }
 
     handle_event(event: ZulipEvent): void {

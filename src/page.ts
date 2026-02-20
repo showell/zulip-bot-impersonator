@@ -1,94 +1,14 @@
+import type { Plugin } from "./plugin_helper";
+
 import { ZulipEvent } from "./backend/event";
+import { PluginHelper } from "./plugin_helper";
 import { SearchWidget } from "./search_widget";
 import { StatusBar, create_global_status_bar } from "./status_bar";
-
-type Widget = {
-    div: HTMLElement;
-    start: (tab_helper: TabHelper) => void;
-    handle_event: (event: ZulipEvent) => void;
-};
-
-class Button {
-    tab_helper: TabHelper;
-    button: HTMLElement;
-    div: HTMLElement;
-
-    constructor(tab_helper: TabHelper, page: Page) {
-        const div = document.createElement("div");
-        const button = document.createElement("button");
-
-        this.tab_helper = tab_helper;
-        this.div = div;
-        this.button = button;
-
-        button.addEventListener("click", () => {
-            page.open(tab_helper);
-        });
-
-        div.style.marginRight = "7px";
-        div.append(button);
-
-        this.refresh();
-    }
-
-    refresh(): void {
-        const button = this.button;
-        const tab_helper = this.tab_helper;
-
-        button.innerText = tab_helper.label;
-
-        if (tab_helper.open) {
-            button.style.backgroundColor = "lightgreen";
-        } else {
-            button.style.backgroundColor = "lightblue";
-        }
-    }
-
-    violet(): void {
-        this.button.style.backgroundColor = "violet";
-    }
-}
-
-export class TabHelper {
-    deleted: boolean;
-    page: Page;
-    open: boolean;
-    widget: Widget;
-    label: string;
-    button: Button;
-
-    constructor(widget: Widget, page: Page) {
-        this.widget = widget;
-        this.page = page;
-        this.deleted = false;
-        this.open = false;
-        this.label = "widget";
-        this.button = new Button(this, page);
-    }
-
-    delete_me(): void {
-        this.deleted = true;
-        this.page.go_to_top();
-    }
-
-    refresh() {
-        this.button.refresh();
-    }
-
-    update_label(label: string) {
-        this.label = label;
-        this.refresh();
-    }
-
-    violet() {
-        this.button.violet();
-    }
-}
 
 export class Page {
     div: HTMLElement;
     container_div: HTMLElement;
-    tab_helpers: TabHelper[];
+    plugin_helpers: PluginHelper[];
 
     constructor() {
         const div = document.createElement("div");
@@ -99,7 +19,7 @@ export class Page {
             "Welcome to Zulip! loading users and recent messages...",
         );
 
-        this.tab_helpers = [];
+        this.plugin_helpers = [];
 
         const container_div = document.createElement("div");
 
@@ -108,11 +28,11 @@ export class Page {
     }
 
     make_button_bar(): HTMLElement {
-        this.tab_helpers = this.tab_helpers.filter((tab_helper) => {
-            return !tab_helper.deleted;
+        this.plugin_helpers = this.plugin_helpers.filter((plugin_helper) => {
+            return !plugin_helper.deleted;
         });
 
-        const tab_helpers = this.tab_helpers;
+        const plugin_helpers = this.plugin_helpers;
 
         const button_bar = document.createElement("div");
         button_bar.style.display = "flex";
@@ -121,8 +41,8 @@ export class Page {
         const add_search_button = this.add_search_button();
         button_bar.append(add_search_button);
 
-        for (const tab_helper of tab_helpers) {
-            button_bar.append(tab_helper.button.div);
+        for (const plugin_helper of plugin_helpers) {
+            button_bar.append(plugin_helper.button.div);
         }
 
         return button_bar;
@@ -143,46 +63,46 @@ export class Page {
         return elem;
     }
 
-    add_widget(widget: Widget): void {
+    add_plugin(plugin: Plugin): void {
         const page = this;
-        const tab_helpers = this.tab_helpers;
+        const plugin_helpers = this.plugin_helpers;
 
-        const tab_helper = new TabHelper(widget, page);
+        const plugin_helper = new PluginHelper(plugin, page);
 
-        tab_helpers.push(tab_helper);
+        plugin_helpers.push(plugin_helper);
 
-        this.open(tab_helper);
-        widget.start(tab_helper);
+        this.open(plugin_helper);
+        plugin.start(plugin_helper);
     }
 
     close_all(): void {
-        for (const tab_helper of this.tab_helpers) {
-            if (tab_helper.open) {
-                tab_helper.open = false;
-                tab_helper.refresh();
+        for (const plugin_helper of this.plugin_helpers) {
+            if (plugin_helper.open) {
+                plugin_helper.open = false;
+                plugin_helper.refresh();
             }
         }
     }
 
-    open(tab_helper: TabHelper): void {
+    open(plugin_helper: PluginHelper): void {
         this.close_all();
-        tab_helper.open = true;
-        tab_helper.refresh();
-        this.redraw(tab_helper);
+        plugin_helper.open = true;
+        plugin_helper.refresh();
+        this.redraw(plugin_helper);
     }
 
     go_to_top(): void {
-        this.redraw(this.tab_helpers[0]);
+        this.redraw(this.plugin_helpers[0]);
     }
 
-    redraw(tab_helper: TabHelper): void {
+    redraw(plugin_helper: PluginHelper): void {
         const div = this.div;
         const container_div = this.container_div;
 
         const button_bar = this.make_button_bar();
 
         container_div.innerHTML = "";
-        container_div.append(tab_helper.widget.div);
+        container_div.append(plugin_helper.plugin.div);
 
         div.innerHTML = "";
         div.append(StatusBar.div);
@@ -193,12 +113,12 @@ export class Page {
     add_search_widget(): void {
         const search_widget = new SearchWidget();
         search_widget.populate();
-        this.add_widget(search_widget);
+        this.add_plugin(search_widget);
     }
 
     handle_event(event: ZulipEvent): void {
-        for (const tab_helper of this.tab_helpers) {
-            tab_helper.widget.handle_event(event);
+        for (const plugin_helper of this.plugin_helpers) {
+            plugin_helper.plugin.handle_event(event);
         }
     }
 }

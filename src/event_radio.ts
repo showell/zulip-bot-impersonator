@@ -1,6 +1,6 @@
 import type { ZulipEvent } from "./backend/event";
 
-import type { TabHelper } from "./page";
+import type { PluginHelper } from "./plugin_helper";
 
 import { EventFlavor } from "./backend/event";
 import * as model from "./backend/model";
@@ -10,7 +10,7 @@ import { MessageRowWidget } from "./message_row_widget";
 
 export class EventRadio {
     div: HTMLDivElement;
-    tab_helper?: TabHelper;
+    plugin_helper?: PluginHelper;
 
     constructor() {
         const div = document.createElement("div");
@@ -24,9 +24,9 @@ export class EventRadio {
         this.div = div;
     }
 
-    start(tab_helper: TabHelper): void {
-        this.tab_helper = tab_helper;
-        tab_helper.update_label("Events");
+    start(plugin_helper: PluginHelper): void {
+        this.plugin_helper = plugin_helper;
+        plugin_helper.update_label("Events");
     }
 
     handle_event(event: ZulipEvent): void {
@@ -55,7 +55,7 @@ export class EventRadio {
             div.append(elem);
         }
 
-        this.tab_helper!.violet();
+        this.plugin_helper!.violet();
 
         this.scroll_to_bottom();
     }

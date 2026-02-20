@@ -33,7 +33,7 @@ export async function run() {
 
     zulip_client.start_polling(event_manager);
 
-    page.add_widget(event_radio_widget);
+    page.add_plugin(event_radio_widget);
 
     page.add_search_widget();
 }
