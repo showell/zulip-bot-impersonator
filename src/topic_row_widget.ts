@@ -11,7 +11,7 @@ type TopicRowData = {
 function render_topic_count(count: number): HTMLElement {
     const div = document.createElement("div");
     div.innerText = `${count}`;
-    div.style.textAlign = "right";
+    div.style.textAlign = "left";
 
     return div;
 }
@@ -72,9 +72,9 @@ export class TopicRowWidget {
         );
 
         const tr = render_tr([
-            render_topic_count(row_data.msg_count),
             render_unread_count(row_data.unread_count),
             topic_row_name.div,
+            render_topic_count(row_data.msg_count),
         ]);
 
         this.tr = tr;

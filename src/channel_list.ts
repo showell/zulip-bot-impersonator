@@ -15,7 +15,7 @@ import {
 function render_channel_count(count: number): HTMLElement {
     const div = document.createElement("div");
     div.innerText = `${count}`;
-    div.style.textAlign = "right";
+    div.style.textAlign = "left";
 
     return div;
 }
@@ -75,9 +75,9 @@ class ChannelRowWidget {
         );
 
         this.tr = render_tr([
-            render_channel_count(channel_row.num_messages()),
             render_unread_count(channel_row.unread_count()),
             channel_row_name.div,
+            render_channel_count(channel_row.num_messages()),
         ]);
     }
 }
@@ -125,9 +125,9 @@ export class ChannelList {
 
     make_thead(): HTMLElement {
         const thead = render_thead([
-            render_th("Msgs"),
             render_th("Unread"),
             render_th("Channel"),
+            render_th("Messages"),
         ]);
 
         return thead;

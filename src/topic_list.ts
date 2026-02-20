@@ -69,9 +69,9 @@ export class TopicList {
 
     make_thead(): HTMLElement {
         const thead = render_thead([
-            render_th("Msgs"),
             render_th("Unread"),
             render_th("Topic name"),
+            render_th("Messages"),
         ]);
 
         return thead;
