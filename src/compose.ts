@@ -50,7 +50,7 @@ class TopicInput {
         input.type = "text";
         input.placeholder = topic_name ? "" : "name your new topic";
         input.value = topic_name;
-        input.style.width = "300px";
+        input.style.width = "270px";
 
         return input;
     }
