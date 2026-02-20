@@ -4,7 +4,7 @@ import * as zulip_client from "./backend/zulip_client";
 
 import { config } from "./secrets";
 
-import { EventRadio } from "./event_radio";
+import { EventRadio } from "./plugins/event_radio";
 import { Page } from "./page";
 
 export async function run() {

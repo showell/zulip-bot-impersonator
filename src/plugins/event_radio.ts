@@ -1,12 +1,11 @@
-import type { ZulipEvent } from "./backend/event";
+import type { ZulipEvent } from "../backend/event";
+import type { PluginHelper } from "../plugin_helper";
 
-import type { PluginHelper } from "./plugin_helper";
+import { EventFlavor } from "../backend/event";
+import * as model from "../backend/model";
+import { MessageRow } from "../backend/row_types";
 
-import { EventFlavor } from "./backend/event";
-import * as model from "./backend/model";
-import { MessageRow } from "./backend/row_types";
-
-import { MessageRowWidget } from "./message_row_widget";
+import { MessageRowWidget } from "../message_row_widget";
 
 export class EventRadio {
     div: HTMLDivElement;
