@@ -1,6 +1,6 @@
 import { ZulipEvent } from "./backend/event";
-
 import { SearchWidget } from "./search_widget";
+import { StatusBar, create_global_status_bar } from "./status_bar";
 
 type Widget = {
     div: HTMLElement;
@@ -92,8 +92,12 @@ export class Page {
 
     constructor() {
         const div = document.createElement("div");
-        div.innerText =
-            "Welcome to Zulip! loading users and recent messages...";
+        create_global_status_bar();
+
+        div.append(StatusBar.div);
+        StatusBar.inform(
+            "Welcome to Zulip! loading users and recent messages...",
+        );
 
         this.tab_helpers = [];
 
@@ -181,6 +185,7 @@ export class Page {
         container_div.append(tab_helper.widget.div);
 
         div.innerHTML = "";
+        div.append(StatusBar.div);
         div.append(button_bar);
         div.append(container_div);
     }

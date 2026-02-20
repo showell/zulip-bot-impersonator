@@ -60,7 +60,6 @@ export class ButtonPanel {
             search_widget.reply();
         });
 
-
         div.append(this.close.div);
 
         div.append(this.surf_channels.div);

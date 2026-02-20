@@ -13,6 +13,7 @@ import type { TopicList } from "./topic_list";
 import { ButtonPanel } from "./nav_button_panel";
 import { ChannelPane } from "./channel_pane";
 import { ChannelView } from "./channel_view";
+import { StatusBar } from "./status_bar";
 
 export class SearchWidget {
     div: HTMLElement;
@@ -72,7 +73,8 @@ export class SearchWidget {
         tab_helper.label = "search";
         this.update_button_panel();
         this.button_panel.start();
-        tab_helper.update_label("Search");
+        StatusBar.inform("Begin finding messages by clicking on a channel.");
+        tab_helper.update_label("Channels");
     }
 
     get_topic_list(): TopicList | undefined {
@@ -134,6 +136,8 @@ export class SearchWidget {
 
         div.append(this.channel_pane.div);
         div.append(this.channel_view!.div);
+
+        StatusBar.inform("You can click on a topic now.");
     }
 
     hide_channels(): void {
@@ -142,6 +146,7 @@ export class SearchWidget {
         div.innerHTML = "";
 
         div.append(this.channel_view!.div);
+        StatusBar.inform("Choose a channel to surf!");
     }
 
     update_button_panel(): void {
@@ -173,7 +178,7 @@ export class SearchWidget {
         const tab_helper = this.tab_helper!;
         const channel_name = this.get_channel_name();
 
-        let label = "Search";
+        let label = "Channels";
 
         if (channel_name) {
             label = "#" + channel_name;
@@ -181,7 +186,7 @@ export class SearchWidget {
             const topic_name = this.get_topic_name();
 
             if (topic_name !== undefined) {
-                label += " > " + topic_name;
+                label = "> " + topic_name;
             }
         }
 
