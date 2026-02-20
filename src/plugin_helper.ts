@@ -1,6 +1,15 @@
+import type { Stream } from "./backend/db_types";
+
 import { ZulipEvent } from "./backend/event";
+import * as backend_model from "./backend/model";
 
 import type { Page } from "./page";
+
+class Model {
+    stream_for(stream_id: number): Stream {
+        return backend_model.stream_for(stream_id);
+    }
+}
 
 export type Plugin = {
     div: HTMLElement;
@@ -56,6 +65,7 @@ export class PluginHelper {
     plugin: Plugin;
     label: string;
     button: Button;
+    model: Model;
 
     constructor(plugin: Plugin, page: Page) {
         this.plugin = plugin;
@@ -64,6 +74,7 @@ export class PluginHelper {
         this.open = false;
         this.label = "plugin";
         this.button = new Button(this, page);
+        this.model = new Model();
     }
 
     delete_me(): void {
