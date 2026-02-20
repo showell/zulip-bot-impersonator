@@ -11,7 +11,8 @@ type TopicRowData = {
 function render_topic_count(count: number): HTMLElement {
     const div = document.createElement("div");
     div.innerText = `${count}`;
-    div.style.textAlign = "left";
+    div.style.textAlign = "right";
+    div.style.paddingRight = "3px";
 
     return div;
 }
