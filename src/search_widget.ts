@@ -92,7 +92,7 @@ export class SearchWidget {
         }
 
         const topic_row = topic_list.get_topic_row();
-        return topic_row?.topic.name;
+        return topic_row?.name();
     }
 
     get_message_list(): MessageList | undefined {

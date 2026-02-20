@@ -84,17 +84,17 @@ export class ChannelView {
         }
 
         const topic_list = this.get_topic_list();
-        const topic = topic_list.get_current_topic();
+        const topic_row = topic_list.get_topic_row();
         const sent_by_me = model.is_me(stream_message.sender_id);
 
-        if (!topic) {
+        if (!topic_row) {
             if (sent_by_me) {
                 this.select_topic_and_append(stream_message);
             } else {
                 topic_list.refresh(); // for counts
             }
         } else {
-            if (topic.name === stream_message.topic_name) {
+            if (topic_row.name() === stream_message.topic_name) {
                 topic_list.refresh(); // for counts
 
                 if (this.message_view) {

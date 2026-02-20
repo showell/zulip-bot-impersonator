@@ -11,12 +11,12 @@ function render_topic_heading_count(count: number): HTMLElement {
 
 function render_topic_heading(topic_row: TopicRow): HTMLElement {
     const div = document.createElement("div");
-    div.innerText = topic_row.topic.name;
+    div.innerText = topic_row.name();
     div.style.color = "#000080";
     div.style.paddingBottom = "0px";
     div.style.fontSize = "19px";
 
-    if (topic_row.unread_count > 0) {
+    if (topic_row.unread_count() > 0) {
         div.style.backgroundColor = "lavender";
     }
 
@@ -34,7 +34,7 @@ export class MessageViewHeader {
         div.style.marginBottom = "12px";
 
         div.append(render_topic_heading(topic_row));
-        div.append(render_topic_heading_count(topic_row.msg_count));
+        div.append(render_topic_heading_count(topic_row.num_messages()));
 
         this.div = div;
     }

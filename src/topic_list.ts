@@ -1,5 +1,3 @@
-import type { Topic } from "./backend/db_types";
-
 import * as model from "./backend/model";
 
 import type { TopicRow } from "./row_types";
@@ -41,20 +39,12 @@ export class TopicList {
         return this.topic_rows[index];
     }
 
-    get_current_topic(): Topic | undefined {
-        const index = this.cursor.selected_index;
-
-        if (index === undefined) return undefined;
-
-        return this.topic_rows[index].topic;
-    }
-
     refresh_topics_with_topic_name_selected(topic_name: string): void {
         const new_topic_rows = this.get_topic_rows();
         const cursor = this.cursor;
 
         const index = new_topic_rows.findIndex((topic_row) => {
-            return topic_row.topic.name === topic_name;
+            return topic_row.name() === topic_name;
         });
         cursor.select_index(index);
 
@@ -62,14 +52,14 @@ export class TopicList {
     }
 
     refresh(): void {
-        const topic = this.get_current_topic();
+        const current_topic_row = this.get_topic_row();
         const cursor = this.cursor;
 
         const new_topic_rows = this.get_topic_rows();
 
-        if (topic) {
+        if (current_topic_row) {
             const new_index = new_topic_rows.findIndex((topic_row) => {
-                return topic_row.topic.name === topic.name;
+                return topic_row.name() === current_topic_row.name();
             });
             cursor.select_index(new_index);
         }
@@ -93,7 +83,7 @@ export class TopicList {
 
         const topic_rows = model.get_topic_rows(stream_id);
 
-        topic_rows.sort((t1, t2) => t2.last_msg_id - t1.last_msg_id);
+        topic_rows.sort((t1, t2) => t2.last_msg_id() - t1.last_msg_id());
         // topics.sort((t1, t2) => t1.name.localeCompare(t2.name));
 
         cursor.set_count(topic_rows.length);
@@ -113,9 +103,9 @@ export class TopicList {
             const topic_row = topic_rows[i];
             const selected = cursor.is_selecting(i);
             const topic_row_data = {
-                name: topic_row.topic.name,
-                msg_count: topic_row.msg_count,
-                unread_count: topic_row.unread_count,
+                name: topic_row.name(),
+                msg_count: topic_row.num_messages(),
+                unread_count: topic_row.unread_count(),
             };
             const topic_row_widget = new TopicRowWidget(
                 topic_row_data,

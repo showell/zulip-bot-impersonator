@@ -28,12 +28,7 @@ export function get_rows(messages: Message[]): TopicRow[] {
         const message_list = message_list_map.get(topic_name)!;
         const list_info = message_list.list_info();
 
-        const topic_row = {
-            last_msg_id: list_info.last_msg_id,
-            msg_count: list_info.count,
-            unread_count: list_info.unread_count,
-            topic
-        };
+        const topic_row = new TopicRow(topic, list_info);
 
         topic_rows.push(topic_row);
     }

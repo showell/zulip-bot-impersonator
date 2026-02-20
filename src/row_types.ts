@@ -40,13 +40,35 @@ export class ChannelRow {
     }
 }
 
-export type TopicRow = {
-    // TODO: make class
-    msg_count: number;
-    last_msg_id: number;
-    unread_count: number;
-    topic: Topic;
-};
+export class TopicRow {
+    _topic: Topic;
+    _list_info: ListInfo;
+
+    constructor(topic: Topic, list_info: ListInfo) {
+        this._topic = topic;
+        this._list_info = list_info;
+    }
+
+    topic(): Topic {
+        return this._topic;
+    }
+
+    name(): string {
+        return this._topic.name;
+    }
+
+    num_messages(): number {
+        return this._list_info.count;
+    }
+
+    last_msg_id(): number {
+        return this._list_info.last_msg_id;
+    }
+
+    unread_count(): number {
+        return this._list_info.unread_count;
+    }
+}
 
 export class MessageRow {
     _message: Message;
@@ -58,7 +80,7 @@ export class MessageRow {
     sender_name(): string {
         const message = this._message;
 
-        const user = UserMap.get(message.sender_id)
+        const user = UserMap.get(message.sender_id);
         if (user) {
             return user.full_name;
         } else {
