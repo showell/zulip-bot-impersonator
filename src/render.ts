@@ -9,7 +9,8 @@ export function render_spacer(): HTMLElement {
 export function render_pane(): HTMLElement {
     const div = document.createElement("div");
     div.style.backgroundColor = "white";
-    div.style.padding = "10px";
+    div.style.paddingLeft = "10px";
+    div.style.paddingRight = "10px";
     div.style.borderRadius = "5px";
     div.style.marginRight = "25px";
     div.style.height = "fit-content";
@@ -20,7 +21,7 @@ export function render_pane(): HTMLElement {
 export function render_big_list(): HTMLElement {
     const div = document.createElement("div");
     div.style.paddingRight = "5px";
-    div.style.maxHeight = "80vh";
+    div.style.maxHeight = "100vh";
     div.style.overflowY = "auto";
     return div;
 }

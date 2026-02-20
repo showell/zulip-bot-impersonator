@@ -37,6 +37,9 @@ export class Page {
         const button_bar = document.createElement("div");
         button_bar.style.display = "flex";
         button_bar.style.marginBottom = "5px";
+        button_bar.style.paddingTop = "2px";
+        button_bar.style.paddingBottom = "4px";
+        button_bar.style.borderBottom = "1px black solid";
 
         const add_search_button = this.add_search_button();
         button_bar.append(add_search_button);

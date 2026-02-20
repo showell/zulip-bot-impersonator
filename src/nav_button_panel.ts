@@ -17,7 +17,7 @@ export class ButtonPanel {
     constructor(search_widget: SearchWidget) {
         const div = document.createElement("div");
         div.style.display = "flex";
-        div.style.paddingBottom = "4px";
+        div.style.maxHeight = "fit-content";
 
         this.close = new Button("close", () => {
             search_widget.close();
