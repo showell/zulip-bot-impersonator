@@ -11,7 +11,7 @@ function render_topic_heading_count(count: number): HTMLElement {
 
 function render_topic_heading(topic_row: TopicRow): HTMLElement {
     const div = document.createElement("div");
-    div.innerText = topic_row.name();
+    div.innerText = "> " + topic_row.name();
     div.style.color = "#000080";
     div.style.paddingBottom = "0px";
     div.style.fontSize = "19px";

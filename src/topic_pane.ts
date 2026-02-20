@@ -18,7 +18,7 @@ export class TopicPane {
         this.topic_list.populate();
 
         div.innerHTML = "";
-        div.append(render_list_heading(stream.name));
+        div.append(render_list_heading("#" + stream.name));
         div.append(this.topic_list.div);
 
         this.div = div;
