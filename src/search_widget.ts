@@ -198,6 +198,7 @@ export class SearchWidget {
         this.update_button_panel();
         this.button_panel.focus_next_channel_button();
         this.update_label();
+        StatusBar.inform("You can choose a channel now.");
     }
 
     update_channel(): void {
