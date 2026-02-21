@@ -13,12 +13,13 @@ import type { TopicList } from "./topic_list";
 import { ButtonPanel } from "./nav_button_panel";
 import { ChannelPane } from "./channel_pane";
 import { ChannelView } from "./channel_view";
+import { PaneManager } from "./pane_manager";
 import { StatusBar } from "./status_bar";
 
 export class SearchWidget {
     div: HTMLElement;
     button_panel: ButtonPanel;
-    main_section: HTMLElement;
+    pane_manager: PaneManager;
     channel_pane: ChannelPane;
     channel_view?: ChannelView;
     plugin_helper?: PluginHelper;
@@ -32,8 +33,23 @@ export class SearchWidget {
 
         this.button_panel = new ButtonPanel(self);
         this.channel_pane = new ChannelPane(self);
-        this.main_section = this.build_main_section();
-        this.show_only_channels();
+        this.pane_manager = new PaneManager();
+        this.pane_manager.add_pane({
+            key: "channel_pane",
+            pane_widget: this.channel_pane,
+        });
+
+    }
+
+    populate(): void {
+        const div = this.div;
+        const button_panel = this.button_panel;
+        const pane_manager = this.pane_manager;
+
+        div.innerHTML = "";
+
+        div.append(button_panel.div);
+        div.append(pane_manager.div);
     }
 
     refresh_message_ids(message_ids: number[]): void {
@@ -55,17 +71,6 @@ export class SearchWidget {
 
         const stream_id = this.get_stream_id();
         this.channel_view = new ChannelView(stream_id!, self);
-    }
-
-    populate(): void {
-        const div = this.div;
-        const button_panel = this.button_panel;
-
-        div.innerHTML = "";
-
-        div.append(button_panel.div);
-
-        div.append(this.main_section);
     }
 
     start(plugin_helper: PluginHelper) {
@@ -119,35 +124,6 @@ export class SearchWidget {
         return div;
     }
 
-    show_only_channels(): void {
-        const div = this.main_section;
-
-        div.innerHTML = "";
-
-        div.append(this.channel_pane.div);
-
-        this.channel_view = undefined;
-    }
-
-    show_channels(): void {
-        const div = this.main_section;
-
-        div.innerHTML = "";
-
-        div.append(this.channel_pane.div);
-        div.append(this.channel_view!.div);
-
-        StatusBar.inform("You can click on a topic now.");
-    }
-
-    hide_channels(): void {
-        const div = this.main_section;
-
-        div.innerHTML = "";
-
-        div.append(this.channel_view!.div);
-    }
-
     update_button_panel(): void {
         this.button_panel.update({
             channel_selected: this.channel_selected(),
@@ -194,7 +170,8 @@ export class SearchWidget {
 
     clear_channel(): void {
         this.get_stream_list().clear_selection();
-        this.show_only_channels();
+        this.pane_manager.pop("channel_view");
+        this.channel_view = undefined;
         this.update_button_panel();
         this.button_panel.focus_next_channel_button();
         this.update_label();
@@ -204,7 +181,18 @@ export class SearchWidget {
     update_channel(): void {
         this.make_channel_view();
         this.update_button_panel();
-        this.show_channels();
+        this.pane_manager.set_panes([
+            {
+                key: "channel_pane",
+                pane_widget: this.channel_pane,
+            },
+            {
+                key: "channel_view",
+                pane_widget: this.channel_view!,
+            },
+        ]);
+
+        StatusBar.inform("You can click on a topic now.");
         this.update_label();
     }
 
@@ -241,7 +229,6 @@ export class SearchWidget {
             console.log("Add topic without a channel?");
             return;
         }
-        this.hide_channels();
         this.channel_view.add_topic();
     }
 
@@ -257,7 +244,6 @@ export class SearchWidget {
 
     update_topic(): void {
         StatusBar.inform("You can read or reply now.");
-        this.hide_channels();
         this.update_button_panel();
         this.update_label();
     }
