@@ -146,7 +146,6 @@ export class SearchWidget {
         div.innerHTML = "";
 
         div.append(this.channel_view!.div);
-        StatusBar.inform("Choose a channel to surf!");
     }
 
     update_button_panel(): void {
@@ -256,6 +255,7 @@ export class SearchWidget {
     }
 
     update_topic(): void {
+        StatusBar.inform("You can read or reply now.");
         this.hide_channels();
         this.update_button_panel();
         this.update_label();

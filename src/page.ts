@@ -130,6 +130,10 @@ export class Page {
             StatusBar.inform(`Message arrived from ${sender_name} at ${address}.`);
         }
 
+        if (event.flavor === EventFlavor.UNREAD_ADD) {
+            StatusBar.celebrate("Messages have been marked as read.");
+        }
+
         for (const plugin_helper of this.plugin_helpers) {
             plugin_helper.plugin.handle_event(event);
         }

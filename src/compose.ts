@@ -3,6 +3,7 @@ import type { Topic } from "./backend/db_types";
 import * as outbound from "./backend/outbound";
 
 import { Button } from "./button";
+import { StatusBar } from "./status_bar";
 
 function render_textarea(): HTMLTextAreaElement {
     const elem = document.createElement("textarea");
@@ -56,6 +57,7 @@ class TopicInput {
     }
 
     focus(): void {
+        StatusBar.inform("Try to choose a descriptive but short topic.");
         this.topic_input.focus();
     }
 
@@ -87,6 +89,7 @@ class TextArea {
     }
 
     focus(): void {
+        StatusBar.inform("You can hit tab to get to the Send button.");
         this.elem.focus();
     }
 }
