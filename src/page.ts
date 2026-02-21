@@ -15,6 +15,9 @@ export class Page {
 
     constructor() {
         const div = document.createElement("div");
+        div.style.height = "98vh";
+        div.style.overflowY = "auto";
+
         create_global_status_bar();
 
         div.append(StatusBar.div);
@@ -108,6 +111,7 @@ export class Page {
     redraw(plugin_helper: PluginHelper): void {
         const div = this.div;
         const container_div = document.createElement("div");
+        container_div.style.overflowY = "auto";
 
         const button_bar = this.make_button_bar();
 

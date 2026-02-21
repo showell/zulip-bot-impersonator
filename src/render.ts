@@ -21,7 +21,7 @@ export function render_pane(): HTMLElement {
 export function render_big_list(): HTMLElement {
     const div = document.createElement("div");
     div.style.paddingRight = "5px";
-    div.style.maxHeight = "100vh";
+    div.style.maxHeight = "70vh";
     div.style.overflowY = "auto";
     return div;
 }

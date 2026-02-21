@@ -28,7 +28,6 @@ export class SearchWidget {
         const self = this;
 
         const div = document.createElement("div");
-
         this.div = div;
 
         this.button_panel = new ButtonPanel(self);
