@@ -4,7 +4,8 @@ import type { TopicRow } from "./row_types";
 import type { SearchWidget } from "./search_widget";
 
 import { Cursor } from "./cursor";
-import { render_thead, render_th, render_big_list } from "./render";
+import { render_big_list } from "./render";
+import { TableWidget } from "./table_widget";
 import { TopicRowWidget } from "./topic_row_widget";
 
 export class TopicList {
@@ -73,16 +74,6 @@ export class TopicList {
         this.populate_from_topic_rows(new_topic_rows);
     }
 
-    make_thead(): HTMLElement {
-        const thead = render_thead([
-            render_th("Unread"),
-            render_th("Topic name"),
-            render_th("Messages"),
-        ]);
-
-        return thead;
-    }
-
     get_topic_rows(): TopicRow[] {
         const stream_id = this.stream_id!;
         const cursor = this.cursor;
@@ -99,11 +90,11 @@ export class TopicList {
         return topic_rows;
     }
 
-    make_tbody(topic_rows: TopicRow[]): HTMLElement {
+    make_table(topic_rows: TopicRow[]): HTMLTableElement {
         const search_widget = this.search_widget;
         const cursor = this.cursor;
 
-        const tbody = document.createElement("tbody");
+        const row_widgets = [];
 
         for (let i = 0; i < topic_rows.length; ++i) {
             const topic_row = topic_rows[i];
@@ -119,23 +110,13 @@ export class TopicList {
                 selected,
                 search_widget,
             );
-            tbody.append(topic_row_widget.tr);
+            row_widgets.push(topic_row_widget);
         }
 
-        return tbody;
-    }
+        const columns = ["Unread", "Topic name", "Messages"];
+        const table_widget = new TableWidget(columns, row_widgets);
 
-    make_table(topic_rows: TopicRow[]): HTMLElement {
-        const thead = this.make_thead();
-        const tbody = this.make_tbody(topic_rows);
-
-        const table = document.createElement("table");
-        table.append(thead);
-        table.append(tbody);
-
-        table.style.borderCollapse = "collapse";
-
-        return table;
+        return table_widget.table;
     }
 
     populate_from_topic_rows(topic_rows: TopicRow[]) {

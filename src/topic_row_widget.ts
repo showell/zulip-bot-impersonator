@@ -1,6 +1,6 @@
 import type { SearchWidget } from "./search_widget";
 
-import { render_tr, render_unread_count } from "./render";
+import { render_unread_count } from "./render";
 
 type TopicRowData = {
     name: string;
@@ -8,7 +8,7 @@ type TopicRowData = {
     unread_count: number;
 };
 
-function render_topic_count(count: number): HTMLElement {
+function render_topic_count(count: number): HTMLDivElement {
     const div = document.createElement("div");
     div.innerText = `${count}`;
     div.style.textAlign = "right";
@@ -17,7 +17,7 @@ function render_topic_count(count: number): HTMLElement {
     return div;
 }
 
-function render_topic_name(topic_name: string): HTMLElement {
+function render_topic_name(topic_name: string): HTMLDivElement {
     const div = document.createElement("div");
     div.innerText = "> " + topic_name;
     div.style.maxWidth = "270px";
@@ -30,7 +30,7 @@ function render_topic_name(topic_name: string): HTMLElement {
 }
 
 class TopicRowName {
-    div: HTMLElement;
+    div: HTMLDivElement;
 
     constructor(
         topic_name: string,
@@ -57,7 +57,7 @@ class TopicRowName {
 }
 
 export class TopicRowWidget {
-    tr: HTMLElement;
+    divs: HTMLDivElement[];
 
     constructor(
         row_data: TopicRowData,
@@ -72,12 +72,10 @@ export class TopicRowWidget {
             search_widget,
         );
 
-        const tr = render_tr([
+        this.divs = [
             render_unread_count(row_data.unread_count),
             topic_row_name.div,
             render_topic_count(row_data.msg_count),
-        ]);
-
-        this.tr = tr;
+        ];
     }
 }
