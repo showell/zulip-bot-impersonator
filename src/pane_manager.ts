@@ -13,18 +13,22 @@ export class PaneManager {
 
     constructor() {
         const div = document.createElement("div");
+        div.style.display = "flex";
+
         this.div = div;
         this.panes = [];
     }
 
     add_pane(pane: Pane): void {
+        const div = this.div;
+
         if (this.end_key_matches(pane.key)) {
             console.log("already added", pane.key);
             return;
         }
 
         this.panes.push(pane);
-        this.redraw();
+        div.append(pane.pane_widget.div);
     }
 
     pop(key: string) {
@@ -82,15 +86,10 @@ export class PaneManager {
         const div = this.div;
         const panes = this.panes;
 
-        const new_div = document.createElement("div");
-        new_div.style.display = "flex";
-
-        for (const pane of panes) {
-            new_div.append(pane.pane_widget.div);
-        }
-
         div.innerHTML = "";
-        div.append(new_div);
+        for (const pane of panes) {
+            div.append(pane.pane_widget.div);
+        }
     }
 }
 
