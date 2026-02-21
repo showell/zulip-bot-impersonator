@@ -2,8 +2,8 @@ import type { StreamMessage } from "./db_types";
 
 export const enum EventFlavor {
     STREAM_MESSAGE,
-    UNREAD_ADD,
-    UNREAD_REMOVE,
+    MARK_AS_READ,
+    MARK_AS_UNREAD,
     UNKNOWN,
 }
 
@@ -14,12 +14,12 @@ type StreamMessageEvent = {
 };
 
 type UnreadAddEvent = {
-    flavor: EventFlavor.UNREAD_ADD;
+    flavor: EventFlavor.MARK_AS_READ;
     message_ids: number[];
 }
 
 type UnreadRemoveEvent = {
-    flavor: EventFlavor.UNREAD_REMOVE;
+    flavor: EventFlavor.MARK_AS_UNREAD;
     message_ids: number[];
 }
 
@@ -62,14 +62,14 @@ function build_event(raw_event: any): ZulipEvent | undefined {
         case "update_message_flags": {
             if (raw_event.op === "add" && raw_event.flag === "read") {
                 return {
-                    flavor: EventFlavor.UNREAD_ADD,
+                    flavor: EventFlavor.MARK_AS_READ,
                     message_ids: raw_event.messages,
                 };
             }
 
             if (raw_event.op === "remove" && raw_event.flag === "read") {
                 return {
-                    flavor: EventFlavor.UNREAD_REMOVE,
+                    flavor: EventFlavor.MARK_AS_UNREAD,
                     message_ids: raw_event.messages,
                 };
             }

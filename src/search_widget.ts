@@ -313,11 +313,11 @@ export class SearchWidget {
             this.refresh(event.stream_message);
         }
 
-        if (event.flavor === EventFlavor.UNREAD_ADD) {
+        if (event.flavor === EventFlavor.MARK_AS_READ) {
             this.refresh_message_ids(event.message_ids);
         }
 
-        if (event.flavor === EventFlavor.UNREAD_REMOVE) {
+        if (event.flavor === EventFlavor.MARK_AS_UNREAD) {
             this.refresh_message_ids(event.message_ids);
         }
         this.update_label();

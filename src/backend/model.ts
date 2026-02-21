@@ -95,11 +95,11 @@ export function handle_event(event: ZulipEvent): void {
         add_stream_messages_to_cache(event.stream_message);
     }
 
-    if (event.flavor === EventFlavor.UNREAD_ADD) {
+    if (event.flavor === EventFlavor.MARK_AS_READ) {
         mark_message_ids_as_read(event.message_ids);
     }
 
-    if (event.flavor === EventFlavor.UNREAD_REMOVE) {
+    if (event.flavor === EventFlavor.MARK_AS_UNREAD) {
         mark_message_ids_as_unread(event.message_ids);
     }
 }
