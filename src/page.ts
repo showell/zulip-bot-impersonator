@@ -11,7 +11,6 @@ import { StatusBar, create_global_status_bar } from "./status_bar";
 
 export class Page {
     div: HTMLElement;
-    container_div: HTMLElement;
     plugin_helpers: PluginHelper[];
 
     constructor() {
@@ -25,9 +24,6 @@ export class Page {
 
         this.plugin_helpers = [];
 
-        const container_div = document.createElement("div");
-
-        this.container_div = container_div;
         this.div = div;
     }
 
@@ -111,7 +107,7 @@ export class Page {
 
     redraw(plugin_helper: PluginHelper): void {
         const div = this.div;
-        const container_div = this.container_div;
+        const container_div = document.createElement("div");
 
         const button_bar = this.make_button_bar();
 
