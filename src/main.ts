@@ -19,7 +19,11 @@ export async function run() {
     const event_radio_widget = new EventRadio();
 
     function handle_event(event: ZulipEvent) {
+        // We want the model to update before any plugins touch
+        // the event.
         model.handle_event(event);
+
+        // The Page object dispatches events to all the plugins.
         page.handle_event(event);
     }
 

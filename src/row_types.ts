@@ -104,4 +104,8 @@ export class MessageRow {
     is_super_new(): boolean {
         return this._message.is_super_new;
     }
+
+    address_string(): string {
+        return this._message.topic_name;
+    }
 }

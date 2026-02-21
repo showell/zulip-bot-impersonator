@@ -89,8 +89,23 @@ export class ChannelView {
         const topic_row = topic_list.get_topic_row();
         const sent_by_me = model.is_me(stream_message.sender_id);
 
+        /*
+         * In the add-topic scenario, we don't switch to the
+         * new topic until the message event gets confirmed
+         * by the server. If the server lags a bit, we risk
+         * having the user intentionally change topic views
+         * in between, but this is not the end of the world.
+         *
+         * We try to guess as best as we can. To be more
+         * rigorous, we may eventually try to use queue_id
+         * and local_id (see https://zulip.com/api/send-message)
+         * to reconcile messages.
+         */
+
+        const can_change_topic = sent_by_me && this.add_topic_pane;
+
         if (!topic_row) {
-            if (sent_by_me) {
+            if (can_change_topic) {
                 this.select_topic_and_append(stream_message);
             } else {
                 topic_list.refresh(); // for counts
@@ -102,7 +117,7 @@ export class ChannelView {
                 if (this.message_view) {
                     this.get_message_list()!.append_message(stream_message);
                 }
-            } else if (sent_by_me) {
+            } else if (can_change_topic) {
                 this.select_topic_and_append(stream_message);
             } else {
                 topic_list.refresh();

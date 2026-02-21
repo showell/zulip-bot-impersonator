@@ -1,6 +1,9 @@
+import type { ZulipEvent } from "./backend/event";
 import type { Plugin } from "./plugin_helper";
 
-import { ZulipEvent } from "./backend/event";
+import { EventFlavor } from "./backend/event";
+
+import { MessageRow } from "./row_types";
 import { PluginHelper } from "./plugin_helper";
 import { SearchWidget } from "./search_widget";
 import { StatusBar, create_global_status_bar } from "./status_bar";
@@ -120,6 +123,13 @@ export class Page {
     }
 
     handle_event(event: ZulipEvent): void {
+        if (event.flavor === EventFlavor.STREAM_MESSAGE) {
+            const message_row = new MessageRow(event.stream_message);
+            const sender_name = message_row.sender_name();
+            const address = message_row.address_string();
+            StatusBar.inform(`Message arrived from ${sender_name} at ${address}.`);
+        }
+
         for (const plugin_helper of this.plugin_helpers) {
             plugin_helper.plugin.handle_event(event);
         }

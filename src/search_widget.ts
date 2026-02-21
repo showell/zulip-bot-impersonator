@@ -320,5 +320,6 @@ export class SearchWidget {
         if (event.flavor === EventFlavor.UNREAD_REMOVE) {
             this.refresh_message_ids(event.message_ids);
         }
+        this.update_label();
     }
 }
