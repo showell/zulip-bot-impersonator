@@ -9,35 +9,40 @@ import type { MessageList } from "./message_list";
 import { AddTopicPane } from "./add_topic_pane";
 import { ChannelInfo } from "./channel_info";
 import { MessageView } from "./message_view";
+import { PaneManager } from "./pane_manager";
 import { TopicList } from "./topic_list";
 import { TopicPane } from "./topic_pane";
 
 export class ChannelView {
-    div: HTMLElement;
     stream_id: number;
     stream: Stream;
     channel_info: ChannelInfo;
     topic_pane: TopicPane;
     message_view?: MessageView;
     add_topic_pane?: AddTopicPane;
+    pane_manager: PaneManager;
 
-    constructor(stream_id: number, search_widget: SearchWidget) {
+    constructor(stream_id: number, search_widget: SearchWidget, pane_manager: PaneManager) {
         const stream = model.stream_for(stream_id);
 
         this.stream = stream;
         this.stream_id = stream_id;
-        this.channel_info = new ChannelInfo(stream_id);
 
-        this.topic_pane = new TopicPane(stream, search_widget);
         this.add_topic_pane = undefined;
 
-        const div = document.createElement("div");
-        div.style.display = "flex";
+        this.pane_manager = pane_manager;
 
-        div.append(this.topic_pane.div);
-        div.append(this.channel_info.div);
+        this.topic_pane = new TopicPane(stream, search_widget);
+        pane_manager.add_pane({
+            key: "topic_pane",
+            pane_widget: this.topic_pane,
+        });
 
-        this.div = div;
+        this.channel_info = new ChannelInfo(stream_id);
+        pane_manager.add_pane({
+            key: "channel_info",
+            pane_widget: this.channel_info,
+        });
     }
 
     topic_selected(): boolean {
@@ -45,17 +50,21 @@ export class ChannelView {
     }
 
     open_message_view(): void {
-        const div = this.div;
-
+        const pane_manager = this.pane_manager;
         const topic_row = this.get_topic_row()!;
+
         const message_view = new MessageView(topic_row);
 
-        div.innerHTML = "";
-        div.append(this.topic_pane.div);
-        div.append(message_view.div);
+        pane_manager.replace_after("topic_pane", {
+            key: "message_view",
+            pane_widget: message_view,
+        });
 
         if (this.add_topic_pane) {
-            div.append(this.add_topic_pane.div);
+            pane_manager.add_pane({
+                key: "add_topic_pane",
+                pane_widget: this.add_topic_pane,
+            });
         }
 
         this.message_view = message_view;
@@ -146,32 +155,31 @@ export class ChannelView {
     }
 
     clear_message_view(): void {
-        const div = this.div;
+        const pane_manager = this.pane_manager;
         const topic_list = this.get_topic_list();
 
         topic_list.clear_selection();
 
-        div.innerHTML = "";
-        div.append(this.topic_pane.div);
-        div.append(this.channel_info.div);
+        pane_manager.replace_after("topic_pane", {
+            key: "channel_info",
+            pane_widget: this.channel_info,
+        });
 
         this.add_topic_pane = undefined;
     }
 
     add_topic(): void {
-        const div = this.div;
+        const pane_manager = this.pane_manager;
         const topic_list = this.get_topic_list();
 
         topic_list.clear_selection();
-        div.innerHTML = "";
 
-        // we want the topic pane to stay visible!
-        div.append(this.topic_pane.div);
-
-        // but we replace all other views with our dedicated UI
-        // for adding a topic
         const add_topic_pane = new AddTopicPane(this.stream);
-        div.append(add_topic_pane.div);
+
+        pane_manager.replace_after("topic_pane", {
+            key: "add_topic_pane",
+            pane_widget: add_topic_pane,
+        });
 
         add_topic_pane.focus_compose_box();
 

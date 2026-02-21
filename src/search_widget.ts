@@ -164,7 +164,7 @@ export class SearchWidget {
 
     clear_channel(): void {
         this.get_stream_list().clear_selection();
-        this.pane_manager.pop("channel_view");
+        this.pane_manager.remove_after("channel_pane");
         this.channel_view = undefined;
         this.update_button_panel();
         this.button_panel.focus_next_channel_button();
@@ -173,19 +173,18 @@ export class SearchWidget {
     }
 
     update_channel(): void {
+        const search_widget = this;
+        const pane_manager = this.pane_manager;
         const stream_id = this.get_stream_id();
 
-        this.channel_view = new ChannelView(stream_id!, this);
-        this.pane_manager.set_panes([
-            {
-                key: "channel_pane",
-                pane_widget: this.channel_pane,
-            },
-            {
-                key: "channel_view",
-                pane_widget: this.channel_view!,
-            },
-        ]);
+        this.pane_manager.remove_after("channel_pane");
+
+        // ChannelView will add panes
+        this.channel_view = new ChannelView(
+            stream_id!,
+            search_widget,
+            pane_manager,
+        );
 
         this.update_button_panel();
         StatusBar.inform("You can click on a topic now.");

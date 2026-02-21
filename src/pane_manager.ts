@@ -17,11 +17,6 @@ export class PaneManager {
         this.panes = [];
     }
 
-    set_panes(panes: Pane[]): void {
-        this.panes = panes;
-        this.redraw();
-    }
-
     add_pane(pane: Pane): void {
         if (this.end_key_matches(pane.key)) {
             console.log("already added", pane.key);
@@ -38,6 +33,36 @@ export class PaneManager {
             return;
         }
         this.panes = this.panes.slice(0, this.panes.length - 1);
+        this.redraw();
+    }
+
+    remove_after(key: string) {
+        const new_panes =[];
+
+        for (const pane of this.panes) {
+            new_panes.push(pane);
+            if (pane.key === key) {
+                break;
+            }
+        }
+
+        this.panes = new_panes;
+        this.redraw();
+    }
+
+    replace_after(key: string, new_pane: Pane) {
+        const new_panes =[];
+
+        for (const pane of this.panes) {
+            new_panes.push(pane);
+            if (pane.key === key) {
+                break;
+            }
+        }
+
+        new_panes.push(new_pane);
+
+        this.panes = new_panes;
         this.redraw();
     }
 
