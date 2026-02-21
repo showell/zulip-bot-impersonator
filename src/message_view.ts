@@ -3,35 +3,38 @@ import type { TopicRow } from "./row_types";
 
 import { ComposeBox } from "./compose";
 import { MessagePane } from "./message_pane";
+import { PaneManager } from "./pane_manager";
 import { ReplyPane } from "./reply_pane";
 
 export class MessageView {
-    div: HTMLElement;
     message_pane: MessagePane;
     topic_row: TopicRow;
     reply_pane?: ReplyPane;
+    pane_manager: PaneManager;
 
-    constructor(topic_row: TopicRow) {
-        const div = document.createElement("div");
-
-        div.innerHTML = "";
-        div.style.display = "flex";
-
+    constructor(topic_row: TopicRow, pane_manager: PaneManager) {
         const message_pane = new MessagePane(topic_row);
-        div.append(message_pane.div);
 
-        this.div = div;
+        pane_manager.add_pane({
+            key: "message_pane",
+            pane_widget: message_pane,
+        });
+
         this.topic_row = topic_row;
         this.message_pane = message_pane;
+        this.pane_manager = pane_manager;
     }
 
     reply(): void {
-        const div = this.div;
+        const pane_manager = this.pane_manager;
         const topic_row = this.topic_row;
 
         if (!this.reply_pane) {
             const reply_pane = new ReplyPane(topic_row.topic());
-            div.append(reply_pane.div);
+            pane_manager.add_pane({
+                key: "reply_pane",
+                pane_widget: reply_pane,
+            });
             this.reply_pane = reply_pane;
         }
 

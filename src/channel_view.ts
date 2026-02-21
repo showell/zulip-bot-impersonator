@@ -53,12 +53,9 @@ export class ChannelView {
         const pane_manager = this.pane_manager;
         const topic_row = this.get_topic_row()!;
 
-        const message_view = new MessageView(topic_row);
+        pane_manager.remove_after("topic_pane");
 
-        pane_manager.replace_after("topic_pane", {
-            key: "message_view",
-            pane_widget: message_view,
-        });
+        const message_view = new MessageView(topic_row, pane_manager);
 
         if (this.add_topic_pane) {
             pane_manager.add_pane({
