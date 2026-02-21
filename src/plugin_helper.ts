@@ -94,4 +94,8 @@ export class PluginHelper {
     violet() {
         this.button.violet();
     }
+
+    add_plugin(plugin: Plugin): void {
+        this.page.add_plugin(plugin);
+    }
 }

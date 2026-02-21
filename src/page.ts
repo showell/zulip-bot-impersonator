@@ -4,6 +4,7 @@ import type { Plugin } from "./plugin_helper";
 import { EventFlavor } from "./backend/event";
 
 import { MessageRow } from "./row_types";
+import { PluginChooser } from "./plugins/plugin_chooser";
 import { PluginHelper } from "./plugin_helper";
 import { SearchWidget } from "./search_widget";
 import { StatusBar, create_global_status_bar } from "./status_bar";
@@ -28,6 +29,13 @@ export class Page {
 
         this.container_div = container_div;
         this.div = div;
+    }
+
+    start(): void {
+        const plugin_chooser = new PluginChooser();
+        this.add_plugin(plugin_chooser);
+
+        this.add_search_widget();
     }
 
     make_button_bar(): HTMLElement {

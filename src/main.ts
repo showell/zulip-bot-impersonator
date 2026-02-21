@@ -4,7 +4,6 @@ import * as zulip_client from "./backend/zulip_client";
 
 import { config } from "./secrets";
 
-import { EventRadio } from "./plugins/event_radio";
 import { Page } from "./page";
 
 export async function run() {
@@ -15,8 +14,6 @@ export async function run() {
     // do before fetching to get "spinner"
     const page = new Page();
     document.body.append(page.div);
-
-    const event_radio_widget = new EventRadio();
 
     function handle_event(event: ZulipEvent) {
         // We want the model to update before any plugins touch
@@ -37,9 +34,7 @@ export async function run() {
 
     zulip_client.start_polling(event_manager);
 
-    page.add_plugin(event_radio_widget);
-
-    page.add_search_widget();
+    page.start();
 }
 
 run();
