@@ -32,8 +32,9 @@ export class SearchWidget {
         this.div = div;
 
         this.button_panel = new ButtonPanel(self);
-        this.channel_pane = new ChannelPane(self);
         this.pane_manager = new PaneManager();
+
+        this.channel_pane = new ChannelPane(self);
         this.pane_manager.add_pane({
             key: "channel_pane",
             pane_widget: this.channel_pane,
@@ -64,13 +65,6 @@ export class SearchWidget {
         if (this.channel_view) {
             this.channel_view.refresh(stream_message);
         }
-    }
-
-    make_channel_view() {
-        const self = this;
-
-        const stream_id = this.get_stream_id();
-        this.channel_view = new ChannelView(stream_id!, self);
     }
 
     start(plugin_helper: PluginHelper) {
@@ -179,8 +173,9 @@ export class SearchWidget {
     }
 
     update_channel(): void {
-        this.make_channel_view();
-        this.update_button_panel();
+        const stream_id = this.get_stream_id();
+
+        this.channel_view = new ChannelView(stream_id!, this);
         this.pane_manager.set_panes([
             {
                 key: "channel_pane",
@@ -192,6 +187,7 @@ export class SearchWidget {
             },
         ]);
 
+        this.update_button_panel();
         StatusBar.inform("You can click on a topic now.");
         this.update_label();
     }
