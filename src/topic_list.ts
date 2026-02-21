@@ -39,29 +39,35 @@ export class TopicList {
         return this.topic_rows[index];
     }
 
-    refresh_topics_with_topic_name_selected(topic_name: string): void {
-        const new_topic_rows = this.get_topic_rows();
+    select_topic_name(new_topic_rows: TopicRow[], topic_name: string) {
         const cursor = this.cursor;
 
         const index = new_topic_rows.findIndex((topic_row) => {
             return topic_row.name() === topic_name;
         });
         cursor.select_index(index);
+    }
 
+    refresh_topics_with_topic_name_selected(topic_name: string): void {
+        const new_topic_rows = this.get_topic_rows();
+        this.select_topic_name(new_topic_rows, topic_name);
         this.populate_from_topic_rows(new_topic_rows);
     }
 
-    refresh(): void {
+    get_topic_name(): string | undefined {
         const current_topic_row = this.get_topic_row();
-        const cursor = this.cursor;
+        if (current_topic_row === undefined) {
+            return undefined;
+        }
+        return current_topic_row.name();
+    }
 
+    refresh(): void {
+        const topic_name = this.get_topic_name();
         const new_topic_rows = this.get_topic_rows();
 
-        if (current_topic_row) {
-            const new_index = new_topic_rows.findIndex((topic_row) => {
-                return topic_row.name() === current_topic_row.name();
-            });
-            cursor.select_index(new_index);
+        if (topic_name) {
+            this.select_topic_name(new_topic_rows, topic_name);
         }
 
         this.populate_from_topic_rows(new_topic_rows);
