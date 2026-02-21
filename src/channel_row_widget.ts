@@ -1,9 +1,9 @@
 import type { ChannelRow } from "./row_types";
 import type { SearchWidget } from "./search_widget";
 
-import { render_tr, render_unread_count } from "./render";
+import { render_unread_count } from "./render";
 
-function render_num_topics(count: number): HTMLElement {
+function render_num_topics(count: number): HTMLDivElement {
     const div = document.createElement("div");
     div.innerText = `${count}`;
     div.style.textAlign = "right";
@@ -12,7 +12,7 @@ function render_num_topics(count: number): HTMLElement {
     return div;
 }
 
-function render_channel_name(channel_name: string): HTMLElement {
+function render_channel_name(channel_name: string): HTMLDivElement {
     const div = document.createElement("div");
     div.innerText = "#" + channel_name;
     div.style.maxWidth = "270px";
@@ -24,7 +24,7 @@ function render_channel_name(channel_name: string): HTMLElement {
 }
 
 class ChannelRowName {
-    div: HTMLElement;
+    div: HTMLDivElement;
 
     constructor(
         channel_row: ChannelRow,
@@ -51,7 +51,7 @@ class ChannelRowName {
 }
 
 export class ChannelRowWidget {
-    tr: HTMLElement;
+    divs: HTMLDivElement[];
 
     constructor(
         channel_row: ChannelRow,
@@ -66,10 +66,10 @@ export class ChannelRowWidget {
             search_widget,
         );
 
-        this.tr = render_tr([
+        this.divs = [
             render_unread_count(channel_row.unread_count()),
             channel_row_name.div,
             render_num_topics(channel_row.num_topics()),
-        ]);
+        ];
     }
 }

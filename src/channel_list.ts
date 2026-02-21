@@ -5,7 +5,8 @@ import type { SearchWidget } from "./search_widget";
 
 import { ChannelRowWidget } from "./channel_row_widget";
 import { Cursor } from "./cursor";
-import { render_thead, render_th, render_big_list } from "./render";
+import { render_big_list } from "./render";
+import { TableWidget } from "./table_widget";
 
 export class ChannelList {
     search_widget: SearchWidget;
@@ -48,16 +49,6 @@ export class ChannelList {
         return channel_rows[index];
     }
 
-    make_thead(): HTMLElement {
-        const thead = render_thead([
-            render_th("Unread"),
-            render_th("Channel"),
-            render_th("Topics"),
-        ]);
-
-        return thead;
-    }
-
     sort(channel_rows: ChannelRow[]) {
         channel_rows.sort((c1, c2) => {
             return c2.last_msg_id() - c1.last_msg_id();
@@ -79,12 +70,12 @@ export class ChannelList {
         return channel_rows;
     }
 
-    make_tbody(): HTMLElement {
+    make_table(): HTMLElement {
         const search_widget = this.search_widget;
         const cursor = this.cursor;
-        const channel_rows = this.get_channel_rows();
+        const row_widgets = [];
 
-        const tbody = document.createElement("tbody");
+        const channel_rows = this.get_channel_rows();
 
         for (let i = 0; i < channel_rows.length; ++i) {
             const channel_row = channel_rows[i];
@@ -95,23 +86,13 @@ export class ChannelList {
                 selected,
                 search_widget,
             );
-            tbody.append(channel_row_widget.tr);
+            row_widgets.push(channel_row_widget);
         }
 
-        return tbody;
-    }
+        const columns = ["Unread", "Channel", "Topics"];
+        const table_widget = new TableWidget(columns, row_widgets);
 
-    make_table(): HTMLElement {
-        const thead = this.make_thead();
-        const tbody = this.make_tbody();
-
-        const table = document.createElement("table");
-        table.append(thead);
-        table.append(tbody);
-
-        table.style.borderCollapse = "collapse";
-
-        return table;
+        return table_widget.table;
     }
 
     populate() {

@@ -42,7 +42,7 @@ export function render_list_heading(name: string): HTMLElement {
     return div;
 }
 
-export function render_thead(headers: HTMLElement[]): HTMLElement {
+export function render_thead(headers: HTMLElement[]): HTMLTableSectionElement {
     const thead = document.createElement("thead");
 
     const tr = document.createElement("tr");
@@ -82,7 +82,7 @@ export function render_tr(divs: HTMLElement[]): HTMLElement {
     return tr;
 }
 
-export function render_unread_count(count: number): HTMLElement {
+export function render_unread_count(count: number): HTMLDivElement {
     const div = document.createElement("div");
     div.innerText = count ? `${count}` : "";
     div.style.textAlign = "right";
