@@ -28,7 +28,7 @@ export class PluginChooser {
         plugin_helper.update_label("Plugins");
     }
 
-    handle_event(event: ZulipEvent): void {
+    handle_event(_event: ZulipEvent): void {
         // nothing to do
     }
 }

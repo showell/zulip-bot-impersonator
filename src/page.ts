@@ -135,7 +135,9 @@ export class Page {
             const message_row = new MessageRow(event.stream_message);
             const sender_name = message_row.sender_name();
             const address = message_row.address_string();
-            StatusBar.inform(`Message arrived from ${sender_name} at ${address}.`);
+            StatusBar.inform(
+                `Message arrived from ${sender_name} at ${address}.`,
+            );
         }
 
         if (event.flavor === EventFlavor.MARK_AS_READ) {

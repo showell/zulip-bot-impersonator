@@ -22,7 +22,11 @@ export class ChannelView {
     add_topic_pane?: AddTopicPane;
     pane_manager: PaneManager;
 
-    constructor(stream_id: number, search_widget: SearchWidget, pane_manager: PaneManager) {
+    constructor(
+        stream_id: number,
+        search_widget: SearchWidget,
+        pane_manager: PaneManager,
+    ) {
         const stream = model.stream_for(stream_id);
 
         this.stream = stream;

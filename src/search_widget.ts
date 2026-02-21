@@ -39,7 +39,6 @@ export class SearchWidget {
             key: "channel_pane",
             pane_widget: this.channel_pane,
         });
-
     }
 
     populate(): void {

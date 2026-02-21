@@ -41,7 +41,7 @@ export class PaneManager {
     }
 
     remove_after(key: string) {
-        const new_panes =[];
+        const new_panes = [];
 
         for (const pane of this.panes) {
             new_panes.push(pane);
@@ -55,7 +55,7 @@ export class PaneManager {
     }
 
     replace_after(key: string, new_pane: Pane) {
-        const new_panes =[];
+        const new_panes = [];
 
         for (const pane of this.panes) {
             new_panes.push(pane);
@@ -92,4 +92,3 @@ export class PaneManager {
         }
     }
 }
-
