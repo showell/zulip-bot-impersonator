@@ -148,16 +148,19 @@ export class SearchWidget {
 
         let label = "Channels";
 
+        function unread_prefix(count: number) {
+            return count === 0 ? "": `(${count}) `
+        }
+
+
         if (channel_name) {
             const channel_unreads = get_channel_unreads(this.get_stream_id()!);
-            const channel_unreads_string = channel_unreads === 0 ? "": `(${channel_unreads}) `
-            label = channel_unreads_string + "#" + channel_name;
+            label = unread_prefix(channel_unreads) + "#" + channel_name;
 
             const topic_name = this.get_topic_name();
             if (topic_name !== undefined) {
                 const topic_unreads = get_topic_unreads(this.get_stream_id()!, topic_name)
-                const topic_unreads_string = topic_unreads === 0 ? "" : `(${topic_unreads}) `
-                label = topic_unreads_string +"> " + topic_name;
+                label = unread_prefix(topic_unreads) +"> " + topic_name;
             }
         }
 
