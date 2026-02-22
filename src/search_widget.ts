@@ -72,7 +72,7 @@ export class SearchWidget {
         this.update_button_panel();
         this.button_panel.start();
         StatusBar.inform("Begin finding messages by clicking on a channel.");
-        plugin_helper.update_label("Channels");
+        this.update_label();
     }
 
     get_topic_list(): TopicList | undefined {
