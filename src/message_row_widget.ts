@@ -1,6 +1,7 @@
 import type { MessageRow } from "./row_types";
 
 import { render_message_content } from "./message_content";
+import { MessagePopup } from "./message_popup";
 import { pop } from "./popup";
 
 function render_message_box() {
@@ -37,18 +38,6 @@ class MessageSender {
         div.style.display = "flex";
 
         div.append(render_sender_name(message_row.sender_name()));
-
-        this.div = div;
-    }
-}
-
-class MessagePopup {
-    div: HTMLDivElement;
-
-    constructor(message_row: MessageRow) {
-        const div = document.createElement("div");
-
-        div.innerText = message_row.address_string();
 
         this.div = div;
     }
