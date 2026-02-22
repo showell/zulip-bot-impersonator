@@ -142,15 +142,17 @@ export class SearchWidget {
         return this.channel_pane.get_stream_list();
     }
 
-    update_label(): void {
-        const plugin_helper = this.plugin_helper!;
-        const channel_name = this.get_channel_name();
-
+    unread_count(): number {
         const stream_id = this.get_stream_id();
         const topic_name = this.get_topic_name();
         const narrow_address = { stream_id, topic_name };
-        const unread_count =
-            CurrentUnreadManager.get_unread_count_for_narrow(narrow_address);
+        return CurrentUnreadManager.get_unread_count_for_narrow(narrow_address);
+    }
+
+    get_narrow_label(): string {
+        const channel_name = this.get_channel_name();
+        const topic_name = this.get_topic_name();
+        const unread_count = this.unread_count();
 
         let label = "Channels";
 
@@ -165,8 +167,11 @@ export class SearchWidget {
                 label = "> " + topic_name;
             }
         }
+        return unread_prefix(unread_count) + label;
+    }
 
-        plugin_helper.update_label(unread_prefix(unread_count) + label);
+    update_label(): void {
+        this.plugin_helper!.update_label(this.get_narrow_label());
     }
 
     clear_channel(): void {
