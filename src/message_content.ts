@@ -33,6 +33,10 @@ function preprocess_anchor_element(ele: HTMLAnchorElement) {
             ele.setAttribute("href", config.realm_url + frag);
         }
     }
+
+    // Link clicks shouldn't propagate to trigger the popup
+    // with message details.
+    ele.addEventListener("click", (e)=>e.stopPropagation())
 }
 
 function preprocess_message_content(html_content: string): DocumentFragment {
