@@ -18,7 +18,7 @@ import { UnreadManager } from "./unread";
 export let UserMap: Map<number, User>;
 export let Streams: Stream[];
 let CurrentMessageStore: MessageStore;
-let CurrentUnreadManager: UnreadManager
+export let CurrentUnreadManager: UnreadManager
 let CurrentUserId = -1;
 
 // USERS (mostly just pull directly from UserMap for now)
@@ -59,14 +59,6 @@ export function get_topic_rows(stream_id: number): TopicRow[] {
 
 export function filtered_messages(filter: Filter) {
     return CurrentMessageStore.filtered_messages(filter);
-}
-
-export function get_channel_unreads(channel_id:number) {
-  return CurrentUnreadManager.get_unread_count_for_narrow({stream_id:channel_id})
-}
-
-export function get_topic_unreads(channel_id: number, topic_name: string) {
-    return CurrentUnreadManager.get_unread_count_for_narrow({stream_id:channel_id, topic_name})
 }
 
 export function mark_message_ids_as_read(message_ids: number[]): void {

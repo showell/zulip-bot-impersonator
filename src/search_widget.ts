@@ -2,6 +2,7 @@ import type { ZulipEvent } from "./backend/event";
 import type { StreamMessage } from "./backend/db_types";
 
 import { EventFlavor } from "./backend/event";
+import { CurrentUnreadManager } from "./backend/model";
 
 import type { ChannelList } from "./channel_list";
 import type { MessageList } from "./message_list";
@@ -15,7 +16,6 @@ import { ChannelPane } from "./channel_pane";
 import { ChannelView } from "./channel_view";
 import { PaneManager } from "./pane_manager";
 import { StatusBar } from "./status_bar";
-import { get_channel_unreads, get_topic_unreads } from "./backend/model";
 
 export class SearchWidget {
     div: HTMLElement;
@@ -146,25 +146,27 @@ export class SearchWidget {
         const plugin_helper = this.plugin_helper!;
         const channel_name = this.get_channel_name();
 
+        const stream_id = this.get_stream_id();
+        const topic_name = this.get_topic_name();
+        const narrow_address = { stream_id, topic_name };
+        const unread_count =
+            CurrentUnreadManager.get_unread_count_for_narrow(narrow_address);
+
         let label = "Channels";
 
         function unread_prefix(count: number) {
-            return count === 0 ? "": `(${count}) `
+            return count === 0 ? "" : `(${count}) `;
         }
 
-
         if (channel_name) {
-            const channel_unreads = get_channel_unreads(this.get_stream_id()!);
-            label = unread_prefix(channel_unreads) + "#" + channel_name;
+            label = "#" + channel_name;
 
-            const topic_name = this.get_topic_name();
             if (topic_name !== undefined) {
-                const topic_unreads = get_topic_unreads(this.get_stream_id()!, topic_name)
-                label = unread_prefix(topic_unreads) +"> " + topic_name;
+                label = "> " + topic_name;
             }
         }
 
-        plugin_helper.update_label(label);
+        plugin_helper.update_label(unread_prefix(unread_count) + label);
     }
 
     clear_channel(): void {
