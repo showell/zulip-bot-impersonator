@@ -3,6 +3,8 @@ import type { Plugin } from "./plugin_helper";
 
 import { EventFlavor } from "./backend/event";
 import * as model from './backend/model'
+
+import { config } from "./secrets";
 import { MessageRow } from "./row_types";
 import { PluginChooser } from "./plugins/plugin_chooser";
 import { PluginHelper } from "./plugin_helper";
@@ -33,7 +35,13 @@ export class Page {
         this.add_plugin(plugin_chooser);
 
         this.add_search_widget();
-        document.title = `(${model.get_total_unread_count()}) Le Big Mac`
+        this.update_title();
+    }
+
+    update_title(): void {
+        const unread_count = model.get_total_unread_count();
+        const prefix = unread_count === 0 ? "" : `(${unread_count}) `;
+        document.title = `${prefix}${config.nickname}`;
     }
 
     make_button_bar(): HTMLElement {
@@ -174,6 +182,6 @@ export class Page {
             plugin_helper.plugin.handle_event(event);
         }
 
-        document.title = `(${model.get_total_unread_count()}) Le Big Mac`
+        this.update_title();
     }
 }
