@@ -11,11 +11,6 @@ export type StreamMessage = {
     is_super_new: boolean;
 };
 
-export type NarrowAddress = {
-    stream_id?: number;
-    topic_name?: string;
-}
-
 export type Message = StreamMessage;
 
 export type Stream = {
