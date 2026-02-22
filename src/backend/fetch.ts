@@ -2,17 +2,11 @@ import type { User, Stream } from "./db_types";
 
 import { config } from "../secrets";
 
+import { Database } from "./database";
 import { MessageStore } from "./message_store";
 import * as zulip_client from "./zulip_client";
 
 const BATCH_SIZE = 5000;
-
-type Backend = {
-    current_user_id: number;
-    user_map: Map<number, User>;
-    channel_map: Map<number, Stream>;
-    message_store: MessageStore;
-};
 
 async function fetch_streams(): Promise<Stream[]> {
     const subscriptions = await zulip_client.get_subscriptions();
@@ -41,7 +35,7 @@ async function fetch_users(): Promise<User[]> {
     });
 }
 
-export async function fetch_model_data(): Promise<Backend> {
+export async function fetch_model_data(): Promise<Database> {
     const users = await fetch_users();
 
     const user_map = new Map<number, User>();
