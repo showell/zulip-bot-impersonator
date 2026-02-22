@@ -1,5 +1,4 @@
-import type { Stream } from "./backend/db_types";
-
+import type { ChannelRow } from "./row_types";
 import type { SearchWidget } from "./search_widget";
 
 import { render_list_heading, render_pane } from "./render";
@@ -9,16 +8,14 @@ export class TopicPane {
     div: HTMLElement;
     topic_list: TopicList;
 
-    constructor(stream: Stream, search_widget: SearchWidget) {
+    constructor(channel_row: ChannelRow, search_widget: SearchWidget) {
         const div = render_pane();
 
-        const stream_id = stream.stream_id;
-
-        this.topic_list = new TopicList(stream_id, search_widget);
+        this.topic_list = new TopicList(channel_row, search_widget);
         this.topic_list.populate();
 
         div.innerHTML = "";
-        div.append(render_list_heading("#" + stream.name));
+        div.append(render_list_heading("#" + channel_row.name()));
         div.append(this.topic_list.div);
 
         this.div = div;

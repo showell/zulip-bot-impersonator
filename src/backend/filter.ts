@@ -24,16 +24,16 @@ export function topic_filter(topic: Topic): Filter {
     return { predicate, label };
 }
 
-export function stream_filter(stream: Stream): Filter {
+export function stream_filter(stream_id: number, channel_name: string): Filter {
     function predicate(message: Message): boolean {
         if (message.type === "stream") {
-            return message.stream_id === stream.stream_id;
+            return message.stream_id === stream_id;
         } else {
             return false;
         }
     }
 
-    const label = stream.name;
+    const label = channel_name;
 
     return { predicate, label };
 }

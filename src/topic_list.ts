@@ -1,6 +1,6 @@
 import * as model from "./backend/model";
 
-import type { TopicRow } from "./row_types";
+import type { ChannelRow, TopicRow } from "./row_types";
 import type { SearchWidget } from "./search_widget";
 
 import { Cursor } from "./cursor";
@@ -15,12 +15,12 @@ export class TopicList {
     stream_id: number;
     search_widget: SearchWidget;
 
-    constructor(stream_id: number, search_widget: SearchWidget) {
+    constructor(channel_row: ChannelRow, search_widget: SearchWidget) {
         this.search_widget = search_widget;
 
         const div = render_big_list();
 
-        this.stream_id = stream_id;
+        this.stream_id = channel_row.stream_id();
 
         this.topic_rows = [];
         this.cursor = new Cursor();

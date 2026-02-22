@@ -2,6 +2,8 @@ import type { Stream } from "./backend/db_types";
 
 import { Topic } from "./backend/db_types";
 
+import type { ChannelRow } from "./row_types";
+
 import { ComposeBox } from "./compose";
 import { render_list_heading, render_pane } from "./render";
 import { StatusBar } from "./status_bar";
@@ -19,26 +21,26 @@ export class AddTopicPane {
     div: HTMLElement;
     compose_box: ComposeBox;
 
-    constructor(stream: Stream) {
+    constructor(channel_row: ChannelRow) {
         const div = render_pane();
 
         StatusBar.inform("Choose a fairly short topic name, please.");
 
-        const compose_box = this.make_compose_box(stream);
+        const compose_box = this.make_compose_box(channel_row.stream_id());
 
         div.innerHTML = "";
         div.style.height = "fit-content";
 
-        div.append(render_heading(stream.name));
+        div.append(render_heading(channel_row.name()));
         div.append(compose_box.div);
 
         this.div = div;
         this.compose_box = compose_box;
     }
 
-    make_compose_box(stream: Stream): ComposeBox {
+    make_compose_box(stream_id: number): ComposeBox {
         const blank_name = "";
-        const topic = new Topic(stream.stream_id, blank_name);
+        const topic = new Topic(stream_id, blank_name);
         return new ComposeBox(topic);
     }
 

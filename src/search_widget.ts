@@ -199,13 +199,13 @@ export class SearchWidget {
     update_channel(): void {
         const search_widget = this;
         const pane_manager = this.pane_manager;
-        const stream_id = this.get_stream_id();
+        const channel_row = this.get_channel_row();
 
         this.pane_manager.remove_after("channel_pane");
 
         // ChannelView will add panes
         this.channel_view = new ChannelView(
-            stream_id!,
+            channel_row,
             search_widget,
             pane_manager,
         );

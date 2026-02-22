@@ -10,12 +10,12 @@ import { AddTopicPane } from "./add_topic_pane";
 import { ChannelInfo } from "./channel_info";
 import { MessageView } from "./message_view";
 import { PaneManager } from "./pane_manager";
+import { ChannelRow } from "./row_types";
 import { TopicList } from "./topic_list";
 import { TopicPane } from "./topic_pane";
 
 export class ChannelView {
-    stream_id: number;
-    stream: Stream;
+    channel_row: ChannelRow;
     channel_info: ChannelInfo;
     topic_pane: TopicPane;
     message_view?: MessageView;
@@ -23,26 +23,22 @@ export class ChannelView {
     pane_manager: PaneManager;
 
     constructor(
-        stream_id: number,
+        channel_row: ChannelRow,
         search_widget: SearchWidget,
         pane_manager: PaneManager,
     ) {
-        const stream = model.stream_for(stream_id);
-
-        this.stream = stream;
-        this.stream_id = stream_id;
+        this.channel_row = channel_row;
+        this.pane_manager = pane_manager;
 
         this.add_topic_pane = undefined;
 
-        this.pane_manager = pane_manager;
-
-        this.topic_pane = new TopicPane(stream, search_widget);
+        this.topic_pane = new TopicPane(channel_row, search_widget);
         pane_manager.add_pane({
             key: "topic_pane",
             pane_widget: this.topic_pane,
         });
 
-        this.channel_info = new ChannelInfo(stream_id);
+        this.channel_info = new ChannelInfo(channel_row);
         pane_manager.add_pane({
             key: "channel_info",
             pane_widget: this.channel_info,
@@ -91,7 +87,7 @@ export class ChannelView {
     }
 
     refresh(stream_message: StreamMessage): void {
-        if (stream_message.stream_id !== this.stream_id) {
+        if (stream_message.stream_id !== this.channel_row.stream_id()) {
             return;
         }
 
@@ -175,7 +171,7 @@ export class ChannelView {
 
         topic_list.clear_selection();
 
-        const add_topic_pane = new AddTopicPane(this.stream);
+        const add_topic_pane = new AddTopicPane(this.channel_row);
 
         pane_manager.replace_after("topic_pane", {
             key: "add_topic_pane",

@@ -3,6 +3,8 @@ import type { User } from "./backend/db_types";
 import { stream_filter } from "./backend/filter";
 import * as model from "./backend/model";
 
+import type { ChannelRow } from "./row_types";
+
 import { render_message_content } from "./message_content";
 import { render_pane } from "./render";
 
@@ -26,25 +28,26 @@ function render_participants(participants: User[]) {
 export class ChannelInfo {
     div: HTMLElement;
 
-    constructor(stream_id: number) {
+    constructor(channel_row: ChannelRow) {
         const div = render_pane();
 
-        const stream = model.stream_for(stream_id);
+        const rendered_description = channel_row.rendered_description();
 
-        console.log(stream.rendered_description);
-        if (stream.rendered_description) {
-            div.append(render_message_content(stream.rendered_description));
+        if (rendered_description) {
+            div.append(render_message_content(rendered_description));
         }
 
-        if (stream.stream_weekly_traffic) {
+        const stream_weekly_traffic = channel_row.stream_weekly_traffic();
+
+        if (stream_weekly_traffic) {
             div.append(
                 render_text(
-                    `traffic: about ${stream.stream_weekly_traffic} messages per week`,
+                    `traffic: about ${stream_weekly_traffic} messages per week`,
                 ),
             );
         }
 
-        const filter = stream_filter(stream);
+        const filter = stream_filter(channel_row.stream_id(), channel_row.name());
         const messages = model.filtered_messages(filter);
         const participants = model.participants_for_messages(messages);
 

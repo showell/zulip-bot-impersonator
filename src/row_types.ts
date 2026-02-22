@@ -44,6 +44,14 @@ export class ChannelRow {
     num_topics(): number {
         return this._list_info.num_topics;
     }
+
+    stream_weekly_traffic(): number {
+        return this._channel.stream_weekly_traffic;
+    }
+
+    rendered_description(): string {
+        return this._channel.rendered_description;
+    }
 }
 
 export class TopicRow {
