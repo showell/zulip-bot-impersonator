@@ -67,6 +67,18 @@ export class Page {
         return button_bar;
     }
 
+    render_navbar() {
+        const navbar_div = document.createElement("div");
+        navbar_div.append(StatusBar.div);
+        navbar_div.append(this.make_button_bar());
+        navbar_div.style.position = "sticky"
+        navbar_div.style.top = "0px";
+        navbar_div.style.zIndex = "100"
+        navbar_div.style.backgroundColor = "rgb(246, 246, 255)"
+
+        return navbar_div
+    }
+
     add_search_button(): HTMLElement {
         const self = this;
 
@@ -127,14 +139,13 @@ export class Page {
         const container_div = document.createElement("div");
         container_div.style.overflowY = "auto";
 
-        const button_bar = this.make_button_bar();
+        const navbar = this.render_navbar();
 
         container_div.innerHTML = "";
         container_div.append(plugin_helper.plugin.div);
 
         div.innerHTML = "";
-        div.append(StatusBar.div);
-        div.append(button_bar);
+        div.append(navbar)
         div.append(container_div);
     }
 
