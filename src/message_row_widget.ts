@@ -42,7 +42,6 @@ class MessageSender {
     }
 }
 
-
 class MessagePopup {
     div: HTMLDivElement;
 

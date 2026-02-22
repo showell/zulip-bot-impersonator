@@ -105,5 +105,4 @@ export class SmartList {
         }
         this.dummies[index].scroll_to_top();
     }
- }
-
+}
