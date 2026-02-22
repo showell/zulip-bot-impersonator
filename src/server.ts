@@ -1,7 +1,8 @@
+import * as database from "./backend/database";
 import * as model from "./backend/model";
 
 async function test(): Promise<void> {
-    await model.fetch_model_data();
+    await database.fetch_original_data();
 
     console.log(model.get_channel_rows().slice(0, 2));
 }

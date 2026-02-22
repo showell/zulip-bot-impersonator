@@ -3,7 +3,7 @@ import * as model from "./backend/model";
 import type { Message, Stream, Topic } from "./backend/db_types.ts";
 import type { ListInfo } from "./backend/message_list.ts";
 
-import { DB } from "./backend/model";
+import { DB } from "./backend/database";
 
 /*
  *  In some ways this code would more logically belong in the

@@ -1,21 +1,14 @@
-import type { Database } from "./database";
 import type {
     User,
     Message,
     Stream,
-    StreamMessage,
 } from "./db_types";
-import type { ZulipEvent } from "./event";
 import type { Filter } from "./filter";
-import type { MessageStore } from "./message_store";
 import type { ChannelRow, TopicRow } from "../row_types";
 
-import { EventFlavor } from "./event";
+import { DB } from "./database";
 import * as channel_row_query from "./channel_row_query";
-import * as fetch from "./fetch";
 import * as topic_row_query from "./topic_row_query";
-
-export let DB: Database;
 
 // USERS (mostly just pull directly from DB.user_map for now)
 
@@ -53,14 +46,6 @@ export function filtered_messages(filter: Filter) {
     return DB.message_store.stream_messages.filter(filter.predicate);
 }
 
-export function mark_message_ids_as_read(message_ids: number[]): void {
-    DB.message_store.mark_ids_as_read(message_ids);
-}
-
-export function mark_message_ids_as_unread(message_ids: number[]): void {
-    DB.message_store.mark_ids_as_unread(message_ids);
-}
-
 export function get_total_unread_count() {
     let count = 0;
     for (const message of DB.message_store.stream_messages) {
@@ -92,29 +77,3 @@ export function participants_for_messages(messages: Message[]): User[] {
         .filter((user) => user !== undefined);
 }
 
-// EVENTS
-
-export function handle_event(event: ZulipEvent): void {
-    if (event.flavor === EventFlavor.STREAM_MESSAGE) {
-        add_stream_messages_to_cache(event.stream_message);
-    }
-
-    if (event.flavor === EventFlavor.MARK_AS_READ) {
-        mark_message_ids_as_read(event.message_ids);
-    }
-
-    if (event.flavor === EventFlavor.MARK_AS_UNREAD) {
-        mark_message_ids_as_unread(event.message_ids);
-    }
-}
-
-
-// FETCHING and EVENT PROCESSING
-
-export function add_stream_messages_to_cache(message: StreamMessage) {
-    DB.message_store.add_messages([message]);
-}
-
-export async function fetch_model_data(): Promise<void> {
-    DB = await fetch.fetch_model_data();
-}
