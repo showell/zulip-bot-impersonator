@@ -61,7 +61,6 @@ export class MessageRowWidget {
 
         const content = message_row.content();
         const content_div = render_message_content(content);
-        content_div.classList.add("rendered_markdown");
 
         div.append(content_div);
 

@@ -49,6 +49,7 @@ function preprocess_message_content(html_content: string): DocumentFragment {
 
 export function render_message_content(content: string): HTMLElement {
     const div = document.createElement("div");
+    div.classList.add("rendered_markdown");
     div.style.marginLeft = "20px";
     div.style.marginRight = "20px";
     div.append(preprocess_message_content(content));
