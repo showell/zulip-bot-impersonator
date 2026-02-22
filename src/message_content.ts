@@ -19,7 +19,7 @@ function preprocess_img_element(img: HTMLImageElement) {
 function preprocess_anchor_element(ele: HTMLAnchorElement) {
     const a_href = ele.getAttribute("href");
 
-    if (a_href === "http://") {
+    if (!a_href || a_href === "http://") {
         // This happens with an empty link. This is a quick hack to ignore
         // it.
         return;
