@@ -64,10 +64,6 @@ export class MessageList {
                 return message_row_widget.div;
             },
             when_done() {
-                // We don't do self.scroll_to_bottom() for now.
-                // We should stay at the top for threads with no unreads,
-                // and we should scroll to the first unread if there are
-                // any.
                 const unread_index = rows.findIndex((row) => row.message.unread);;
                 if (unread_index >= 0) {
                     smart_list.scroll_index_to_top(unread_index);
