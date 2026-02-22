@@ -8,7 +8,7 @@ import type { ChannelList } from "./channel_list";
 import type { MessageList } from "./message_list";
 import type { MessageView } from "./message_view";
 import type { PluginHelper } from "./plugin_helper";
-import type { ChannelRow } from "./row_types";
+import type { ChannelRow, TopicRow } from "./row_types";
 import type { TopicList } from "./topic_list";
 
 import { ButtonPanel } from "./nav_button_panel";
@@ -86,14 +86,18 @@ export class SearchWidget {
         return this.channel_view.get_topic_list();
     }
 
-    get_topic_name(): string | undefined {
+    get_topic_row(): TopicRow | undefined {
         const topic_list = this.get_topic_list();
 
         if (topic_list === undefined) {
             return undefined;
         }
 
-        const topic_row = topic_list.get_topic_row();
+        return topic_list.get_topic_row();
+    }
+
+    get_topic_name(): string | undefined {
+        const topic_row = this.get_topic_row();
         return topic_row?.name();
     }
 
