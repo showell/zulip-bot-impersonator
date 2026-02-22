@@ -12,5 +12,8 @@
     "build": "vite build",
     "preview": "vite preview",
     "format": "prettier --write ."
+  },
+  "dependencies": {
+    "npm": "^11.10.1"
   }
 }
