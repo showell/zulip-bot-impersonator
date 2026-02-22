@@ -2,7 +2,7 @@ import type { ZulipEvent } from "./backend/event";
 import type { Plugin } from "./plugin_helper";
 
 import { EventFlavor } from "./backend/event";
-import * as model from './backend/model'
+import * as model from "./backend/model";
 
 import { config } from "./secrets";
 import { MessageRow } from "./row_types";
@@ -17,8 +17,8 @@ export class Page {
 
     constructor() {
         const div = document.body;
-        div.style.margin = "0"
-        div.style.backgroundColor = "rgb(246, 246, 255)"
+        div.style.margin = "0";
+        div.style.backgroundColor = "rgb(246, 246, 255)";
         create_global_status_bar();
 
         div.append(StatusBar.div);
@@ -72,7 +72,6 @@ export class Page {
         spacer.style.flexGrow = "1";
         button_bar.append(spacer);
 
-
         return button_bar;
     }
 
@@ -80,12 +79,12 @@ export class Page {
         const navbar_div = document.createElement("div");
         navbar_div.append(StatusBar.div);
         navbar_div.append(this.make_button_bar());
-        navbar_div.style.position = "sticky"
+        navbar_div.style.position = "sticky";
         navbar_div.style.top = "0px";
-        navbar_div.style.zIndex = "100"
-        navbar_div.style.backgroundColor = "rgb(246, 246, 255)"
+        navbar_div.style.zIndex = "100";
+        navbar_div.style.backgroundColor = "rgb(246, 246, 255)";
 
-        return navbar_div
+        return navbar_div;
     }
 
     add_search_button(): HTMLElement {
@@ -154,7 +153,7 @@ export class Page {
         container_div.append(plugin_helper.plugin.div);
 
         div.innerHTML = "";
-        div.append(navbar)
+        div.append(navbar);
         div.append(container_div);
     }
 
