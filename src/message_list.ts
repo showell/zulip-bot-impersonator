@@ -69,7 +69,9 @@ export class MessageList {
                 // and we should scroll to the first unread if there are
                 // any.
                 const unread_index = rows.findIndex((row) => row.message.unread);;
-                console.log("first unread", unread_index);
+                if (unread_index >= 0) {
+                    smart_list.scroll_index_to_top(unread_index);
+                }
             },
         });
 

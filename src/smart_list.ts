@@ -17,6 +17,13 @@ class Dummy {
         this.div.innerHTML = "";
         this.div.append(new_div);
     }
+
+    scroll_to_top(): void {
+        this.div.scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+        });
+    }
 }
 
 export class SmartList {
@@ -90,4 +97,13 @@ export class SmartList {
 
         when_done();
     }
-}
+
+    scroll_index_to_top(index: number): void {
+        if (!this.done) {
+            console.log("should call this only in when_done callback");
+            return;
+        }
+        this.dummies[index].scroll_to_top();
+    }
+ }
+
