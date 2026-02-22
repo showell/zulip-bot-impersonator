@@ -1,6 +1,7 @@
 import type { MessageRow } from "./row_types";
 
 import { render_message_content } from "./message_content";
+import { pop } from "./popup";
 
 function render_message_box() {
     const div = document.createElement("div");
@@ -12,6 +13,7 @@ function render_message_box() {
     div.style.fontSize = "16px";
     div.style.fontFamily = `"Source Sans 3 VF", sans-serif`;
     div.style.lineHeight = "22.4px";
+    div.style.cursor = "pointer";
 
     return div;
 }
@@ -40,11 +42,35 @@ class MessageSender {
     }
 }
 
+
+class MessagePopup {
+    div: HTMLDivElement;
+
+    constructor(message_row: MessageRow) {
+        const div = document.createElement("div");
+
+        div.innerText = message_row.address_string();
+
+        this.div = div;
+    }
+}
+
 export class MessageRowWidget {
     div: HTMLElement;
 
     constructor(message_row: MessageRow, show_sender: boolean) {
         const div = render_message_box();
+
+        div.addEventListener("click", (e) => {
+            const message_popup = new MessagePopup(message_row);
+            pop({
+                div: message_popup.div,
+                confirm_button_text: "Ok",
+                callback() {},
+            });
+
+            e.stopPropagation();
+        });
 
         if (message_row.unread()) {
             div.style.backgroundColor = "lavender";

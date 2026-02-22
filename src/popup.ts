@@ -20,13 +20,12 @@ class DialogShell {
         return dialog;
     }
 
-    invoke_with_custom_html(html: HTMLElement, background_color: string) {
+    invoke_with_custom_div(div: HTMLElement) {
         document.body.append(this.popup_element);
-        this.popup_element.style.backgroundColor = background_color;
 
         // Ensures it is closed by nothing apart from what we define
         this.popup_element.setAttribute("closedby", "none");
-        this.popup_element.append(html);
+        this.popup_element.append(div);
         this.popup_element.showModal();
     }
 
@@ -38,15 +37,18 @@ class DialogShell {
     }
 }
 
-type PopupType = "warning" | "success" | "info";
 type PopupOptions = {
-    content: string;
-    type: PopupType;
+    div: HTMLDivElement;
     confirm_button_text: string;
     callback: () => void;
 };
 
-export class PopupSingleton {
+export function pop(info: PopupOptions): void {
+    const popup = new Popup();
+    popup.show(info);
+}
+
+class Popup {
     dialog_shell: DialogShell;
 
     constructor() {
@@ -69,53 +71,18 @@ export class PopupSingleton {
         return button;
     }
 
-    get_background_color(info_type: string): string {
-        switch (info_type) {
-            case "info":
-                return "#ADD8E6";
-            case "success":
-                return "white";
-            case "warning":
-                return "#FFFFE0";
-        }
-
-        return "transparent";
-    }
-
     show(info: PopupOptions) {
         const self = this;
 
-        // AVATAR in left
-        const left = document.createElement("div");
-        left.style.marginRight = "30px";
-        // TEXT and BUTTON in right
-        const right = document.createElement("div");
-
-        const content_div = document.createElement("pre");
-        content_div.innerText = this.clean_multi_string(info.content);
-        right.append(content_div);
-
         const button = this.make_button(info.confirm_button_text);
         button.addEventListener("click", () => self.finish(info.callback));
-        right.append(button);
 
         // PUT THEM ALL TOGETHER
         const flex_div = document.createElement("div");
-        flex_div.style.display = "flex";
-        flex_div.append(left);
-        flex_div.append(right);
+        flex_div.append(info.div);
+        flex_div.append(button);
 
-        this.dialog_shell.invoke_with_custom_html(
-            flex_div,
-            this.get_background_color(info.type),
-        );
-    }
-
-    clean_multi_string(text: string) {
-        return text
-            .split("\n")
-            .map((s) => s.trimEnd())
-            .join("\n");
+        this.dialog_shell.invoke_with_custom_div(flex_div);
     }
 
     finish(callback?: () => void) {
