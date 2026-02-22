@@ -75,6 +75,10 @@ export class SearchWidget {
         this.update_label();
     }
 
+    get_channel_list(): ChannelList {
+        return this.channel_pane.get_channel_list();
+    }
+
     get_topic_list(): TopicList | undefined {
         if (this.channel_view === undefined) {
             return undefined;
@@ -125,21 +129,17 @@ export class SearchWidget {
     }
 
     get_stream_id(): number | undefined {
-        return this.get_stream_list().get_stream_id();
+        return this.get_channel_list().get_stream_id();
     }
 
     get_channel_row(): ChannelRow {
-        return this.get_stream_list().get_channel_row()!;
+        return this.get_channel_list().get_channel_row()!;
     }
 
     get_channel_name(): string | undefined {
         const channel_row = this.get_channel_row();
 
         return channel_row?.name();
-    }
-
-    get_stream_list(): ChannelList {
-        return this.channel_pane.get_stream_list();
     }
 
     unread_count(): number {
@@ -175,7 +175,7 @@ export class SearchWidget {
     }
 
     clear_channel(): void {
-        this.get_stream_list().clear_selection();
+        this.get_channel_list().clear_selection();
         this.pane_manager.remove_after("channel_pane");
         this.channel_view = undefined;
         this.update_button_panel();
@@ -204,18 +204,18 @@ export class SearchWidget {
     }
 
     set_channel_index(index: number): void {
-        this.get_stream_list().select_index(index);
+        this.get_channel_list().select_index(index);
         this.update_channel();
         this.button_panel.focus_surf_topics_button();
     }
 
     channel_up(): void {
-        this.get_stream_list().up();
+        this.get_channel_list().up();
         this.update_channel();
     }
 
     channel_down(): void {
-        this.get_stream_list().down();
+        this.get_channel_list().down();
         this.update_channel();
     }
 
@@ -225,7 +225,7 @@ export class SearchWidget {
         if (topic_list) {
             topic_list.clear_selection();
         }
-        this.get_stream_list().surf();
+        this.get_channel_list().surf();
         this.channel_pane.populate();
         this.update_channel();
         this.button_panel.focus_next_channel_button();

@@ -21,7 +21,7 @@ export class ChannelPane {
         return this.channel_list.has_selection();
     }
 
-    get_stream_list(): ChannelList {
+    get_channel_list(): ChannelList {
         return this.channel_list;
     }
 
