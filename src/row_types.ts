@@ -3,7 +3,7 @@ import * as model from "./backend/model";
 import type { Message, Stream, Topic } from "./backend/db_types.ts";
 import type { ListInfo } from "./backend/message_list.ts";
 
-import { UserMap } from "./backend/model";
+import { DB } from "./backend/model";
 
 /*
  *  In some ways this code would more logically belong in the
@@ -98,7 +98,7 @@ export class MessageRow {
     sender_name(): string {
         const message = this._message;
 
-        const user = UserMap.get(message.sender_id);
+        const user = DB.user_map.get(message.sender_id);
         if (user) {
             return user.full_name;
         } else {

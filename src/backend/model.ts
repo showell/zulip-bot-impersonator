@@ -1,10 +1,11 @@
-import type { ZulipEvent } from "./event";
+import type { Database } from "./database";
 import type {
     User,
     Message,
     Stream,
     StreamMessage,
 } from "./db_types";
+import type { ZulipEvent } from "./event";
 import type { Filter } from "./filter";
 import type { MessageStore } from "./message_store";
 import type { ChannelRow, TopicRow } from "../row_types";
@@ -14,25 +15,22 @@ import * as channel_row_query from "./channel_row_query";
 import * as fetch from "./fetch";
 import * as topic_row_query from "./topic_row_query";
 
-export let UserMap: Map<number, User>;
-export let ChannelMap: Map<number, Stream>;
-let CurrentMessageStore: MessageStore;
-let CurrentUserId = -1;
+export let DB: Database;
 
-// USERS (mostly just pull directly from UserMap for now)
+// USERS (mostly just pull directly from DB.user_map for now)
 
 export function is_me(user_id: number): boolean {
-    return user_id === CurrentUserId;
+    return user_id === DB.current_user_id;
 }
 
 // STREAMS
 //
 export function get_channel_rows(): ChannelRow[] {
-    return channel_row_query.get_rows(ChannelMap, CurrentMessageStore.stream_messages);
+    return channel_row_query.get_rows(DB.channel_map, DB.message_store.stream_messages);
 }
 
 export function stream_for(stream_id: number): Stream {
-    return ChannelMap.get(stream_id)!;
+    return DB.channel_map.get(stream_id)!;
 }
 
 export function stream_name_for(stream_id: number): string {
@@ -45,27 +43,27 @@ export function get_topic_rows(stream_id: number): TopicRow[] {
     function match(message: Message) {
         return message.stream_id === stream_id;
     }
-    const stream_messages = CurrentMessageStore.stream_messages.filter(match);
+    const stream_messages = DB.message_store.stream_messages.filter(match);
     return topic_row_query.get_rows(stream_messages);
 }
 
 // MESSAGES
 
 export function filtered_messages(filter: Filter) {
-    return CurrentMessageStore.stream_messages.filter(filter.predicate);
+    return DB.message_store.stream_messages.filter(filter.predicate);
 }
 
 export function mark_message_ids_as_read(message_ids: number[]): void {
-    CurrentMessageStore.mark_ids_as_read(message_ids);
+    DB.message_store.mark_ids_as_read(message_ids);
 }
 
 export function mark_message_ids_as_unread(message_ids: number[]): void {
-    CurrentMessageStore.mark_ids_as_unread(message_ids);
+    DB.message_store.mark_ids_as_unread(message_ids);
 }
 
 export function get_total_unread_count() {
     let count = 0;
-    for (const message of CurrentMessageStore.stream_messages) {
+    for (const message of DB.message_store.stream_messages) {
         if (message.unread) {
             ++count;
         }
@@ -90,7 +88,7 @@ export function participants_for_messages(messages: Message[]): User[] {
 
     // we still need system bots
     return sender_ids
-        .map((sender_id) => UserMap.get(sender_id)!)
+        .map((sender_id) => DB.user_map.get(sender_id)!)
         .filter((user) => user !== undefined);
 }
 
@@ -114,15 +112,9 @@ export function handle_event(event: ZulipEvent): void {
 // FETCHING and EVENT PROCESSING
 
 export function add_stream_messages_to_cache(message: StreamMessage) {
-    CurrentMessageStore.add_messages([message]);
+    DB.message_store.add_messages([message]);
 }
 
 export async function fetch_model_data(): Promise<void> {
-    const { current_user_id, user_map, channel_map, message_store } =
-        await fetch.fetch_model_data();
-
-    CurrentUserId = current_user_id;
-    UserMap = user_map;
-    ChannelMap = channel_map;
-    CurrentMessageStore = message_store;
+    DB = await fetch.fetch_model_data();
 }
