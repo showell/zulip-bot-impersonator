@@ -95,6 +95,16 @@ export class ChannelList {
         return table_widget.table;
     }
 
+    unread_count(): number {
+        let count = 0;
+
+        for (const channel_row of this.channel_rows!) {
+            count += channel_row.unread_count();
+        }
+
+        return count;
+    }
+
     populate() {
         const div = this.div;
 

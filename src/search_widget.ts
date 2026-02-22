@@ -2,7 +2,6 @@ import type { ZulipEvent } from "./backend/event";
 import type { StreamMessage } from "./backend/db_types";
 
 import { EventFlavor } from "./backend/event";
-import { CurrentUnreadManager } from "./backend/model";
 
 import type { ChannelList } from "./channel_list";
 import type { MessageList } from "./message_list";
@@ -147,10 +146,19 @@ export class SearchWidget {
     }
 
     unread_count(): number {
-        const stream_id = this.get_stream_id();
-        const topic_name = this.get_topic_name();
-        const narrow_address = { stream_id, topic_name };
-        return CurrentUnreadManager.get_unread_count_for_narrow(narrow_address);
+        const topic_row = this.get_topic_row();
+
+        if (topic_row) {
+            return topic_row.unread_count();
+        }
+
+        const channel_row = this.get_channel_row();
+
+        if (channel_row) {
+            return channel_row.unread_count();
+        }
+
+        return this.get_channel_list().unread_count();
     }
 
     get_narrow_label(): string {
