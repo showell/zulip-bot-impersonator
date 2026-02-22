@@ -61,6 +61,14 @@ export function filtered_messages(filter: Filter) {
     return CurrentMessageStore.filtered_messages(filter);
 }
 
+export function get_channel_unreads(channel_id:number) {
+  return CurrentUnreadManager.get_unread_count_for_narrow({stream_id:channel_id})
+}
+
+export function get_topic_unreads(channel_id: number, topic_name: string) {
+    return CurrentUnreadManager.get_unread_count_for_narrow({stream_id:channel_id, topic_name})
+}
+
 export function mark_message_ids_as_read(message_ids: number[]): void {
     CurrentMessageStore.mark_ids_as_read(message_ids);
 }

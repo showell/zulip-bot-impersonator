@@ -15,6 +15,7 @@ import { ChannelPane } from "./channel_pane";
 import { ChannelView } from "./channel_view";
 import { PaneManager } from "./pane_manager";
 import { StatusBar } from "./status_bar";
+import { get_channel_unreads, get_topic_unreads } from "./backend/model";
 
 export class SearchWidget {
     div: HTMLElement;
@@ -148,12 +149,15 @@ export class SearchWidget {
         let label = "Channels";
 
         if (channel_name) {
-            label = "#" + channel_name;
+            const channel_unreads = get_channel_unreads(this.get_stream_id()!);
+            const channel_unreads_string = channel_unreads === 0 ? "": `(${channel_unreads}) `
+            label = channel_unreads_string + "#" + channel_name;
 
             const topic_name = this.get_topic_name();
-
             if (topic_name !== undefined) {
-                label = "> " + topic_name;
+                const topic_unreads = get_topic_unreads(this.get_stream_id()!, topic_name)
+                const topic_unreads_string = topic_unreads === 0 ? "" : `(${topic_unreads}) `
+                label = topic_unreads_string +"> " + topic_name;
             }
         }
 

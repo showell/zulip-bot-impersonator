@@ -1,5 +1,7 @@
-import { StreamMessage } from "./db_types";
+import { NarrowAddress, StreamMessage, Topic } from "./db_types";
+import { stream_filter, topic_filter } from "./filter";
 import { MessageStore } from "./message_store";
+import { stream_for } from "./model";
 
 export class UnreadManager {
     message_store: MessageStore;
@@ -17,6 +19,21 @@ export class UnreadManager {
           }
         })
         return count;
+    }
+
+    get_unread_count_for_narrow(narrow_address: NarrowAddress) : number{
+        const {stream_id, topic_name} = narrow_address
+        if (stream_id && topic_name) {
+            const topic = new Topic(stream_id, topic_name);
+            const messages = this.message_store.filtered_messages(topic_filter(topic))
+            return this.get_total_unread_count_for_messages(messages);
+        }
+        if (stream_id) {
+            const messages = this.message_store.filtered_messages(stream_filter(stream_for(stream_id)))
+            return this.get_total_unread_count_for_messages(messages);
+        }
+        // This case is unlikely to happen so we just return 0.
+        return 0;
     }
 
     get_total_unread_count_for_messages(messages:StreamMessage[]): number{
