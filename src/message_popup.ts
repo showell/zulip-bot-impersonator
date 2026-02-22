@@ -8,10 +8,13 @@ function text(s: string): HTMLDivElement {
 }
 
 function link_table(message_row: MessageRow): HTMLTableElement {
-    const columns = ["Mention type", "Syntax"];
+    const columns = ["Link type", "Syntax"];
 
     const row_widgets = [
         { divs: [text("Sender mention"), text(message_row.sender_mention())] },
+        { divs: [text("Channel link"), text(message_row.channel_link())] },
+        { divs: [text("Topic link"), text(message_row.topic_link())] },
+        { divs: [text("Message link"), text(message_row.message_link())] },
     ];
 
     const table_widget = new TableWidget(columns, row_widgets);

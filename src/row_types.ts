@@ -83,6 +83,10 @@ export class MessageRow {
         this._message = message;
     }
 
+    message_id(): number {
+        return this._message.id;
+    }
+
     sender_name(): string {
         const message = this._message;
 
@@ -105,8 +109,27 @@ export class MessageRow {
         return model.stream_name_for(this._message.stream_id);
     }
 
+    channel_link(): string {
+        const channel_name = this.stream_name();
+        return `#**${channel_name}**`;
+    }
+
     topic_name(): string {
         return this._message.topic_name;
+    }
+
+    topic_link(): string {
+        const channel_name = this.stream_name();
+        const topic_name = this.topic_name();
+        return `#**${channel_name}>${topic_name}**`;
+    }
+
+    message_link(): string {
+        // #**Angry Cat (Zulip client)>commits@573999073**
+        const channel_name = this.stream_name();
+        const topic_name = this.topic_name();
+        const message_id = this.message_id();
+        return `#**${channel_name}>${topic_name}@${message_id}**`;
     }
 
     content(): string {
