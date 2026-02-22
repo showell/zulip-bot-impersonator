@@ -2,7 +2,7 @@ import type { ZulipEvent } from "./backend/event";
 import type { Plugin } from "./plugin_helper";
 
 import { EventFlavor } from "./backend/event";
-
+import * as model from './backend/model'
 import { MessageRow } from "./row_types";
 import { PluginChooser } from "./plugins/plugin_chooser";
 import { PluginHelper } from "./plugin_helper";
@@ -33,6 +33,7 @@ export class Page {
         this.add_plugin(plugin_chooser);
 
         this.add_search_widget();
+        document.title = `(${model.get_total_unread_count()}) Le Big Mac`
     }
 
     make_button_bar(): HTMLElement {
@@ -172,5 +173,7 @@ export class Page {
         for (const plugin_helper of this.plugin_helpers) {
             plugin_helper.plugin.handle_event(event);
         }
+
+        document.title = `(${model.get_total_unread_count()}) Le Big Mac`
     }
 }
