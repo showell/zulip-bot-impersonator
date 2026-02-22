@@ -15,7 +15,7 @@ import * as fetch from "./fetch";
 import * as topic_row_query from "./topic_row_query";
 
 export let UserMap: Map<number, User>;
-export let Streams: Stream[];
+export let ChannelMap: Map<number, Stream>;
 let CurrentMessageStore: MessageStore;
 let CurrentUserId = -1;
 
@@ -28,15 +28,11 @@ export function is_me(user_id: number): boolean {
 // STREAMS
 //
 export function get_channel_rows(): ChannelRow[] {
-    return channel_row_query.get_rows(Streams, CurrentMessageStore.stream_messages);
+    return channel_row_query.get_rows(ChannelMap, CurrentMessageStore.stream_messages);
 }
 
 export function stream_for(stream_id: number): Stream {
-    const stream = Streams.find((stream) => {
-        return stream.stream_id === stream_id;
-    });
-
-    return stream!;
+    return ChannelMap.get(stream_id)!;
 }
 
 export function stream_name_for(stream_id: number): string {
@@ -122,11 +118,11 @@ export function add_stream_messages_to_cache(message: StreamMessage) {
 }
 
 export async function fetch_model_data(): Promise<void> {
-    const { current_user_id, user_map, streams, message_store } =
+    const { current_user_id, user_map, channel_map, message_store } =
         await fetch.fetch_model_data();
 
     CurrentUserId = current_user_id;
     UserMap = user_map;
-    Streams = streams;
+    ChannelMap = channel_map;
     CurrentMessageStore = message_store;
 }

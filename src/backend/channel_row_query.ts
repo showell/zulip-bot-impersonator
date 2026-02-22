@@ -3,7 +3,8 @@ import type { Message, Stream } from "./db_types";
 import { MessageList } from "./message_list";
 import { ChannelRow } from "../row_types";
 
-export function get_rows(streams: Stream[], messages: Message[]): ChannelRow[] {
+export function get_rows(channel_map: Map<number, Stream>, messages: Message[]): ChannelRow[] {
+    const stream_ids = [...channel_map.keys()];
     const message_list_map = new Map<number, MessageList>();
 
     for (const message of messages) {
@@ -21,10 +22,10 @@ export function get_rows(streams: Stream[], messages: Message[]): ChannelRow[] {
 
     const rows: ChannelRow[] = [];
 
-    for (const stream of streams) {
-        const stream_id = stream.stream_id;
+    for (const stream_id of stream_ids) {
         const message_list = message_list_map.get(stream_id) ?? new MessageList();
         const list_info = message_list.list_info();
+        const stream = channel_map.get(stream_id)!;
         const channel_row = new ChannelRow(stream, list_info);
 
         rows.push(channel_row);

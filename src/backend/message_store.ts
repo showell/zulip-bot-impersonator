@@ -1,5 +1,4 @@
 import type { StreamMessage } from "./db_types";
-import type { Filter } from "./filter";
 
 export class MessageStore {
     stream_messages: StreamMessage[];

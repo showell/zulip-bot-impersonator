@@ -10,7 +10,7 @@ const BATCH_SIZE = 5000;
 type Backend = {
     current_user_id: number;
     user_map: Map<number, User>;
-    streams: Stream[];
+    channel_map: Map<number, Stream>;
     message_store: MessageStore;
 };
 
@@ -58,6 +58,12 @@ export async function fetch_model_data(): Promise<Backend> {
 
     const streams = await fetch_streams();
 
+    const channel_map = new Map<number, Stream>();
+
+    for (const stream of streams) {
+        channel_map.set(stream.stream_id, stream);
+    }
+
     const rows = await zulip_client.get_messages(BATCH_SIZE);
 
     const stream_messages = rows
@@ -91,7 +97,7 @@ export async function fetch_model_data(): Promise<Backend> {
     return {
         current_user_id,
         user_map,
-        streams,
+        channel_map,
         message_store,
     };
 }
