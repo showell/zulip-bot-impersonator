@@ -45,7 +45,7 @@ function preprocess_anchor_element(ele: HTMLAnchorElement) {
 
     // Link clicks shouldn't propagate to trigger the popup
     // with message details.
-    ele.addEventListener("click", (e)=>e.stopPropagation())
+    ele.addEventListener("click", (e) => e.stopPropagation());
 }
 
 function preprocess_message_content(html_content: string): DocumentFragment {
