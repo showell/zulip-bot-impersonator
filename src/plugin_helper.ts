@@ -58,12 +58,10 @@ class Button {
         if (plugin_helper.open) {
             button.style.backgroundColor = "white";
             button.style.borderBottom = "1px white solid";
-            button.style.fontWeight = "bold";
             button.style.color = "#000080";
         } else {
             button.style.backgroundColor = "lightgray";
             button.style.borderBottom = "1px black solid";
-            button.style.fontWeight = "normal";
             button.style.color = "#0000B0";
         }
     }
