@@ -80,6 +80,8 @@ export class Page {
         navbar_div.append(StatusBar.div);
         navbar_div.append(this.make_button_bar());
         navbar_div.style.position = "sticky";
+        navbar_div.style.marginTop = "8px";
+        navbar_div.style.marginLeft = "8px";
         navbar_div.style.top = "0px";
         navbar_div.style.zIndex = "100";
         navbar_div.style.backgroundColor = "rgb(246, 246, 255)";
@@ -146,6 +148,7 @@ export class Page {
         const div = this.div;
         const container_div = document.createElement("div");
         container_div.style.overflowY = "auto";
+        container_div.style.marginLeft = "8px";
 
         const navbar = this.render_navbar();
 
