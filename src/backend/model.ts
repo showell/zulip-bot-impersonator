@@ -56,7 +56,7 @@ export function get_topic_rows(stream_id: number): TopicRow[] {
 // MESSAGES
 
 export function filtered_messages(filter: Filter) {
-    return CurrentMessageStore.filtered_messages(filter);
+    return CurrentMessageStore.stream_messages.filter(filter.predicate);
 }
 
 export function mark_message_ids_as_read(message_ids: number[]): void {

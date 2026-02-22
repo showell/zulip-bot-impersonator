@@ -26,12 +26,6 @@ export class MessageStore {
         }
     }
 
-    filtered_messages(filter: Filter) {
-        const messages = this.stream_messages;
-
-        return messages.filter(filter.predicate);
-    }
-
     add_messages(messages: StreamMessage[]) {
         this.stream_messages.push(...messages);
     }
