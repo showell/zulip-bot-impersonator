@@ -13,10 +13,12 @@ import { EventFlavor } from "./event";
 import * as channel_row_query from "./channel_row_query";
 import * as fetch from "./fetch";
 import * as topic_row_query from "./topic_row_query";
+import { UnreadManager } from "./unread";
 
 export let UserMap: Map<number, User>;
 export let Streams: Stream[];
 let CurrentMessageStore: MessageStore;
+let CurrentUnreadManager: UnreadManager
 let CurrentUserId = -1;
 
 // USERS (mostly just pull directly from UserMap for now)
@@ -67,6 +69,10 @@ export function mark_message_ids_as_unread(message_ids: number[]): void {
     CurrentMessageStore.mark_ids_as_unread(message_ids);
 }
 
+export function get_total_unread_count() {
+    return CurrentUnreadManager.get_total_unread_count();
+}
+
 // MISC
 //
 export function participants_for_messages(messages: Message[]): User[] {
@@ -112,11 +118,12 @@ export function add_stream_messages_to_cache(message: StreamMessage) {
 }
 
 export async function fetch_model_data(): Promise<void> {
-    const { current_user_id, user_map, streams, message_store } =
+    const { current_user_id, user_map, streams, message_store, unread_manager } =
         await fetch.fetch_model_data();
 
     CurrentUserId = current_user_id;
     UserMap = user_map;
     Streams = streams;
     CurrentMessageStore = message_store;
+    CurrentUnreadManager = unread_manager;
 }

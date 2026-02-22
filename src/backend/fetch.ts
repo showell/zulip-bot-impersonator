@@ -4,6 +4,7 @@ import { config } from "../secrets";
 
 import { MessageStore } from "./message_store";
 import * as zulip_client from "./zulip_client";
+import { UnreadManager } from "./unread";
 
 const BATCH_SIZE = 5000;
 
@@ -12,6 +13,7 @@ type Backend = {
     user_map: Map<number, User>;
     streams: Stream[];
     message_store: MessageStore;
+    unread_manager: UnreadManager;
 };
 
 async function fetch_streams(): Promise<Stream[]> {
@@ -88,11 +90,12 @@ export async function fetch_model_data(): Promise<Backend> {
     }
 
     const message_store = new MessageStore(stream_messages);
-
+    const unread_manager = new UnreadManager(message_store)
     return {
         current_user_id,
         user_map,
         streams,
         message_store,
+        unread_manager
     };
 }
