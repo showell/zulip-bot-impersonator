@@ -24,7 +24,17 @@ class Button {
 
     constructor(plugin_helper: PluginHelper, page: Page) {
         const div = document.createElement("div");
+
         const button = document.createElement("button");
+
+        button.style.borderBottom = "none";
+        button.style.fontSize = "16px";
+        button.style.paddingLeft = "13px";
+        button.style.paddingRight = "13px";
+        button.style.paddingTop = "4px";
+        button.style.paddingBottom = "4px";
+        button.style.borderTopRightRadius = "10px";
+        button.style.borderTopLeftRadius = "10px";
 
         this.plugin_helper = plugin_helper;
         this.div = div;
@@ -34,7 +44,6 @@ class Button {
             page.open(plugin_helper);
         });
 
-        div.style.marginRight = "7px";
         div.append(button);
 
         this.refresh();
@@ -47,9 +56,15 @@ class Button {
         button.innerText = plugin_helper.label;
 
         if (plugin_helper.open) {
-            button.style.backgroundColor = "lightgreen";
+            button.style.backgroundColor = "white";
+            button.style.borderBottom = "1px white solid";
+            button.style.fontWeight = "bold";
+            button.style.color = "#000080";
         } else {
-            button.style.backgroundColor = "lightblue";
+            button.style.backgroundColor = "lightgray";
+            button.style.borderBottom = "1px black solid";
+            button.style.fontWeight = "normal";
+            button.style.color = "#0000B0";
         }
     }
 

@@ -46,10 +46,10 @@ export class Page {
 
         const button_bar = document.createElement("div");
         button_bar.style.display = "flex";
-        button_bar.style.marginBottom = "5px";
+        button_bar.style.alignItems = "flex-end";
         button_bar.style.paddingTop = "2px";
-        button_bar.style.paddingBottom = "4px";
-        button_bar.style.borderBottom = "1px black solid";
+        button_bar.style.marginBottom = "3px";
+        button_bar.style.maxHeight = "fit-content";
 
         const add_search_button = this.add_search_button();
         button_bar.append(add_search_button);
@@ -58,22 +58,38 @@ export class Page {
             button_bar.append(plugin_helper.button.div);
         }
 
+        const spacer = document.createElement("div");
+        spacer.innerText = " ";
+        spacer.style.borderBottom = "1px black solid";
+        spacer.style.height = "1px";
+        spacer.style.flexGrow = "1";
+        button_bar.append(spacer);
+
+
         return button_bar;
     }
 
     add_search_button(): HTMLElement {
         const self = this;
 
-        const elem = document.createElement("button");
-        elem.style.backgroundColor = "white";
-        elem.style.marginRight = "10px";
-        elem.innerText = "Add search tab";
+        const div = document.createElement("div");
+        div.style.marginRight = "15px";
 
-        elem.addEventListener("click", () => {
+        const button = document.createElement("button");
+        button.innerText = "+";
+        button.style.backgroundColor = "white";
+        button.style.padding = "3px";
+        button.style.fontSize = "12px";
+        button.style.backgroundColor = "white";
+        button.style.border = "1px green solid";
+
+        button.addEventListener("click", () => {
             self.add_search_widget();
         });
 
-        return elem;
+        div.append(button);
+
+        return div;
     }
 
     add_plugin(plugin: Plugin): void {
