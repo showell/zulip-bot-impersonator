@@ -95,6 +95,12 @@ export class MessageRow {
         }
     }
 
+    sender_mention(): string {
+        const name = this.sender_name();
+
+        return `@**${name}**`;
+    }
+
     stream_name(): string {
         return model.stream_name_for(this._message.stream_id);
     }

@@ -1,6 +1,6 @@
 import { render_th, render_thead, render_tr } from "./render";
 
-type RowWidget = {
+export type RowWidget = {
     divs: HTMLDivElement[];
 };
 
