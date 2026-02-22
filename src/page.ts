@@ -14,10 +14,9 @@ export class Page {
     plugin_helpers: PluginHelper[];
 
     constructor() {
-        const div = document.createElement("div");
-        div.style.height = "98vh";
-        div.style.overflowY = "auto";
-
+        const div = document.body;
+        div.style.margin = "0"
+        div.style.backgroundColor = "rgb(246, 246, 255)"
         create_global_status_bar();
 
         div.append(StatusBar.div);
@@ -26,7 +25,6 @@ export class Page {
         );
 
         this.plugin_helpers = [];
-
         this.div = div;
     }
 
