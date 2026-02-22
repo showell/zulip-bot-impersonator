@@ -1,4 +1,4 @@
-import type { Stream, StreamMessage } from "./backend/db_types";
+import type { StreamMessage } from "./backend/db_types";
 import type { TopicRow } from "./row_types";
 import type { SearchWidget } from "./search_widget";
 

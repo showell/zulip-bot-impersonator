@@ -1,5 +1,3 @@
-import type { Stream } from "./backend/db_types";
-
 import { Topic } from "./backend/db_types";
 
 import type { ChannelRow } from "./row_types";
