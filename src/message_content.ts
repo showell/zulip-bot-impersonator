@@ -17,7 +17,16 @@ function preprocess_img_element(img: HTMLImageElement) {
 }
 
 function preprocess_anchor_element(ele: HTMLAnchorElement) {
-    const url = new URL(ele.getAttribute("href")!, window.location.href);
+    const a_href = ele.getAttribute("href");
+
+    if (a_href === "http://") {
+        // This happens with an empty link. This is a quick hack to ignore
+        // it.
+        return;
+    }
+
+    console.log(a_href);
+    const url = new URL(a_href, window.location.href);
 
     if (
         url.hash === "" ||
