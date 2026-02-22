@@ -1,3 +1,5 @@
+import * as model from "./backend/model";
+
 import type { Message, Stream, Topic } from "./backend/db_types.ts";
 import type { ListInfo } from "./backend/message_list.ts";
 
@@ -93,6 +95,14 @@ export class MessageRow {
         }
     }
 
+    stream_name(): string {
+        return model.stream_name_for(this._message.stream_id);
+    }
+
+    topic_name(): string {
+        return this._message.topic_name;
+    }
+
     content(): string {
         return this._message.content;
     }
@@ -106,6 +116,9 @@ export class MessageRow {
     }
 
     address_string(): string {
-        return this._message.topic_name;
+        const stream_name = this.stream_name();
+        const topic_name = this.topic_name();
+
+        return `#${stream_name} > ${topic_name}`;
     }
 }
