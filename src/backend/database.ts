@@ -1,6 +1,5 @@
 import type { ZulipEvent } from "./event";
 import type { User, Stream, Message } from "./db_types";
-import type { MessageStore } from "./message_store";
 
 import { EventFlavor } from "./event";
 import * as fetch from "./fetch";
@@ -13,7 +12,7 @@ export type Database = {
     user_map: Map<number, User>;
     channel_map: Map<number, Stream>;
     topic_map: TopicMap;
-    message_store: MessageStore;
+    message_map: Map<number, Message>;
 };
 
 export async function fetch_original_data(): Promise<void> {
@@ -24,7 +23,7 @@ export async function fetch_original_data(): Promise<void> {
 
 export function handle_event(event: ZulipEvent): void {
     if (event.flavor === EventFlavor.MESSAGE) {
-        add_messages_to_cache(event.message);
+        add_message_to_cache(event.message);
     }
 
     if (event.flavor === EventFlavor.MARK_AS_READ) {
@@ -36,14 +35,32 @@ export function handle_event(event: ZulipEvent): void {
     }
 }
 
-export function add_messages_to_cache(message: Message) {
-    DB.message_store.add_messages([message]);
+export function add_message_to_cache(message: Message) {
+    DB.message_map.set(message.id, message);
+}
+
+export function mutate_messages(
+    message_ids: number[],
+    mutate: (message: Message) => void,
+): void {
+    for (const message_id of message_ids) {
+        const message = DB.message_map.get(message_id);
+        if (message) {
+            mutate(message);
+        } else {
+            console.log("UNKNOWN message id!", message_id);
+        }
+    }
 }
 
 export function mark_message_ids_as_read(message_ids: number[]): void {
-    DB.message_store.mark_ids_as_read(message_ids);
+    mutate_messages(message_ids, (message) => {
+        message.unread = false;
+    });
 }
 
 export function mark_message_ids_as_unread(message_ids: number[]): void {
-    DB.message_store.mark_ids_as_unread(message_ids);
+    mutate_messages(message_ids, (message) => {
+        message.unread = true;
+    });
 }

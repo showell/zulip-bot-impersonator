@@ -15,10 +15,9 @@ export function is_me(user_id: number): boolean {
 // STREAMS
 //
 export function get_channel_rows(): ChannelRow[] {
-    return channel_row_query.get_rows(
-        DB.channel_map,
-        DB.message_store.messages,
-    );
+    return channel_row_query.get_rows(DB.channel_map, [
+        ...DB.message_map.values(),
+    ]);
 }
 
 export function stream_for(stream_id: number): Stream {
@@ -32,22 +31,28 @@ export function stream_name_for(stream_id: number): string {
 // TOPICS
 
 export function get_topic_rows(stream_id: number): TopicRow[] {
-    function match(message: Message) {
+    function predicate(message: Message) {
         return message.stream_id === stream_id;
     }
-    const messages = DB.message_store.messages.filter(match);
+    const messages = filtered_messages({ predicate });
     return topic_row_query.get_rows(DB.topic_map, messages);
 }
 
 // MESSAGES
 
-export function filtered_messages(filter: Filter) {
-    return DB.message_store.messages.filter(filter.predicate);
+export function filtered_messages(filter: Filter): Message[] {
+    const result = [];
+    for (const message of DB.message_map.values()) {
+        if (filter.predicate(message)) {
+            result.push(message);
+        }
+    }
+    return result;
 }
 
-export function get_total_unread_count() {
+export function get_total_unread_count(): number {
     let count = 0;
-    for (const message of DB.message_store.messages) {
+    for (const message of DB.message_map.values()) {
         if (message.unread) {
             ++count;
         }

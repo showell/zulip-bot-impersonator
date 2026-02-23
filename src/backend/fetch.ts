@@ -1,9 +1,8 @@
-import type { User, Stream } from "./db_types";
+import type { Message, Stream, User } from "./db_types";
 
 import { config } from "../secrets";
 
 import { Database } from "./database";
-import { MessageStore } from "./message_store";
 import { TopicMap } from "./topic_map";
 import * as zulip_client from "./zulip_client";
 
@@ -63,7 +62,7 @@ export async function fetch_model_data(): Promise<Database> {
 
     const rows = await zulip_client.get_messages(BATCH_SIZE);
 
-    const messages = rows
+    const messages: Message[] = rows
         .filter((row: any) => row.type === "stream")
         .map((row: any) => {
             const topic = topic_map.get_or_make_topic_for(
@@ -94,12 +93,15 @@ export async function fetch_model_data(): Promise<Database> {
         }
     }
 
-    const message_store = new MessageStore(messages);
+    const message_map = new Map(
+        messages.map((message) => [message.id, message]),
+    );
+
     return {
         current_user_id,
         user_map,
         channel_map,
         topic_map,
-        message_store,
+        message_map,
     };
 }
