@@ -6,9 +6,9 @@ type SendInfo = {
     content: string;
 };
 
-export async function mark_message_ids_unread(
+export function mark_message_ids_unread(
     unread_message_ids: number[],
-): Promise<void> {
+): void {
     const body = new URLSearchParams({
         op: "add",
         flag: "read",
@@ -21,7 +21,7 @@ export async function mark_message_ids_unread(
     const credentials = btoa(`${email}:${api_key}`);
     const api_url = `${config.realm_url}/api/v1/messages/flags`;
 
-    const response = await fetch(api_url, {
+    fetch(api_url, {
         method: "POST",
         headers: {
             Authorization: `Basic ${credentials}`,
@@ -29,11 +29,10 @@ export async function mark_message_ids_unread(
         },
         body: body.toString(),
     });
-
-    const data = await response.json();
+    // TODO: actually look at response
 }
 
-export async function send_message(info: SendInfo): Promise<void> {
+export function send_message(info: SendInfo): Promise<void> {
     const body = new URLSearchParams({
         type: "stream",
         to: `${info.stream_id}`,
@@ -48,7 +47,7 @@ export async function send_message(info: SendInfo): Promise<void> {
     const credentials = btoa(`${email}:${api_key}`);
     const api_url = `${config.realm_url}/api/v1/messages`;
 
-    const response = await fetch(api_url, {
+    fetch(api_url, {
         method: "POST",
         headers: {
             Authorization: `Basic ${credentials}`,
@@ -56,6 +55,5 @@ export async function send_message(info: SendInfo): Promise<void> {
         },
         body: body.toString(),
     });
-
-    const data = await response.json();
+    // TODO: actually look at response
 }
