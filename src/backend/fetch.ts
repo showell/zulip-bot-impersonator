@@ -63,7 +63,7 @@ export async function fetch_model_data(): Promise<Database> {
 
     const rows = await zulip_client.get_messages(BATCH_SIZE);
 
-    const stream_messages = rows
+    const messages = rows
         .filter((row: any) => row.type === "stream")
         .map((row: any) => {
             const topic = topic_map.get_or_make_topic_for(
@@ -94,7 +94,7 @@ export async function fetch_model_data(): Promise<Database> {
         }
     }
 
-    const message_store = new MessageStore(stream_messages);
+    const message_store = new MessageStore(messages);
     return {
         current_user_id,
         user_map,

@@ -118,8 +118,8 @@ export class Page {
     }
 
     handle_event(event: ZulipEvent): void {
-        if (event.flavor === EventFlavor.STREAM_MESSAGE) {
-            const message_row = new MessageRow(event.stream_message);
+        if (event.flavor === EventFlavor.MESSAGE) {
+            const message_row = new MessageRow(event.message);
             const sender_name = message_row.sender_name();
             const address = message_row.address_string();
             StatusBar.inform(

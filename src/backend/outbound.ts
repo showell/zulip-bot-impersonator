@@ -30,7 +30,7 @@ export function mark_message_ids_unread(unread_message_ids: number[]): void {
     // TODO: actually look at response
 }
 
-export function send_message(info: SendInfo): Promise<void> {
+export function send_message(info: SendInfo): void {
     const body = new URLSearchParams({
         type: "stream",
         to: `${info.stream_id}`,

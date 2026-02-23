@@ -1,4 +1,4 @@
-import type { StreamMessage } from "./backend/db_types";
+import type { Message } from "./backend/db_types";
 import type { TopicRow } from "./row_types";
 import type { SearchWidget } from "./search_widget";
 
@@ -86,14 +86,14 @@ export class ChannelView {
         }
     }
 
-    refresh(stream_message: StreamMessage): void {
-        if (stream_message.stream_id !== this.channel_row.stream_id()) {
+    refresh(message: Message): void {
+        if (message.stream_id !== this.channel_row.stream_id()) {
             return;
         }
 
         const topic_list = this.get_topic_list();
         const topic_row = topic_list.get_topic_row();
-        const sent_by_me = model.is_me(stream_message.sender_id);
+        const sent_by_me = model.is_me(message.sender_id);
 
         /*
          * In the add-topic scenario, we don't switch to the
@@ -112,19 +112,19 @@ export class ChannelView {
 
         if (!topic_row) {
             if (can_change_topic) {
-                this.select_topic_and_append(stream_message);
+                this.select_topic_and_append(message);
             } else {
                 topic_list.refresh(); // for counts
             }
         } else {
-            if (topic_row.topic_id() === stream_message.topic_id) {
+            if (topic_row.topic_id() === message.topic_id) {
                 topic_list.refresh(); // for counts
 
                 if (this.message_view) {
-                    this.get_message_list()!.append_message(stream_message);
+                    this.get_message_list()!.append_message(message);
                 }
             } else if (can_change_topic) {
-                this.select_topic_and_append(stream_message);
+                this.select_topic_and_append(message);
             } else {
                 topic_list.refresh();
             }
@@ -142,10 +142,10 @@ export class ChannelView {
         return this.message_view.get_message_list();
     }
 
-    select_topic_and_append(stream_message: StreamMessage): void {
+    select_topic_and_append(message: Message): void {
         const topic_list = this.get_topic_list();
 
-        topic_list.refresh_topics_with_topic_selected(stream_message.topic_id);
+        topic_list.refresh_topics_with_topic_selected(message.topic_id);
         this.open_message_view();
     }
 

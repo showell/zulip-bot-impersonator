@@ -17,7 +17,7 @@ export function is_me(user_id: number): boolean {
 export function get_channel_rows(): ChannelRow[] {
     return channel_row_query.get_rows(
         DB.channel_map,
-        DB.message_store.stream_messages,
+        DB.message_store.messages,
     );
 }
 
@@ -35,19 +35,19 @@ export function get_topic_rows(stream_id: number): TopicRow[] {
     function match(message: Message) {
         return message.stream_id === stream_id;
     }
-    const stream_messages = DB.message_store.stream_messages.filter(match);
-    return topic_row_query.get_rows(DB.topic_map, stream_messages);
+    const messages = DB.message_store.messages.filter(match);
+    return topic_row_query.get_rows(DB.topic_map, messages);
 }
 
 // MESSAGES
 
 export function filtered_messages(filter: Filter) {
-    return DB.message_store.stream_messages.filter(filter.predicate);
+    return DB.message_store.messages.filter(filter.predicate);
 }
 
 export function get_total_unread_count() {
     let count = 0;
-    for (const message of DB.message_store.stream_messages) {
+    for (const message of DB.message_store.messages) {
         if (message.unread) {
             ++count;
         }

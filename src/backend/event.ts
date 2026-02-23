@@ -1,17 +1,17 @@
-import type { StreamMessage } from "./db_types";
+import type { Message } from "./db_types";
 
 import { DB } from "./database";
 
 export const enum EventFlavor {
-    STREAM_MESSAGE,
+    MESSAGE,
     MARK_AS_READ,
     MARK_AS_UNREAD,
     UNKNOWN,
 }
 
-type StreamMessageEvent = {
-    flavor: EventFlavor.STREAM_MESSAGE;
-    stream_message: StreamMessage;
+type MessageEvent = {
+    flavor: EventFlavor.MESSAGE;
+    message: Message;
     info: string;
 };
 
@@ -31,7 +31,7 @@ type UnknownEvent = {
 };
 
 export type ZulipEvent =
-    | StreamMessageEvent
+    | MessageEvent
     | UnreadAddEvent
     | UnreadRemoveEvent
     | UnknownEvent;
@@ -41,29 +41,29 @@ function build_event(raw_event: any): ZulipEvent | undefined {
 
     switch (raw_event.type) {
         case "message": {
-            const message: any = raw_event.message;
+            const raw_message: any = raw_event.message;
 
-            if (message.type === "stream") {
+            if (raw_message.type === "stream") {
                 const topic = DB.topic_map.get_or_make_topic_for(
-                    message.stream_id,
-                    message.subject,
+                    raw_message.stream_id,
+                    raw_message.subject,
                 );
                 const unread =
                     raw_event.flags.find((flag: string) => flag === "read") ===
                     undefined;
-                const stream_message: StreamMessage = {
-                    id: message.id,
+                const message: Message = {
+                    id: raw_message.id,
                     type: "stream",
-                    sender_id: message.sender_id,
-                    stream_id: message.stream_id,
+                    sender_id: raw_message.sender_id,
+                    stream_id: raw_message.stream_id,
                     topic_id: topic.topic_id,
-                    content: message.content,
+                    content: raw_message.content,
                     unread,
                     is_super_new: true,
                 };
                 return {
-                    flavor: EventFlavor.STREAM_MESSAGE,
-                    stream_message,
+                    flavor: EventFlavor.MESSAGE,
+                    message,
                     info: `stream message id ${message.id}`,
                 };
             }

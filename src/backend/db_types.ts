@@ -1,6 +1,6 @@
 export type StreamType = "stream";
 
-export type StreamMessage = {
+export type Message = {
     id: number;
     type: "stream";
     sender_id: number;
@@ -10,8 +10,6 @@ export type StreamMessage = {
     unread: boolean;
     is_super_new: boolean;
 };
-
-export type Message = StreamMessage;
 
 export type Stream = {
     stream_id: number;

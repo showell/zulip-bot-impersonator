@@ -30,8 +30,8 @@ export class EventRadio {
     handle_event(event: ZulipEvent): void {
         const div = this.div;
 
-        if (event.flavor === EventFlavor.STREAM_MESSAGE) {
-            const message = event.stream_message;
+        if (event.flavor === EventFlavor.MESSAGE) {
+            const message = event.message;
             const use_sender = true;
 
             const message_row = new MessageRow(message);

@@ -1,5 +1,5 @@
 import type { ZulipEvent } from "./event";
-import type { User, Stream, StreamMessage } from "./db_types";
+import type { User, Stream, Message } from "./db_types";
 import type { MessageStore } from "./message_store";
 
 import { EventFlavor } from "./event";
@@ -23,8 +23,8 @@ export async function fetch_original_data(): Promise<void> {
 // EVENTS
 
 export function handle_event(event: ZulipEvent): void {
-    if (event.flavor === EventFlavor.STREAM_MESSAGE) {
-        add_stream_messages_to_cache(event.stream_message);
+    if (event.flavor === EventFlavor.MESSAGE) {
+        add_messages_to_cache(event.message);
     }
 
     if (event.flavor === EventFlavor.MARK_AS_READ) {
@@ -36,7 +36,7 @@ export function handle_event(event: ZulipEvent): void {
     }
 }
 
-export function add_stream_messages_to_cache(message: StreamMessage) {
+export function add_messages_to_cache(message: Message) {
     DB.message_store.add_messages([message]);
 }
 

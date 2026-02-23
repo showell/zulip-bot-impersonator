@@ -1,15 +1,15 @@
-import type { StreamMessage } from "./db_types";
+import type { Message } from "./db_types";
 
 export class MessageStore {
-    stream_messages: StreamMessage[];
+    messages: Message[];
 
-    constructor(stream_messages: StreamMessage[]) {
-        this.stream_messages = stream_messages;
+    constructor(messages: Message[]) {
+        this.messages = messages;
     }
 
     mark_ids_as_read(message_ids: number[]): void {
         const set = new Set(message_ids);
-        for (const message of this.stream_messages) {
+        for (const message of this.messages) {
             if (set.has(message.id)) {
                 message.unread = false;
             }
@@ -18,14 +18,14 @@ export class MessageStore {
 
     mark_ids_as_unread(message_ids: number[]): void {
         const set = new Set(message_ids);
-        for (const message of this.stream_messages) {
+        for (const message of this.messages) {
             if (set.has(message.id)) {
                 message.unread = true;
             }
         }
     }
 
-    add_messages(messages: StreamMessage[]) {
-        this.stream_messages.push(...messages);
+    add_messages(messages: Message[]) {
+        this.messages.push(...messages);
     }
 }

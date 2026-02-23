@@ -1,5 +1,5 @@
 import type { ZulipEvent } from "./backend/event";
-import type { StreamMessage } from "./backend/db_types";
+import type { Message } from "./backend/db_types";
 
 import { EventFlavor } from "./backend/event";
 
@@ -78,10 +78,10 @@ export class SearchWidget {
         }
     }
 
-    refresh(stream_message: StreamMessage): void {
+    refresh(message: Message): void {
         this.channel_pane.populate();
         if (this.channel_view) {
-            this.channel_view.refresh(stream_message);
+            this.channel_view.refresh(message);
         }
     }
 
@@ -322,8 +322,8 @@ export class SearchWidget {
     }
 
     handle_event(event: ZulipEvent): void {
-        if (event.flavor === EventFlavor.STREAM_MESSAGE) {
-            this.refresh(event.stream_message);
+        if (event.flavor === EventFlavor.MESSAGE) {
+            this.refresh(event.message);
         }
 
         if (event.flavor === EventFlavor.MARK_AS_READ) {
