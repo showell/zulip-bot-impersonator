@@ -1,3 +1,17 @@
+export function navbar_tab_button(): HTMLButtonElement {
+    const button = document.createElement("button");
+    button.style.borderBottom = "none";
+    button.style.fontSize = "16px";
+    button.style.paddingLeft = "13px";
+    button.style.paddingRight = "13px";
+    button.style.paddingTop = "4px";
+    button.style.paddingBottom = "4px";
+    button.style.borderTopRightRadius = "10px";
+    button.style.borderTopLeftRadius = "10px";
+
+    return button;
+}
+
 function add_search_button(add_search_widget: () => void): HTMLDivElement {
     const div = document.createElement("div");
     div.style.marginRight = "15px";

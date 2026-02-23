@@ -5,6 +5,8 @@ import * as backend_model from "./backend/model";
 
 import type { Page } from "./page";
 
+import * as page_widget from "./dom/page_widget";
+
 class Model {
     stream_for(stream_id: number): Stream {
         return backend_model.stream_for(stream_id);
@@ -25,16 +27,7 @@ class Button {
     constructor(plugin_helper: PluginHelper, page: Page) {
         const div = document.createElement("div");
 
-        const button = document.createElement("button");
-
-        button.style.borderBottom = "none";
-        button.style.fontSize = "16px";
-        button.style.paddingLeft = "13px";
-        button.style.paddingRight = "13px";
-        button.style.paddingTop = "4px";
-        button.style.paddingBottom = "4px";
-        button.style.borderTopRightRadius = "10px";
-        button.style.borderTopLeftRadius = "10px";
+        const button = page_widget.navbar_tab_button();
 
         this.plugin_helper = plugin_helper;
         this.div = div;
