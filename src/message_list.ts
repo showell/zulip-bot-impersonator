@@ -141,7 +141,7 @@ export class MessageList {
         console.log(div.scrollHeight);
         console.log(div.clientHeight);
 
-        return div.scrollTop > div.scrollHeight - div.clientHeight - 10;
+        return div.scrollTop > div.scrollHeight - div.clientHeight - 30;
     }
 
     scroll_to_bottom() {
