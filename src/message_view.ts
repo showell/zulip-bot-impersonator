@@ -30,7 +30,7 @@ export class MessageView {
         const topic_row = this.topic_row;
 
         if (!this.reply_pane) {
-            const reply_pane = new ReplyPane(topic_row.topic());
+            const reply_pane = new ReplyPane(topic_row);
             pane_manager.add_pane({
                 key: "reply_pane",
                 pane_widget: reply_pane,

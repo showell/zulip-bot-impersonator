@@ -1,5 +1,7 @@
 import type { StreamMessage } from "./db_types";
 
+import { DB } from "./database";
+
 export const enum EventFlavor {
     STREAM_MESSAGE,
     MARK_AS_READ,
@@ -38,13 +40,14 @@ function build_event(raw_event: any): ZulipEvent | undefined {
             const message: any = raw_event.message;
 
             if (message.type === "stream") {
+                const topic = DB.topic_map.get_or_make_topic_for(message.stream_id, message.subject);
                 const unread = raw_event.flags.find((flag: string) => flag === "read") === undefined;
                 const stream_message: StreamMessage = {
                     id: message.id,
                     type: "stream",
                     sender_id: message.sender_id,
                     stream_id: message.stream_id,
-                    topic_name: message.subject,
+                    topic_id: topic.topic_id,
                     content: message.content,
                     unread,
                     is_super_new: true,

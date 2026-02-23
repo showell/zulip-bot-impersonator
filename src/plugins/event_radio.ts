@@ -35,11 +35,13 @@ export class EventRadio {
             const message = event.stream_message;
             const use_sender = true;
 
-            const address_div = document.createElement("div");
-            const stream = model.stream_for(message.stream_id);
-            address_div.innerText = `${stream.name} > ${message.topic_name}`;
-
             const message_row = new MessageRow(message);
+
+            const address_div = document.createElement("div");
+            const stream_name = message_row.stream_name();
+            const topic_name = message_row.topic_name();
+            address_div.innerText = `${stream_name} > ${topic_name}`;
+
             const message_row_widget = new MessageRowWidget(
                 message_row,
                 use_sender,

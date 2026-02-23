@@ -98,15 +98,15 @@ export class ComposeBox {
     div: HTMLElement;
     topic_input: TopicInput;
     textarea: TextArea;
-    topic: Topic;
+    stream_id: number;
 
-    constructor(topic: Topic) {
+    constructor(stream_id: number, topic_name: string) {
         const self = this;
-        this.topic = topic;
+        this.stream_id = stream_id;
 
         const div = document.createElement("div");
 
-        const topic_input = new TopicInput(topic.name);
+        const topic_input = new TopicInput(topic_name);
 
         const textarea = new TextArea();
 
@@ -150,7 +150,7 @@ export class ComposeBox {
     }
 
     send(content: string): void {
-        const stream_id = this.topic.stream_id;
+        const stream_id = this.stream_id;
         const topic_name = this.topic_input.topic_name();
 
         outbound.send_message({ stream_id, topic_name, content });

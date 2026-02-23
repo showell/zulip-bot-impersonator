@@ -36,13 +36,10 @@ export class MessageList {
 
     num_topics(): number {
         const messages = this.messages;
-        const set = new Set<string>();
+        const set = new Set<number>();
 
         for (const message of messages) {
-            const stream_id = message.stream_id;
-            const topic_name = message.topic_name;
-            const key = `${stream_id},${topic_name}`;
-            set.add(key);
+            set.add(message.topic_id);
         }
 
         return set.size;

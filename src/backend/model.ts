@@ -37,7 +37,7 @@ export function get_topic_rows(stream_id: number): TopicRow[] {
         return message.stream_id === stream_id;
     }
     const stream_messages = DB.message_store.stream_messages.filter(match);
-    return topic_row_query.get_rows(stream_messages);
+    return topic_row_query.get_rows(DB.topic_map, stream_messages);
 }
 
 // MESSAGES

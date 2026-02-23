@@ -38,8 +38,7 @@ export class AddTopicPane {
 
     make_compose_box(stream_id: number): ComposeBox {
         const blank_name = "";
-        const topic = new Topic(stream_id, blank_name);
-        return new ComposeBox(topic);
+        return new ComposeBox(stream_id, blank_name);
     }
 
     focus_compose_box(): void {

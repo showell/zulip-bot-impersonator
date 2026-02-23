@@ -40,18 +40,26 @@ export class TopicList {
         return this.topic_rows[index];
     }
 
-    select_topic_name(new_topic_rows: TopicRow[], topic_name: string) {
+    get_topic_id(): number | undefined {
+        const topic_row = this.get_topic_row();
+
+        if (topic_row === undefined) return undefined;
+
+        return topic_row.topic_id();
+    }
+
+    select_topic(new_topic_rows: TopicRow[], topic_id: number) {
         const cursor = this.cursor;
 
         const index = new_topic_rows.findIndex((topic_row) => {
-            return topic_row.name() === topic_name;
+            return topic_row.topic_id() === topic_id;
         });
         cursor.select_index(index);
     }
 
-    refresh_topics_with_topic_name_selected(topic_name: string): void {
+    refresh_topics_with_topic_selected(topic_id: number): void {
         const new_topic_rows = this.get_topic_rows();
-        this.select_topic_name(new_topic_rows, topic_name);
+        this.select_topic(new_topic_rows, topic_id);
         this.populate_from_topic_rows(new_topic_rows);
     }
 
@@ -64,11 +72,11 @@ export class TopicList {
     }
 
     refresh(): void {
-        const topic_name = this.get_topic_name();
+        const topic_id = this.get_topic_id();
         const new_topic_rows = this.get_topic_rows();
 
-        if (topic_name) {
-            this.select_topic_name(new_topic_rows, topic_name);
+        if (topic_id) {
+            this.select_topic(new_topic_rows, topic_id);
         }
 
         this.populate_from_topic_rows(new_topic_rows);

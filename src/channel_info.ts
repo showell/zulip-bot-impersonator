@@ -47,10 +47,7 @@ export class ChannelInfo {
             );
         }
 
-        const filter = stream_filter(
-            channel_row.stream_id(),
-            channel_row.name(),
-        );
+        const filter = stream_filter(channel_row.stream_id());
         const messages = model.filtered_messages(filter);
         const participants = model.participants_for_messages(messages);
 

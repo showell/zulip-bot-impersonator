@@ -4,6 +4,7 @@ import { config } from "../secrets";
 
 import { Database } from "./database";
 import { MessageStore } from "./message_store";
+import { TopicMap } from "./topic_map";
 import * as zulip_client from "./zulip_client";
 
 const BATCH_SIZE = 5000;
@@ -58,18 +59,21 @@ export async function fetch_model_data(): Promise<Database> {
         channel_map.set(stream.stream_id, stream);
     }
 
+    const topic_map = new TopicMap();
+
     const rows = await zulip_client.get_messages(BATCH_SIZE);
 
     const stream_messages = rows
         .filter((row: any) => row.type === "stream")
         .map((row: any) => {
+            const topic = topic_map.get_or_make_topic_for(row.stream_id, row.subject);
             const unread =
                 row.flags.find((flag: string) => flag === "read") === undefined;
             return {
                 id: row.id,
                 type: row.type,
                 sender_id: row.sender_id,
-                topic_name: row.subject,
+                topic_id: topic.topic_id,
                 stream_id: row.stream_id,
                 content: row.content,
                 is_super_new: false,
@@ -92,6 +96,7 @@ export async function fetch_model_data(): Promise<Database> {
         current_user_id,
         user_map,
         channel_map,
+        topic_map,
         message_store,
     };
 }

@@ -63,12 +63,25 @@ export class TopicRow {
         this._list_info = list_info;
     }
 
+    stream_id(): number {
+        return this._topic.channel_id;
+    }
+
+    topic_id(): number {
+        return this._topic.topic_id;
+    }
+
+    stream_name(): string {
+        const channel = DB.channel_map.get(this.stream_id())!;
+        return channel.name;
+    }
+
     topic(): Topic {
         return this._topic;
     }
 
     name(): string {
-        return this._topic.name;
+        return this._topic.topic_name;
     }
 
     num_messages(): number {
@@ -117,13 +130,19 @@ export class MessageRow {
         return model.stream_name_for(this._message.stream_id);
     }
 
-    channel_link(): string {
-        const channel_name = this.stream_name();
-        return `#**${channel_name}**`;
+    topic_id(): number {
+        return this._message.topic_id;
+
     }
 
     topic_name(): string {
-        return this._message.topic_name;
+        const topic = DB.topic_map.get(this.topic_id());
+        return topic.topic_name;
+    }
+
+    channel_link(): string {
+        const channel_name = this.stream_name();
+        return `#**${channel_name}**`;
     }
 
     topic_link(): string {

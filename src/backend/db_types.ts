@@ -5,7 +5,7 @@ export type StreamMessage = {
     type: "stream";
     sender_id: number;
     stream_id: number;
-    topic_name: string;
+    topic_id: number;
     content: string;
     unread: boolean;
     is_super_new: boolean;
@@ -26,16 +26,8 @@ export type User = {
     full_name: string;
 };
 
-export class Topic {
-    stream_id: number;
-    name: string;
-
-    constructor(stream_id: number, name: string) {
-        this.stream_id = stream_id;
-        this.name = name;
-    }
-
-    is_same(other: Topic) {
-        return this.stream_id === other.stream_id && this.name === other.name;
-    }
-}
+export type Topic = {
+    topic_id: number;
+    channel_id: number;
+    topic_name: string;
+};

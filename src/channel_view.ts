@@ -117,7 +117,7 @@ export class ChannelView {
                 topic_list.refresh(); // for counts
             }
         } else {
-            if (topic_row.name() === stream_message.topic_name) {
+            if (topic_row.topic_id() === stream_message.topic_id) {
                 topic_list.refresh(); // for counts
 
                 if (this.message_view) {
@@ -145,8 +145,8 @@ export class ChannelView {
     select_topic_and_append(stream_message: StreamMessage): void {
         const topic_list = this.get_topic_list();
 
-        topic_list.refresh_topics_with_topic_name_selected(
-            stream_message.topic_name,
+        topic_list.refresh_topics_with_topic_selected(
+            stream_message.topic_id,
         );
         this.open_message_view();
     }

@@ -2,31 +2,28 @@ import type { Message } from "./db_types";
 
 import { Topic } from "./db_types";
 import { MessageList } from "./message_list";
+import { TopicMap } from "./topic_map";
 import { TopicRow } from "../row_types";
 
-export function get_rows(messages: Message[]): TopicRow[] {
-    const topic_map = new Map<string, Topic>();
-    const message_list_map = new Map<string, MessageList>();
+export function get_rows(topic_map: TopicMap, messages: Message[]): TopicRow[] {
+    const message_list_map = new Map<number, MessageList>();
 
     for (const message of messages) {
-        const stream_id = message.stream_id;
-        const topic_name = message.topic_name;
+        const topic_id = message.topic_id;
 
-        const topic = topic_map.get(topic_name) ?? new Topic(stream_id, topic_name);
-        topic_map.set(topic_name, topic);
-
-        const message_list = message_list_map.get(topic_name) ?? new MessageList();
+        const message_list = message_list_map.get(topic_id) ?? new MessageList();
 
         message_list.push(message);
-        message_list_map.set(topic_name, message_list);
+        message_list_map.set(topic_id, message_list);
     }
 
     const topic_rows: TopicRow[] = [];
 
-    for (const topic_name of topic_map.keys()) {
-        const topic = topic_map.get(topic_name)!;
-        const message_list = message_list_map.get(topic_name)!;
+    for (const topic_id of message_list_map.keys()) {
+        const message_list = message_list_map.get(topic_id)!;
         const list_info = message_list.list_info();
+        const topic = topic_map.get(topic_id);
+        console.log("in query", topic_id, topic);
 
         const topic_row = new TopicRow(topic, list_info);
 

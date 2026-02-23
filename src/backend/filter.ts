@@ -4,27 +4,21 @@ type Predicate = (message: Message) => boolean;
 
 export type Filter = {
     predicate: Predicate;
-    label: string;
 };
 
-export function topic_filter(topic: Topic): Filter {
+export function topic_filter(topic_id: number): Filter {
     function predicate(message: Message): boolean {
         if (message.type === "stream") {
-            return (
-                message.stream_id === topic.stream_id &&
-                message.topic_name === topic.name
-            );
+            return message.topic_id === topic_id;
         } else {
             return false;
         }
     }
 
-    const label = topic.name;
-
-    return { predicate, label };
+    return { predicate };
 }
 
-export function stream_filter(stream_id: number, channel_name: string): Filter {
+export function stream_filter(stream_id: number): Filter {
     function predicate(message: Message): boolean {
         if (message.type === "stream") {
             return message.stream_id === stream_id;
@@ -33,7 +27,5 @@ export function stream_filter(stream_id: number, channel_name: string): Filter {
         }
     }
 
-    const label = channel_name;
-
-    return { predicate, label };
+    return { predicate };
 }

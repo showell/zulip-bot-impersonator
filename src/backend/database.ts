@@ -4,6 +4,7 @@ import type { MessageStore } from "./message_store";
 
 import { EventFlavor } from "./event";
 import * as fetch from "./fetch";
+import { TopicMap } from "./topic_map";
 
 export let DB: Database;
 
@@ -11,6 +12,7 @@ export type Database = {
     current_user_id: number;
     user_map: Map<number, User>;
     channel_map: Map<number, Stream>;
+    topic_map: TopicMap;
     message_store: MessageStore;
 };
 
