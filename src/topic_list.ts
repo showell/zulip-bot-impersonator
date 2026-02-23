@@ -6,7 +6,7 @@ import type { SearchWidget } from "./search_widget";
 import { Cursor } from "./cursor";
 import { render_big_list } from "./render";
 import { TableWidget } from "./table_widget";
-import { TopicRowWidget } from "./topic_row_widget";
+import * as topic_row_widget from "./dom/topic_row_widget";
 
 export class TopicList {
     div: HTMLElement;
@@ -112,13 +112,13 @@ export class TopicList {
                 msg_count: topic_row.num_messages(),
                 unread_count: topic_row.unread_count(),
             };
-            const topic_row_widget = new TopicRowWidget(
+            const row_widget = topic_row_widget.row_widget(
                 topic_row_data,
                 i,
                 selected,
                 search_widget,
             );
-            row_widgets.push(topic_row_widget);
+            row_widgets.push(row_widget);
         }
 
         const columns = ["Unread", "Topic name", "Messages"];
