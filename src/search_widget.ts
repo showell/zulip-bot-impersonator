@@ -16,6 +16,26 @@ import { ChannelView } from "./channel_view";
 import { PaneManager } from "./pane_manager";
 import { StatusBar } from "./status_bar";
 
+function narrow_label(
+    channel_name: string | undefined,
+    topic_name: string | undefined,
+    unread_count: number,
+): string {
+    let label: string;
+
+    if (topic_name !== undefined) {
+        label = "> " + topic_name;
+    } else if (channel_name !== undefined) {
+        label = "#" + channel_name;
+    } else {
+        label = "Channels";
+    }
+
+    const prefix = unread_count === 0 ? "" : `(${unread_count}) `;
+
+    return prefix + label;
+}
+
 export class SearchWidget {
     div: HTMLElement;
     button_panel: ButtonPanel;
@@ -166,20 +186,7 @@ export class SearchWidget {
         const topic_name = this.get_topic_name();
         const unread_count = this.unread_count();
 
-        let label = "Channels";
-
-        function unread_prefix(count: number) {
-            return count === 0 ? "" : `(${count}) `;
-        }
-
-        if (channel_name) {
-            label = "#" + channel_name;
-
-            if (topic_name !== undefined) {
-                label = "> " + topic_name;
-            }
-        }
-        return unread_prefix(unread_count) + label;
+        return narrow_label(channel_name, topic_name, unread_count);
     }
 
     update_label(): void {
