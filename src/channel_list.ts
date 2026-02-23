@@ -38,6 +38,15 @@ export class ChannelList {
         return this.stream_ids[index];
     }
 
+    select_channel(new_channel_rows: ChannelRow[], channel_id: number) {
+        const cursor = this.cursor;
+
+        const index = new_channel_rows.findIndex((channel_row) => {
+            return channel_row.stream_id() === channel_id;
+        });
+        cursor.select_index(index);
+    }
+
     get_channel_row(): ChannelRow | undefined {
         const index = this.cursor.selected_index;
         const channel_rows = this.channel_rows;
@@ -49,6 +58,14 @@ export class ChannelList {
         return channel_rows[index];
     }
 
+    get_channel_id(): number | undefined {
+        const channel_row = this.get_channel_row();
+
+        if (channel_row === undefined) return undefined;
+
+        return channel_row.stream_id();
+    }
+
     sort(channel_rows: ChannelRow[]) {
         channel_rows.sort((c1, c2) => {
             return c2.last_msg_id() - c1.last_msg_id();
@@ -58,10 +75,16 @@ export class ChannelList {
     get_channel_rows(): ChannelRow[] {
         const cursor = this.cursor;
 
+        const channel_id = this.get_channel_id();
+
         const channel_rows = model.get_channel_rows();
         this.sort(channel_rows);
 
         cursor.set_count(channel_rows.length);
+
+        if (channel_id) {
+            this.select_channel(channel_rows, channel_id);
+        }
 
         this.stream_ids = channel_rows.map((c) => c.stream_id());
 
