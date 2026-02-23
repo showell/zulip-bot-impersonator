@@ -6,9 +6,7 @@ type SendInfo = {
     content: string;
 };
 
-export function mark_message_ids_unread(
-    unread_message_ids: number[],
-): void {
+export function mark_message_ids_unread(unread_message_ids: number[]): void {
     const body = new URLSearchParams({
         op: "add",
         flag: "read",
