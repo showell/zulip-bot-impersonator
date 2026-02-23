@@ -108,6 +108,7 @@ export class MessageList {
     }
 
     append_message(message: Message) {
+        const smart_list = this.smart_list;
         const filter = this.filter;
         const rows = this.rows;
 
@@ -127,11 +128,12 @@ export class MessageList {
         );
 
         const was_near_bottom = this.near_bottom();
+        console.log("was_near_bottom", was_near_bottom);
 
-        this.smart_list.append(message_row_widget.div);
+        smart_list.append(message_row_widget.div);
 
         if (was_near_bottom) {
-            this.scroll_to_bottom();
+            smart_list.scroll_to_bottom();
         }
     }
 
@@ -141,12 +143,6 @@ export class MessageList {
         console.log(div.scrollHeight);
         console.log(div.clientHeight);
 
-        return div.scrollTop > div.scrollHeight - div.clientHeight - 30;
-    }
-
-    scroll_to_bottom() {
-        const div = this.div;
-
-        div.scrollTop = div.scrollHeight - div.clientHeight;
+        return div.scrollTop > div.scrollHeight - div.clientHeight - 300;
     }
 }

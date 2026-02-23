@@ -24,6 +24,13 @@ class Dummy {
             block: "start",
         });
     }
+
+    scroll_to_bottom(): void {
+        this.div.scrollIntoView({
+            behavior: "smooth",
+            block: "end",
+        });
+    }
 }
 
 export class SmartList {
@@ -96,6 +103,20 @@ export class SmartList {
         this.queue = [];
 
         when_done();
+    }
+
+    scroll_to_bottom(): void {
+        const dummies = this.dummies;
+
+        if (!this.done) {
+            console.log("should call this only in when_done callback");
+            return;
+        }
+        if (dummies.length === 0) {
+            return;
+        }
+        const last_index = dummies.length - 1;
+        dummies[last_index].scroll_to_bottom();
     }
 
     scroll_index_to_top(index: number): void {
