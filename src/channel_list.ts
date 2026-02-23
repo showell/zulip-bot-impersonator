@@ -5,9 +5,9 @@ import type { SearchWidget } from "./search_widget";
 
 import *as channel_row_widget from "./dom/channel_row_widget";
 import { render_big_list } from "./dom/render";
+import * as table_widget from "./dom/table_widget";
 
 import { Cursor } from "./cursor";
-import { TableWidget } from "./table_widget";
 
 export class ChannelList {
     search_widget: SearchWidget;
@@ -114,9 +114,7 @@ export class ChannelList {
         }
 
         const columns = ["Unread", "Channel", "Topics"];
-        const table_widget = new TableWidget(columns, row_widgets);
-
-        return table_widget.table;
+        return table_widget.table(columns, row_widgets);
     }
 
     unread_count(): number {

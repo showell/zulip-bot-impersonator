@@ -1,5 +1,6 @@
+import * as table_widget from "./dom/table_widget";
+
 import { MessageRow } from "./row_types";
-import { TableWidget } from "./table_widget";
 
 function text(s: string): HTMLDivElement {
     const div = document.createElement("div");
@@ -17,9 +18,7 @@ function link_table(message_row: MessageRow): HTMLTableElement {
         { divs: [text("Message link"), text(message_row.message_link())] },
     ];
 
-    const table_widget = new TableWidget(columns, row_widgets);
-
-    return table_widget.table;
+    return table_widget.table(columns, row_widgets);
 }
 
 export class MessagePopup {

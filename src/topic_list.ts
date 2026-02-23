@@ -3,10 +3,11 @@ import * as model from "./backend/model";
 import type { ChannelRow, TopicRow } from "./row_types";
 import type { SearchWidget } from "./search_widget";
 
-import { Cursor } from "./cursor";
-import { render_big_list } from "./render";
-import { TableWidget } from "./table_widget";
+import { render_big_list } from "./dom/render";
+import * as table_widget from "./dom/table_widget";
 import * as topic_row_widget from "./dom/topic_row_widget";
+
+import { Cursor } from "./cursor";
 
 export class TopicList {
     div: HTMLElement;
@@ -122,9 +123,7 @@ export class TopicList {
         }
 
         const columns = ["Unread", "Topic name", "Messages"];
-        const table_widget = new TableWidget(columns, row_widgets);
-
-        return table_widget.table;
+        return table_widget.table(columns, row_widgets);
     }
 
     populate_from_topic_rows(topic_rows: TopicRow[]) {
