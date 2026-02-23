@@ -89,7 +89,6 @@ export class Page {
         const div = this.div;
         const plugin_helpers = this.plugin_helpers;
 
-
         const tab_button_divs = plugin_helpers.map((plugin_helper) => {
             return plugin_helper.button.div;
         });
