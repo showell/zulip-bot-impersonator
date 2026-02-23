@@ -127,8 +127,9 @@ export class Page {
             );
         }
 
-        if (event.flavor === EventFlavor.MARK_AS_READ) {
-            StatusBar.celebrate("Messages have been marked as read.");
+        if (event.flavor === EventFlavor.MUTATE_UNREAD) {
+            const val = event.unread ? "unread" : "read";
+            StatusBar.celebrate(`Messages have been marked as ${val}.`);
         }
 
         for (const plugin_helper of this.plugin_helpers) {

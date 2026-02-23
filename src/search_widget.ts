@@ -326,13 +326,10 @@ export class SearchWidget {
             this.refresh(event.message);
         }
 
-        if (event.flavor === EventFlavor.MARK_AS_READ) {
+        if (event.flavor === EventFlavor.MUTATE_UNREAD) {
             this.refresh_message_ids(event.message_ids);
         }
 
-        if (event.flavor === EventFlavor.MARK_AS_UNREAD) {
-            this.refresh_message_ids(event.message_ids);
-        }
         this.update_label();
     }
 }

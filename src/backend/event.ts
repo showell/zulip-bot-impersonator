@@ -4,8 +4,7 @@ import { DB } from "./database";
 
 export const enum EventFlavor {
     MESSAGE,
-    MARK_AS_READ,
-    MARK_AS_UNREAD,
+    MUTATE_UNREAD,
     UNKNOWN,
 }
 
@@ -15,14 +14,10 @@ type MessageEvent = {
     info: string;
 };
 
-type UnreadAddEvent = {
-    flavor: EventFlavor.MARK_AS_READ;
+type MutateUnreadEvent = {
+    flavor: EventFlavor.MUTATE_UNREAD;
     message_ids: number[];
-};
-
-type UnreadRemoveEvent = {
-    flavor: EventFlavor.MARK_AS_UNREAD;
-    message_ids: number[];
+    unread: boolean;
 };
 
 type UnknownEvent = {
@@ -30,11 +25,7 @@ type UnknownEvent = {
     raw_event: any;
 };
 
-export type ZulipEvent =
-    | MessageEvent
-    | UnreadAddEvent
-    | UnreadRemoveEvent
-    | UnknownEvent;
+export type ZulipEvent = MessageEvent | MutateUnreadEvent | UnknownEvent;
 
 function build_event(raw_event: any): ZulipEvent | undefined {
     console.log(JSON.stringify(raw_event, null, 4));
@@ -48,9 +39,11 @@ function build_event(raw_event: any): ZulipEvent | undefined {
                     raw_message.stream_id,
                     raw_message.subject,
                 );
+
                 const unread =
                     raw_event.flags.find((flag: string) => flag === "read") ===
                     undefined;
+
                 const message: Message = {
                     id: raw_message.id,
                     type: "stream",
@@ -72,17 +65,11 @@ function build_event(raw_event: any): ZulipEvent | undefined {
         }
 
         case "update_message_flags": {
-            if (raw_event.op === "add" && raw_event.flag === "read") {
+            if (raw_event.flag === "read") {
                 return {
-                    flavor: EventFlavor.MARK_AS_READ,
+                    flavor: EventFlavor.MUTATE_UNREAD,
                     message_ids: raw_event.messages,
-                };
-            }
-
-            if (raw_event.op === "remove" && raw_event.flag === "read") {
-                return {
-                    flavor: EventFlavor.MARK_AS_UNREAD,
-                    message_ids: raw_event.messages,
+                    unread: raw_event.op === "remove",
                 };
             }
 

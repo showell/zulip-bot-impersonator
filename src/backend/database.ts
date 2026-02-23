@@ -26,20 +26,18 @@ export function handle_event(event: ZulipEvent): void {
         add_message_to_cache(event.message);
     }
 
-    if (event.flavor === EventFlavor.MARK_AS_READ) {
-        mark_message_ids_as_read(event.message_ids);
-    }
-
-    if (event.flavor === EventFlavor.MARK_AS_UNREAD) {
-        mark_message_ids_as_unread(event.message_ids);
+    if (event.flavor === EventFlavor.MUTATE_UNREAD) {
+        mutate_messages(event.message_ids, (message) => {
+            message.unread = event.unread;
+        });
     }
 }
 
-export function add_message_to_cache(message: Message) {
+function add_message_to_cache(message: Message) {
     DB.message_map.set(message.id, message);
 }
 
-export function mutate_messages(
+function mutate_messages(
     message_ids: number[],
     mutate: (message: Message) => void,
 ): void {
@@ -51,16 +49,4 @@ export function mutate_messages(
             console.log("UNKNOWN message id!", message_id);
         }
     }
-}
-
-export function mark_message_ids_as_read(message_ids: number[]): void {
-    mutate_messages(message_ids, (message) => {
-        message.unread = false;
-    });
-}
-
-export function mark_message_ids_as_unread(message_ids: number[]): void {
-    mutate_messages(message_ids, (message) => {
-        message.unread = true;
-    });
 }
