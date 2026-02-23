@@ -3,9 +3,10 @@ import * as model from "./backend/model";
 import type { ChannelRow } from "./row_types";
 import type { SearchWidget } from "./search_widget";
 
-import { ChannelRowWidget } from "./channel_row_widget";
+import *as channel_row_widget from "./dom/channel_row_widget";
+import { render_big_list } from "./dom/render";
+
 import { Cursor } from "./cursor";
-import { render_big_list } from "./render";
 import { TableWidget } from "./table_widget";
 
 export class ChannelList {
@@ -103,13 +104,13 @@ export class ChannelList {
         for (let i = 0; i < channel_rows.length; ++i) {
             const channel_row = channel_rows[i];
             const selected = cursor.is_selecting(i);
-            const channel_row_widget = new ChannelRowWidget(
+            const row_widget = channel_row_widget.row_widget(
                 channel_row,
                 i,
                 selected,
                 search_widget,
             );
-            row_widgets.push(channel_row_widget);
+            row_widgets.push(row_widget);
         }
 
         const columns = ["Unread", "Channel", "Topics"];
