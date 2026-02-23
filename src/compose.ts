@@ -1,5 +1,3 @@
-import type { Topic } from "./backend/db_types";
-
 import * as outbound from "./backend/outbound";
 
 import { Button } from "./button";

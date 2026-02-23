@@ -132,7 +132,6 @@ export class MessageRow {
 
     topic_id(): number {
         return this._message.topic_id;
-
     }
 
     topic_name(): string {

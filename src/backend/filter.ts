@@ -1,4 +1,4 @@
-import type { Message, Topic } from "./db_types";
+import type { Message } from "./db_types";
 
 type Predicate = (message: Message) => boolean;
 

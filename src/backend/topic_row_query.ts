@@ -1,6 +1,5 @@
 import type { Message } from "./db_types";
 
-import { Topic } from "./db_types";
 import { MessageList } from "./message_list";
 import { TopicMap } from "./topic_map";
 import { TopicRow } from "../row_types";

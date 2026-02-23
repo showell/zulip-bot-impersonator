@@ -1,5 +1,3 @@
-import { Topic } from "./backend/db_types";
-
 import type { ChannelRow } from "./row_types";
 
 import { ComposeBox } from "./compose";

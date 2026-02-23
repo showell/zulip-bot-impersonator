@@ -28,7 +28,6 @@ export class EventRadio {
     }
 
     handle_event(event: ZulipEvent): void {
-        const model = this.plugin_helper!.model;
         const div = this.div;
 
         if (event.flavor === EventFlavor.STREAM_MESSAGE) {

@@ -1,7 +1,3 @@
-import type { Topic } from "./backend/db_types";
-
-import * as model from "./backend/model";
-
 import { ComposeBox } from "./compose";
 import { render_list_heading, render_pane } from "./render";
 import { TopicRow } from "./row_types";
