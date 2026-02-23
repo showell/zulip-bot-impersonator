@@ -23,7 +23,6 @@ export function get_rows(topic_map: TopicMap, messages: Message[]): TopicRow[] {
         const message_list = message_list_map.get(topic_id)!;
         const list_info = message_list.list_info();
         const topic = topic_map.get(topic_id);
-        console.log("in query", topic_id, topic);
 
         const topic_row = new TopicRow(topic, list_info);
 

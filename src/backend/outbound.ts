@@ -31,7 +31,6 @@ export async function mark_message_ids_unread(
     });
 
     const data = await response.json();
-    console.log(data);
 }
 
 export async function send_message(info: SendInfo): Promise<void> {
@@ -59,5 +58,4 @@ export async function send_message(info: SendInfo): Promise<void> {
     });
 
     const data = await response.json();
-    console.log(data);
 }

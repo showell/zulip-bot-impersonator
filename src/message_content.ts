@@ -1,8 +1,6 @@
 import { config } from "./secrets";
 
 function preprocess_img_element(img: HTMLImageElement) {
-    console.log("img.src", img.src);
-
     let src = img.src;
     const origin = window.location.origin;
 
@@ -25,7 +23,6 @@ function preprocess_anchor_element(ele: HTMLAnchorElement) {
         return;
     }
 
-    console.log(a_href);
     const url = new URL(a_href, window.location.href);
 
     if (
