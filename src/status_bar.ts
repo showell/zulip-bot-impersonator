@@ -1,7 +1,7 @@
 export let StatusBar: StatusBarWidget;
 
 class StatusBarWidget {
-    div: HTMLElement;
+    div: HTMLDivElement;
     text_div: HTMLElement;
 
     constructor() {

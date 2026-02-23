@@ -20,7 +20,7 @@ export type Plugin = {
 class Button {
     plugin_helper: PluginHelper;
     button: HTMLElement;
-    div: HTMLElement;
+    div: HTMLDivElement;
 
     constructor(plugin_helper: PluginHelper, page: Page) {
         const div = document.createElement("div");
@@ -92,6 +92,7 @@ export class PluginHelper {
 
     delete_me(): void {
         this.deleted = true;
+        this.page.remove_deleted_plugins();
         this.page.go_to_top();
     }
 

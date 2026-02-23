@@ -4,6 +4,8 @@ import type { Plugin } from "./plugin_helper";
 import { EventFlavor } from "./backend/event";
 import * as model from "./backend/model";
 
+import * as page_widget from "./dom/page_widget";
+
 import { config } from "./secrets";
 import { MessageRow } from "./row_types";
 import { PluginChooser } from "./plugins/plugin_chooser";
@@ -44,74 +46,6 @@ export class Page {
         document.title = `${prefix}${config.nickname}`;
     }
 
-    make_button_bar(): HTMLElement {
-        this.plugin_helpers = this.plugin_helpers.filter((plugin_helper) => {
-            return !plugin_helper.deleted;
-        });
-
-        const plugin_helpers = this.plugin_helpers;
-
-        const button_bar = document.createElement("div");
-        button_bar.style.display = "flex";
-        button_bar.style.alignItems = "flex-end";
-        button_bar.style.paddingTop = "2px";
-        button_bar.style.marginBottom = "3px";
-        button_bar.style.maxHeight = "fit-content";
-
-        const add_search_button = this.add_search_button();
-        button_bar.append(add_search_button);
-
-        for (const plugin_helper of plugin_helpers) {
-            button_bar.append(plugin_helper.button.div);
-        }
-
-        const spacer = document.createElement("div");
-        spacer.innerText = " ";
-        spacer.style.borderBottom = "1px black solid";
-        spacer.style.height = "1px";
-        spacer.style.flexGrow = "1";
-        button_bar.append(spacer);
-
-        return button_bar;
-    }
-
-    render_navbar() {
-        const navbar_div = document.createElement("div");
-        navbar_div.append(StatusBar.div);
-        navbar_div.append(this.make_button_bar());
-        navbar_div.style.position = "sticky";
-        navbar_div.style.marginTop = "8px";
-        navbar_div.style.marginLeft = "8px";
-        navbar_div.style.top = "0px";
-        navbar_div.style.zIndex = "100";
-        navbar_div.style.backgroundColor = "rgb(246, 246, 255)";
-
-        return navbar_div;
-    }
-
-    add_search_button(): HTMLElement {
-        const self = this;
-
-        const div = document.createElement("div");
-        div.style.marginRight = "15px";
-
-        const button = document.createElement("button");
-        button.innerText = "+";
-        button.style.backgroundColor = "white";
-        button.style.padding = "3px";
-        button.style.fontSize = "12px";
-        button.style.backgroundColor = "white";
-        button.style.border = "1px green solid";
-
-        button.addEventListener("click", () => {
-            self.add_search_widget();
-        });
-
-        div.append(button);
-
-        return div;
-    }
-
     add_plugin(plugin: Plugin): void {
         const page = this;
         const plugin_helpers = this.plugin_helpers;
@@ -140,23 +74,41 @@ export class Page {
         this.redraw(plugin_helper);
     }
 
+    remove_deleted_plugins(): void {
+        this.plugin_helpers = this.plugin_helpers.filter((plugin_helper) => {
+            return !plugin_helper.deleted;
+        });
+    }
+
     go_to_top(): void {
         this.redraw(this.plugin_helpers[0]);
     }
 
     redraw(plugin_helper: PluginHelper): void {
+        const self = this;
         const div = this.div;
-        const container_div = document.createElement("div");
-        container_div.style.overflowY = "auto";
-        container_div.style.marginLeft = "8px";
+        const plugin_helpers = this.plugin_helpers;
 
-        const navbar = this.render_navbar();
 
-        container_div.innerHTML = "";
+        const tab_button_divs = plugin_helpers.map((plugin_helper) => {
+            return plugin_helper.button.div;
+        });
+
+        function add_search_widget(): void {
+            self.add_search_widget();
+        }
+
+        const navbar_div = page_widget.render_navbar(
+            StatusBar.div,
+            tab_button_divs,
+            add_search_widget,
+        );
+
+        const container_div = page_widget.render_container();
         container_div.append(plugin_helper.plugin.div);
 
         div.innerHTML = "";
-        div.append(navbar);
+        div.append(navbar_div);
         div.append(container_div);
     }
 

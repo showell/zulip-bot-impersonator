@@ -1,0 +1,78 @@
+function add_search_button(add_search_widget: () => void): HTMLDivElement {
+    const div = document.createElement("div");
+    div.style.marginRight = "15px";
+
+    const button = document.createElement("button");
+    button.innerText = "+";
+    button.style.backgroundColor = "white";
+    button.style.padding = "3px";
+    button.style.fontSize = "12px";
+    button.style.backgroundColor = "white";
+    button.style.border = "1px green solid";
+
+    button.addEventListener("click", () => {
+        add_search_widget();
+    });
+
+    div.append(button);
+
+    return div;
+}
+
+function tab_bottom_border_spacer(): HTMLDivElement {
+    const spacer = document.createElement("div");
+    spacer.innerText = " ";
+    spacer.style.borderBottom = "1px black solid";
+    spacer.style.height = "1px";
+    spacer.style.flexGrow = "1";
+
+    return spacer;
+}
+
+function make_button_bar(
+    tab_button_divs: HTMLDivElement[],
+    add_search_widget: () => void,
+): HTMLDivElement {
+    const button_bar = document.createElement("div");
+    button_bar.style.display = "flex";
+    button_bar.style.alignItems = "flex-end";
+    button_bar.style.paddingTop = "2px";
+    button_bar.style.marginBottom = "3px";
+    button_bar.style.maxHeight = "fit-content";
+
+    button_bar.append(add_search_button(add_search_widget));
+
+    for (const tab_button_div of tab_button_divs) {
+        button_bar.append(tab_button_div);
+    }
+
+    button_bar.append(tab_bottom_border_spacer());
+
+    return button_bar;
+}
+
+export function render_navbar(
+    status_bar_div: HTMLDivElement,
+    tab_button_divs: HTMLDivElement[],
+    add_search_widget: () => void,
+) {
+    const navbar_div = document.createElement("div");
+    navbar_div.append(status_bar_div);
+    navbar_div.append(make_button_bar(tab_button_divs, add_search_widget));
+    navbar_div.style.position = "sticky";
+    navbar_div.style.marginTop = "8px";
+    navbar_div.style.marginLeft = "8px";
+    navbar_div.style.top = "0px";
+    navbar_div.style.zIndex = "100";
+    navbar_div.style.backgroundColor = "rgb(246, 246, 255)";
+
+    return navbar_div;
+}
+
+export function render_container(): HTMLDivElement {
+    const container_div = document.createElement("div");
+    container_div.style.overflowY = "auto";
+    container_div.style.marginLeft = "8px";
+
+    return container_div;
+}
