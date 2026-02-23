@@ -66,7 +66,10 @@ export async function fetch_model_data(): Promise<Database> {
     const stream_messages = rows
         .filter((row: any) => row.type === "stream")
         .map((row: any) => {
-            const topic = topic_map.get_or_make_topic_for(row.stream_id, row.subject);
+            const topic = topic_map.get_or_make_topic_for(
+                row.stream_id,
+                row.subject,
+            );
             const unread =
                 row.flags.find((flag: string) => flag === "read") === undefined;
             return {
@@ -81,8 +84,8 @@ export async function fetch_model_data(): Promise<Database> {
             };
         });
 
-   for (const row of rows) {
-       if (!user_map.has(row.sender_id)) {
+    for (const row of rows) {
+        if (!user_map.has(row.sender_id)) {
             const id = row.sender_id;
             const email = row.sender_email;
             const full_name = row.sender_full_name;

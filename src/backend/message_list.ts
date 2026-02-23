@@ -15,14 +15,19 @@ export class MessageList {
     }
 
     push(message: Message): void {
-        this.messages.push(message)
+        this.messages.push(message);
     }
 
     list_info(): ListInfo {
         const messages = this.messages;
 
         if (messages.length === 0) {
-            return { last_msg_id: -1, count: 0, unread_count: 0, num_topics: 0 };
+            return {
+                last_msg_id: -1,
+                count: 0,
+                unread_count: 0,
+                num_topics: 0,
+            };
         }
 
         messages.sort((m1, m2) => m2.id - m1.id);

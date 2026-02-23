@@ -3,7 +3,7 @@ import * as model from "./backend/model";
 import type { ChannelRow } from "./row_types";
 import type { SearchWidget } from "./search_widget";
 
-import *as channel_row_widget from "./dom/channel_row_widget";
+import * as channel_row_widget from "./dom/channel_row_widget";
 import { render_big_list } from "./dom/render";
 import * as table_widget from "./dom/table_widget";
 

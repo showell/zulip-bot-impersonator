@@ -6,7 +6,9 @@ type SendInfo = {
     content: string;
 };
 
-export async function mark_message_ids_unread(unread_message_ids: number[]): Promise<void> {
+export async function mark_message_ids_unread(
+    unread_message_ids: number[],
+): Promise<void> {
     const body = new URLSearchParams({
         op: "add",
         flag: "read",
@@ -59,4 +61,3 @@ export async function send_message(info: SendInfo): Promise<void> {
     const data = await response.json();
     console.log(data);
 }
-

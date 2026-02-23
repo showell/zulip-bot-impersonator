@@ -4,7 +4,10 @@ export type RowWidget = {
     divs: HTMLDivElement[];
 };
 
-export function table (columns: string[], row_widgets: RowWidget[]): HTMLTableElement {
+export function table(
+    columns: string[],
+    row_widgets: RowWidget[],
+): HTMLTableElement {
     function make_tbody(): HTMLTableSectionElement {
         const tbody = document.createElement("tbody");
 

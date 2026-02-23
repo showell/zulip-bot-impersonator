@@ -57,7 +57,7 @@ export function row_widget(
     index: number,
     selected: boolean,
     search_widget: SearchWidget,
-): { divs: HTMLDivElement[] }{
+): { divs: HTMLDivElement[] } {
     const name_div = render_name_div(
         row_data.name,
         index,

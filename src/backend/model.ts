@@ -1,8 +1,4 @@
-import type {
-    User,
-    Message,
-    Stream,
-} from "./db_types";
+import type { User, Message, Stream } from "./db_types";
 import type { Filter } from "./filter";
 import type { ChannelRow, TopicRow } from "../row_types";
 
@@ -19,7 +15,10 @@ export function is_me(user_id: number): boolean {
 // STREAMS
 //
 export function get_channel_rows(): ChannelRow[] {
-    return channel_row_query.get_rows(DB.channel_map, DB.message_store.stream_messages);
+    return channel_row_query.get_rows(
+        DB.channel_map,
+        DB.message_store.stream_messages,
+    );
 }
 
 export function stream_for(stream_id: number): Stream {
@@ -76,4 +75,3 @@ export function participants_for_messages(messages: Message[]): User[] {
         .map((sender_id) => DB.user_map.get(sender_id)!)
         .filter((user) => user !== undefined);
 }
-

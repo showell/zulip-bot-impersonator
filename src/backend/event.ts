@@ -18,19 +18,23 @@ type StreamMessageEvent = {
 type UnreadAddEvent = {
     flavor: EventFlavor.MARK_AS_READ;
     message_ids: number[];
-}
+};
 
 type UnreadRemoveEvent = {
     flavor: EventFlavor.MARK_AS_UNREAD;
     message_ids: number[];
-}
+};
 
 type UnknownEvent = {
     flavor: EventFlavor.UNKNOWN;
     raw_event: any;
-}
+};
 
-export type ZulipEvent = StreamMessageEvent | UnreadAddEvent | UnreadRemoveEvent | UnknownEvent;
+export type ZulipEvent =
+    | StreamMessageEvent
+    | UnreadAddEvent
+    | UnreadRemoveEvent
+    | UnknownEvent;
 
 function build_event(raw_event: any): ZulipEvent | undefined {
     console.log(JSON.stringify(raw_event, null, 4));
@@ -40,8 +44,13 @@ function build_event(raw_event: any): ZulipEvent | undefined {
             const message: any = raw_event.message;
 
             if (message.type === "stream") {
-                const topic = DB.topic_map.get_or_make_topic_for(message.stream_id, message.subject);
-                const unread = raw_event.flags.find((flag: string) => flag === "read") === undefined;
+                const topic = DB.topic_map.get_or_make_topic_for(
+                    message.stream_id,
+                    message.subject,
+                );
+                const unread =
+                    raw_event.flags.find((flag: string) => flag === "read") ===
+                    undefined;
                 const stream_message: StreamMessage = {
                     id: message.id,
                     type: "stream",
@@ -79,7 +88,6 @@ function build_event(raw_event: any): ZulipEvent | undefined {
 
             return undefined;
         }
-
     }
 
     return undefined;

@@ -10,7 +10,8 @@ export function get_rows(topic_map: TopicMap, messages: Message[]): TopicRow[] {
     for (const message of messages) {
         const topic_id = message.topic_id;
 
-        const message_list = message_list_map.get(topic_id) ?? new MessageList();
+        const message_list =
+            message_list_map.get(topic_id) ?? new MessageList();
 
         message_list.push(message);
         message_list_map.set(topic_id, message_list);

@@ -19,6 +19,8 @@ npm add -D oxlint
 npx oxlint
 ```
 
+`npx prettier src/*.ts src/dom/*ts src/backend/*.ts --write` too
+
 ## Node stuff
 
 I did:

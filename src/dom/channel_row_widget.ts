@@ -65,5 +65,5 @@ export function row_widget(
             name_div,
             render_num_topics(channel_row.num_topics()),
         ],
-    }
+    };
 }

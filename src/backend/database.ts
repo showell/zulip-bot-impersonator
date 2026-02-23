@@ -47,4 +47,3 @@ export function mark_message_ids_as_read(message_ids: number[]): void {
 export function mark_message_ids_as_unread(message_ids: number[]): void {
     DB.message_store.mark_ids_as_unread(message_ids);
 }
-
