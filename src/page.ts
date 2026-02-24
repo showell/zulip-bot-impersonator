@@ -1,6 +1,7 @@
 import type { ZulipEvent } from "./backend/event";
 import type { Plugin } from "./plugin_helper";
 
+import { DB } from "./backend/database";
 import { EventFlavor } from "./backend/event";
 import * as model from "./backend/model";
 
@@ -124,6 +125,16 @@ export class Page {
             const address = message_row.address_string();
             StatusBar.inform(
                 `Message arrived from ${sender_name} at ${address}.`,
+            );
+        }
+
+        if (event.flavor === EventFlavor.MUTATE_MESSAGE) {
+            const message = DB.message_map.get(event.message_id)!;
+            const message_row = new MessageRow(message);
+            const sender_name = message_row.sender_name();
+            const address = message_row.address_string();
+            StatusBar.inform(
+                `A message was edited by ${sender_name} on ${address}.`,
             );
         }
 

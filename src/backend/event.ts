@@ -4,6 +4,7 @@ import { DB } from "./database";
 
 export const enum EventFlavor {
     MESSAGE,
+    MUTATE_MESSAGE,
     MUTATE_UNREAD,
     UNKNOWN,
 }
@@ -20,12 +21,23 @@ type MutateUnreadEvent = {
     unread: boolean;
 };
 
+type MutateMessageEvent = {
+    flavor: EventFlavor.MUTATE_MESSAGE;
+    message_id: number;
+    raw_content: string;
+    content: string;
+};
+
 type UnknownEvent = {
     flavor: EventFlavor.UNKNOWN;
     raw_event: any;
 };
 
-export type ZulipEvent = MessageEvent | MutateUnreadEvent | UnknownEvent;
+export type ZulipEvent =
+    | MessageEvent
+    | MutateMessageEvent
+    | MutateUnreadEvent
+    | UnknownEvent;
 
 function build_event(raw_event: any): ZulipEvent | undefined {
     console.log(JSON.stringify(raw_event, null, 4));
@@ -74,6 +86,15 @@ function build_event(raw_event: any): ZulipEvent | undefined {
             }
 
             return undefined;
+        }
+
+        case "update_message": {
+            return {
+                flavor: EventFlavor.MUTATE_MESSAGE,
+                message_id: raw_event.message_id,
+                raw_content: raw_event.content,
+                content: raw_event.rendered_content,
+            };
         }
     }
 

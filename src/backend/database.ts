@@ -26,6 +26,12 @@ export function handle_event(event: ZulipEvent): void {
         add_message_to_cache(event.message);
     }
 
+    if (event.flavor === EventFlavor.MUTATE_MESSAGE) {
+        mutate_message(event.message_id, (message) => {
+            message.content = event.content;
+        });
+    }
+
     if (event.flavor === EventFlavor.MUTATE_UNREAD) {
         mutate_messages(event.message_ids, (message) => {
             message.unread = event.unread;
@@ -37,16 +43,23 @@ function add_message_to_cache(message: Message) {
     DB.message_map.set(message.id, message);
 }
 
+function mutate_message(
+    message_id: number,
+    mutate: (message: Message) => void,
+): void {
+    const message = DB.message_map.get(message_id);
+    if (message) {
+        mutate(message);
+    } else {
+        console.log("UNKNOWN message id!", message_id);
+    }
+}
+
 function mutate_messages(
     message_ids: number[],
     mutate: (message: Message) => void,
 ): void {
     for (const message_id of message_ids) {
-        const message = DB.message_map.get(message_id);
-        if (message) {
-            mutate(message);
-        } else {
-            console.log("UNKNOWN message id!", message_id);
-        }
+        mutate_message(message_id, mutate);
     }
 }

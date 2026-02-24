@@ -78,7 +78,7 @@ export class SearchWidget {
         }
     }
 
-    refresh(message: Message): void {
+    handle_incoming_message(message: Message): void {
         this.channel_pane.populate();
         if (this.channel_view) {
             this.channel_view.refresh(message);
@@ -323,7 +323,11 @@ export class SearchWidget {
 
     handle_event(event: ZulipEvent): void {
         if (event.flavor === EventFlavor.MESSAGE) {
-            this.refresh(event.message);
+            this.handle_incoming_message(event.message);
+        }
+
+        if (event.flavor === EventFlavor.MUTATE_MESSAGE) {
+            this.refresh_message_ids([event.message_id]);
         }
 
         if (event.flavor === EventFlavor.MUTATE_UNREAD) {
