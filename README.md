@@ -1,4 +1,4 @@
-Dev server: `npm run dev`
+## Initial setup
 
 Add your bot data in src/secrets.ts after doing:
 
@@ -6,22 +6,25 @@ Add your bot data in src/secrets.ts after doing:
 cp secrets.template.ts ./src/secrets.ts
 ```
 
-Keep the TS compiler running in a separate window:
+Install oxlint:
 
-```
-npx tsc -w --noEmit
-```
+`npm add -D oxlint`
 
-Use oxlint every now and then:
+## Development workflow
 
-```
-npm add -D oxlint
-npx oxlint
-```
+I usually keep 4 terminals open:
 
-`npx prettier src/*.ts src/dom/*ts src/backend/*.ts plugins/*.ts --write` too
+* npm run dev # listens on 7888 usually
+* npx tsc -w --noEmit # shows TS errors
+* <editor>
+* <git, etc.>
 
-## Node stuff
+
+I also lint every now and then:
+* npx oxlint
+* npx prettier src/*.ts src/dom/*ts src/backend/*.ts plugins/*.ts --write
+
+## Server stuff (in progress)
 
 I did:
 
