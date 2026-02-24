@@ -1,4 +1,3 @@
-import * as fs from "fs";
 import type { EventHandler } from "./event";
 
 import { realm_data, self_creds } from "../secrets";
@@ -11,38 +10,6 @@ function get_headers() {
 
 let queue_id: string | undefined;
 let last_event_id: string | undefined;
-
-
-export async function fetch_temp_image(image_url: string) {
-    const url = new URL(image_url, realm_data.url);
-
-    const response = await fetch(url, {
-        method: "GET",
-        headers: get_headers(),
-    });
-    const blob = await response.blob();
-    console.log(blob);
-    const arrayBuffer = await blob.arrayBuffer();
-    const buffer = Buffer.from(arrayBuffer);
-    const path = "tmp.png";
-
-    await fs.writeFile(path, buffer, () => {});
-}
-
-export async function fetch_image(image_url: string) {
-    const url = new URL(image_url);
-
-    const response = await fetch(url, {
-        method: "GET",
-        headers: get_headers(),
-    });
-    const data = await response.json();
-
-    const temp_url = data.url
-    console.log(temp_url);
-
-    await fetch_temp_image(temp_url);
-}
 
 export async function register_queue() {
     const url = new URL("/api/v1/register", realm_data.url);
