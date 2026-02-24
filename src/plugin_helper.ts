@@ -19,48 +19,48 @@ export type Plugin = {
     handle_event: (event: ZulipEvent) => void;
 };
 
-class Button {
+class TabButton {
     plugin_helper: PluginHelper;
-    button: HTMLElement;
+    tab_button: HTMLElement;
     div: HTMLDivElement;
 
     constructor(plugin_helper: PluginHelper, page: Page) {
         const div = document.createElement("div");
 
-        const button = page_widget.navbar_tab_button();
+        const tab_button = page_widget.navbar_tab_button();
 
         this.plugin_helper = plugin_helper;
         this.div = div;
-        this.button = button;
+        this.tab_button = tab_button;
 
-        button.addEventListener("click", () => {
+        tab_button.addEventListener("click", () => {
             page.open(plugin_helper);
         });
 
-        div.append(button);
+        div.append(tab_button);
 
         this.refresh();
     }
 
     refresh(): void {
-        const button = this.button;
+        const tab_button = this.tab_button;
         const plugin_helper = this.plugin_helper;
 
-        button.innerText = plugin_helper.label;
+        tab_button.innerText = plugin_helper.label;
 
         if (plugin_helper.open) {
-            button.style.backgroundColor = "white";
-            button.style.borderBottom = "1px white solid";
-            button.style.color = "#000080";
+            tab_button.style.backgroundColor = "white";
+            tab_button.style.borderBottom = "1px white solid";
+            tab_button.style.color = "#000080";
         } else {
-            button.style.backgroundColor = "lightgray";
-            button.style.borderBottom = "1px black solid";
-            button.style.color = "#0000B0";
+            tab_button.style.backgroundColor = "lightgray";
+            tab_button.style.borderBottom = "1px black solid";
+            tab_button.style.color = "#0000B0";
         }
     }
 
     violet(): void {
-        this.button.style.backgroundColor = "violet";
+        this.tab_button.style.backgroundColor = "violet";
     }
 }
 
@@ -70,7 +70,7 @@ export class PluginHelper {
     open: boolean;
     plugin: Plugin;
     label: string;
-    button: Button;
+    tab_button: TabButton;
     model: Model;
 
     constructor(plugin: Plugin, page: Page) {
@@ -79,7 +79,7 @@ export class PluginHelper {
         this.deleted = false;
         this.open = false;
         this.label = "plugin";
-        this.button = new Button(this, page);
+        this.tab_button = new TabButton(this, page);
         this.model = new Model();
     }
 
@@ -90,7 +90,7 @@ export class PluginHelper {
     }
 
     refresh() {
-        this.button.refresh();
+        this.tab_button.refresh();
     }
 
     update_label(label: string) {
@@ -99,7 +99,7 @@ export class PluginHelper {
     }
 
     violet() {
-        this.button.violet();
+        this.tab_button.violet();
     }
 
     add_plugin(plugin: Plugin): void {

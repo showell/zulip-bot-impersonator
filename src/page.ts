@@ -91,7 +91,7 @@ export class Page {
         const plugin_helpers = this.plugin_helpers;
 
         const tab_button_divs = plugin_helpers.map((plugin_helper) => {
-            return plugin_helper.button.div;
+            return plugin_helper.tab_button.div;
         });
 
         function add_search_widget(): void {
