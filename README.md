@@ -35,5 +35,5 @@ npm install vite-node --save-dev
 Then do:
 
 ```
-npx run server
+npm run server
 ```
