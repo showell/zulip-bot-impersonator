@@ -1,3 +1,4 @@
+import * as zulip_client from "./backend/zulip_client";
 import { config } from "./secrets";
 
 function preprocess_img_element(img: HTMLImageElement) {
@@ -7,9 +8,29 @@ function preprocess_img_element(img: HTMLImageElement) {
     if (src.startsWith(origin)) {
         src = src.slice(origin.length);
 
-        if (src.startsWith("/user_uploads/thumbnail")) {
+        if (src.startsWith("/user_uploads/")) {
             img.setAttribute("src", config.realm_url + src);
-            console.log("fixed but not authorized", img.src);
+
+            async function use_temporary_url() {
+                let original_src;
+                const parts = src.slice(1).split("/");
+                if (parts[1] === "thumbnail") {
+                    original_src = "/user_uploads/" + parts.slice(2, -1).join("/");
+                } else {
+                    original_src = "/" + parts.join("/");
+                }
+                const temp_src = await zulip_client.fetch_image(original_src);
+                img.setAttribute("src", temp_src);
+                img.style.width = "350px";
+                img.addEventListener("click", (e) => {
+                    // we don't have an image viewer
+                    alert("use left click for now, please");
+                    e.stopPropagation();
+                    e.preventDefault();
+                });
+            }
+
+            use_temporary_url();
         }
     }
 }

@@ -71,3 +71,16 @@ export async function get_subscriptions() {
     const data = await response.json();
     return data.subscriptions;
 }
+
+export async function fetch_image(image_url: string): Promise<string> {
+    const url = new URL(`/api/v1${image_url}`, realm_data.url);
+
+    const response = await fetch(url, {
+        method: "GET",
+        headers: get_headers(),
+    });
+    const data = await response.json();
+
+    // we get a temporary url that we have access to
+    return realm_data.url + data.url;
+}
