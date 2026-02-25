@@ -151,8 +151,8 @@ export class SearchWidget {
         });
     }
 
-    get_stream_id(): number | undefined {
-        return this.get_channel_list().get_stream_id();
+    get_channel_id(): number | undefined {
+        return this.get_channel_list().get_channel_id();
     }
 
     get_channel_row(): ChannelRow {

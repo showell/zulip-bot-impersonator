@@ -12,40 +12,46 @@ import { Cursor } from "./cursor";
 export class ChannelList {
     search_widget: SearchWidget;
     div: HTMLElement;
-    stream_ids: number[];
-    channel_rows?: ChannelRow[];
+    channel_id?: number;
+    channel_rows: ChannelRow[];
     cursor: Cursor;
 
     constructor(search_widget: SearchWidget) {
         const div = render_big_list();
 
-        this.stream_ids = [];
         this.cursor = new Cursor();
-        this.get_channel_rows();
+        this.channel_rows = this.populate_channel_rows();
 
         this.search_widget = search_widget;
         this.div = div;
+    }
+
+    get_channel_id(): number | undefined {
+        return this.channel_id;
     }
 
     has_selection(): boolean {
         return this.cursor.has_selection();
     }
 
-    get_stream_id(): number | undefined {
-        const index = this.cursor.selected_index;
+    get_index_for(channel_id: number): number {
+        const channel_rows = this.channel_rows;
 
-        if (index === undefined) return undefined;
-
-        return this.stream_ids[index];
-    }
-
-    select_channel(new_channel_rows: ChannelRow[], channel_id: number) {
-        const cursor = this.cursor;
-
-        const index = new_channel_rows.findIndex((channel_row) => {
+        return channel_rows.findIndex((channel_row) => {
             return channel_row.stream_id() === channel_id;
         });
-        cursor.select_index(index);
+    }
+
+    update_cursor(): void {
+        const cursor = this.cursor;
+        const channel_rows = this.channel_rows;
+
+        cursor.set_count(channel_rows.length);
+        if (this.channel_id === undefined) {
+            this.cursor.selected_index = undefined;
+        } else {
+            this.cursor.selected_index = this.get_index_for(this.channel_id);
+        }
     }
 
     get_channel_row(): ChannelRow | undefined {
@@ -59,12 +65,16 @@ export class ChannelList {
         return channel_rows[index];
     }
 
-    get_channel_id(): number | undefined {
+    get_channel_id_from_cursor(): number | undefined {
         const channel_row = this.get_channel_row();
 
         if (channel_row === undefined) return undefined;
 
         return channel_row.stream_id();
+    }
+
+    set_channel_id_from_cursor(): void {
+        this.channel_id = this.get_channel_id_from_cursor();
     }
 
     sort(channel_rows: ChannelRow[]) {
@@ -73,33 +83,17 @@ export class ChannelList {
         });
     }
 
-    get_channel_rows(): ChannelRow[] {
-        const cursor = this.cursor;
-
-        const channel_id = this.get_channel_id();
-
+    populate_channel_rows(): ChannelRow[] {
         const channel_rows = model.get_channel_rows();
         this.sort(channel_rows);
-
-        cursor.set_count(channel_rows.length);
-
-        if (channel_id) {
-            this.select_channel(channel_rows, channel_id);
-        }
-
-        this.stream_ids = channel_rows.map((c) => c.stream_id());
-
-        this.channel_rows = channel_rows;
-
         return channel_rows;
     }
 
     make_table(): HTMLElement {
+        const channel_rows = this.channel_rows;
         const search_widget = this.search_widget;
         const cursor = this.cursor;
         const row_widgets = [];
-
-        const channel_rows = this.get_channel_rows();
 
         for (let i = 0; i < channel_rows.length; ++i) {
             const channel_row = channel_rows[i];
@@ -130,32 +124,40 @@ export class ChannelList {
     populate() {
         const div = this.div;
 
+        this.channel_rows = this.populate_channel_rows();
+        this.update_cursor();
+
         div.innerHTML = "";
         div.append(this.make_table());
     }
 
     select_index(index: number) {
         this.cursor.select_index(index);
+        this.set_channel_id_from_cursor();
         this.populate();
     }
 
     clear_selection(): void {
         this.cursor.clear();
+        this.set_channel_id_from_cursor();
         this.populate();
     }
 
     surf(): void {
         this.cursor.first();
+        this.set_channel_id_from_cursor();
         this.populate();
     }
 
     down(): void {
         this.cursor.down();
+        this.set_channel_id_from_cursor();
         this.populate();
     }
 
     up(): void {
         this.cursor.up();
+        this.set_channel_id_from_cursor();
         this.populate();
     }
 }
