@@ -1,4 +1,5 @@
 import * as outbound from "./backend/outbound";
+import * as zulip_client from "./backend/zulip_client";
 
 import * as compose_widget from "./dom/compose_widget";
 
@@ -43,6 +44,44 @@ class TextArea {
 
         this.div = div;
         this.elem = elem;
+
+        this.add_paste_handler();
+    }
+
+    add_paste_handler(): void {
+        const self = this;
+        const elem = this.elem;
+
+        elem.addEventListener("paste", (event) => {
+            const clipboard_data = event.clipboardData;
+            if (!clipboard_data) {
+                return;
+            }
+
+            const files = Array.from(clipboard_data.files);
+
+            // Only load the first for now.
+            const file = files[0];
+            async function add_upload_link() {
+                self.insert_text(`[${file.name}]` + "(");
+                const url = await zulip_client.upload_file(file);
+                self.insert_text(url + ")");
+            }
+
+            add_upload_link();
+        });
+    }
+
+    insert_text(text: string): void {
+        const textarea = this.elem;
+
+        textarea.setRangeText(
+            text,
+            textarea.selectionStart,
+            textarea.selectionEnd,
+            "end",
+        );
+        textarea.focus();
     }
 
     contents(): string {

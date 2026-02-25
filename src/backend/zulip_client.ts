@@ -72,6 +72,23 @@ export async function get_subscriptions() {
     return data.subscriptions;
 }
 
+export async function upload_file(file: File) {
+    const url = new URL("/api/v1/user_uploads", realm_data.url);
+    const formData = new FormData();
+
+    formData.append("FILE", file);
+
+    const headers = get_headers();
+
+    const response = await fetch(url, {
+        method: "POST",
+        headers,
+        body: formData,
+    });
+    const data = await response.json();
+    return data.uri;
+}
+
 export async function fetch_image(image_url: string): Promise<string> {
     const url = new URL(`/api/v1${image_url}`, realm_data.url);
 
