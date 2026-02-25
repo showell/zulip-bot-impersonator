@@ -1,6 +1,8 @@
 import type { ZulipEvent } from "./backend/event";
 import type { Plugin } from "./plugin_helper";
 
+import type { Address } from "./address";
+
 import { DB } from "./backend/database";
 import { EventFlavor } from "./backend/event";
 import * as model from "./backend/model";
@@ -37,7 +39,9 @@ export class Page {
         const plugin_chooser = new PluginChooser();
         this.add_plugin(plugin_chooser);
 
-        this.add_search_widget();
+        const channel_id = undefined;
+        const topic_id = undefined;
+        this.add_search_widget({ channel_id, topic_id });
         this.update_title();
     }
 
@@ -95,7 +99,10 @@ export class Page {
         });
 
         function add_search_widget(): void {
-            self.add_search_widget();
+            self.add_search_widget({
+                channel_id: undefined,
+                topic_id: undefined,
+            });
         }
 
         const navbar_div = page_widget.render_navbar(
@@ -112,9 +119,8 @@ export class Page {
         div.append(container_div);
     }
 
-    add_search_widget(): void {
-        const search_widget = new SearchWidget();
-        search_widget.populate();
+    add_search_widget(address: Address): void {
+        const search_widget = new SearchWidget(address);
         this.add_plugin(search_widget);
     }
 

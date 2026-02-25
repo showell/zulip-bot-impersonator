@@ -3,6 +3,7 @@ import type { Message } from "./backend/db_types";
 
 import { EventFlavor } from "./backend/event";
 
+import type { Address } from "./address";
 import type { ChannelList } from "./channel_list";
 import type { MessageList } from "./message_list";
 import type { MessageView } from "./message_view";
@@ -43,32 +44,41 @@ export class SearchWidget {
     channel_pane: ChannelPane;
     channel_view?: ChannelView;
     plugin_helper?: PluginHelper;
+    start_address: Address;
 
-    constructor() {
+    constructor(address: Address) {
         const self = this;
 
+        this.start_address = address;
+
         const div = document.createElement("div");
-        this.div = div;
 
-        this.button_panel = new ButtonPanel(self);
-        this.pane_manager = new PaneManager();
+        const button_panel = new ButtonPanel(self);
+        const pane_manager = new PaneManager();
 
-        this.channel_pane = new ChannelPane(self);
-        this.pane_manager.add_pane({
+        const channel_pane = new ChannelPane(self);
+        pane_manager.add_pane({
             key: "channel_pane",
-            pane_widget: this.channel_pane,
+            pane_widget: channel_pane,
         });
-    }
-
-    populate(): void {
-        const div = this.div;
-        const button_panel = this.button_panel;
-        const pane_manager = this.pane_manager;
 
         div.innerHTML = "";
 
         div.append(button_panel.div);
         div.append(pane_manager.div);
+
+        this.button_panel = button_panel;
+        this.pane_manager = pane_manager;
+        this.channel_pane = channel_pane;
+        this.div = div;
+    }
+
+    fork(): void {
+        const channel_id = this.get_channel_id();
+        const topic_id = this.get_topic_id();
+        const address = { channel_id, topic_id };
+        const new_search_widget = new SearchWidget(address);
+        this.plugin_helper!.add_plugin(new_search_widget);
     }
 
     refresh_message_ids(message_ids: number[]): void {
@@ -86,8 +96,26 @@ export class SearchWidget {
     }
 
     start(plugin_helper: PluginHelper) {
+        const start_address = this.start_address;
         this.plugin_helper = plugin_helper;
-        plugin_helper.label = "search";
+
+        if (start_address.topic_id) {
+            if (start_address.channel_id === undefined) {
+                throw new Error("unexpected");
+            }
+            this.get_channel_list().select_channel_id(start_address.channel_id);
+            this.update_channel();
+            this.channel_view!.select_topic_id(start_address.topic_id);
+            this.update_topic();
+            return;
+        }
+
+        if (start_address.channel_id) {
+            this.get_channel_list().select_channel_id(start_address.channel_id);
+            this.update_channel();
+            return;
+        }
+
         this.update_button_panel();
         this.button_panel.start();
         StatusBar.inform("Begin finding messages by clicking on a channel.");
@@ -163,6 +191,10 @@ export class SearchWidget {
         const channel_row = this.get_channel_row();
 
         return channel_row?.name();
+    }
+
+    get_topic_id(): number | undefined {
+        return this.get_topic_list()?.get_topic_id();
     }
 
     unread_count(): number {

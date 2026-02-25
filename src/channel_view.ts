@@ -181,6 +181,12 @@ export class ChannelView {
         this.add_topic_pane = add_topic_pane;
     }
 
+    select_topic_id(topic_id: number): void {
+        const topic_list = this.get_topic_list();
+        const index = topic_list.get_index_for(topic_id);
+        this.set_topic_index(index);
+    }
+
     set_topic_index(index: number): void {
         const topic_list = this.get_topic_list();
 

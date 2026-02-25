@@ -131,6 +131,11 @@ export class ChannelList {
         div.append(this.make_table());
     }
 
+    select_channel_id(channel_id: number): void {
+        const index = this.get_index_for(channel_id);
+        this.select_index(index);
+    }
+
     select_index(index: number) {
         this.cursor.select_index(index);
         this.set_channel_id_from_cursor();
