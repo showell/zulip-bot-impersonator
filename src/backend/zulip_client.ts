@@ -73,13 +73,13 @@ export async function get_subscriptions() {
 }
 
 export async function upload_file(file: File) {
-    const url = new URL("/api/v1/upload_files", realm_data.url);
+    const url = new URL("/api/v1/user_uploads", realm_data.url);
     const formData = new FormData();
 
-    formData.append("file", file);
+    // formData.append("hello.txt", "hello world");
+    formData.append("FILE", file);
 
     const headers = get_headers();
-    headers["Content-Type"] = "application/x-www-form-urlencoded";
 
     const response = await fetch(url, {
         method: "POST",
