@@ -9,6 +9,7 @@
   "scripts": {
     "dev": "vite",
     "server": "vite-node src/server.ts",
+    "test": "vite-node src/test.ts",
     "build": "vite build",
     "preview": "vite preview",
     "format": "prettier --write ."
