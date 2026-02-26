@@ -4,6 +4,7 @@ import * as zulip_client from "./backend/zulip_client";
 
 import { config } from "./secrets";
 
+import * as app from "./app";
 import { Page } from "./page";
 
 export async function run() {
@@ -37,6 +38,8 @@ export async function run() {
     zulip_client.start_polling(event_manager);
 
     page.start();
+
+    app.init(page);
 }
 
 run();
