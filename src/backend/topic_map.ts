@@ -15,7 +15,7 @@ export class TopicMap {
         return this.map.get(id)!;
     }
 
-    get_or_make_topic_for(channel_id: number, topic_name: string) {
+    get_or_make_topic_for(channel_id: number, topic_name: string): Topic {
         const key_map = this.key_map;
 
         const key = `${channel_id},${topic_name}`;
@@ -31,5 +31,9 @@ export class TopicMap {
         this.map.set(topic.topic_id, topic);
 
         return topic;
+    }
+
+    get_topic_id(channel_id: number, topic_name: string) {
+        return this.get_or_make_topic_for(channel_id, topic_name).topic_id;
     }
 }
