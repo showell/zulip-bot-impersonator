@@ -15,7 +15,8 @@ function preprocess_img_element(img: HTMLImageElement) {
                 let original_src;
                 const parts = src.slice(1).split("/");
                 if (parts[1] === "thumbnail") {
-                    original_src = "/user_uploads/" + parts.slice(2, -1).join("/");
+                    original_src =
+                        "/user_uploads/" + parts.slice(2, -1).join("/");
                 } else {
                     original_src = "/" + parts.join("/");
                 }
