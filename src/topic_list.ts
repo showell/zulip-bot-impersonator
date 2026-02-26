@@ -14,6 +14,7 @@ export class TopicList {
     topic_rows: TopicRow[];
     cursor: Cursor;
     stream_id: number;
+    topic_id?: number;
     search_widget: SearchWidget;
 
     constructor(channel_row: ChannelRow, search_widget: SearchWidget) {
@@ -33,20 +34,8 @@ export class TopicList {
         return this.cursor.has_selection();
     }
 
-    get_topic_row(): TopicRow | undefined {
-        const index = this.cursor.selected_index;
-
-        if (index === undefined) return undefined;
-
-        return this.topic_rows[index];
-    }
-
     get_topic_id(): number | undefined {
-        const topic_row = this.get_topic_row();
-
-        if (topic_row === undefined) return undefined;
-
-        return topic_row.topic_id();
+        return this.topic_id;
     }
 
     select_topic(new_topic_rows: TopicRow[], topic_id: number) {
@@ -59,9 +48,8 @@ export class TopicList {
     }
 
     refresh_topics_with_topic_selected(topic_id: number): void {
-        const new_topic_rows = this.get_topic_rows();
-        this.select_topic(new_topic_rows, topic_id);
-        this.populate_from_topic_rows(new_topic_rows);
+        this.topic_id = topic_id;
+        this.populate();
     }
 
     get_topic_name(): string | undefined {
@@ -72,34 +60,65 @@ export class TopicList {
         return current_topic_row.name();
     }
 
-    refresh(): void {
-        const topic_id = this.get_topic_id();
-        const new_topic_rows = this.get_topic_rows();
+    get_index_for(topic_id: number): number {
+        const topic_rows = this.topic_rows;
 
-        if (topic_id) {
-            this.select_topic(new_topic_rows, topic_id);
-        }
-
-        this.populate_from_topic_rows(new_topic_rows);
+        return topic_rows.findIndex((topic_row) => {
+            return topic_row.topic_id() === topic_id;
+        });
     }
 
-    get_topic_rows(): TopicRow[] {
-        const stream_id = this.stream_id!;
+    update_cursor(): void {
         const cursor = this.cursor;
-
-        const topic_rows = model.get_topic_rows(stream_id);
-
-        topic_rows.sort((t1, t2) => t2.last_msg_id() - t1.last_msg_id());
-        // topics.sort((t1, t2) => t1.name.localeCompare(t2.name));
+        const topic_rows = this.topic_rows;
 
         cursor.set_count(topic_rows.length);
+        if (this.topic_id === undefined) {
+            this.cursor.selected_index = undefined;
+        } else {
+            this.cursor.selected_index = this.get_index_for(this.topic_id);
+        }
+    }
 
-        this.topic_rows = topic_rows;
+    get_topic_row(): TopicRow | undefined {
+        const index = this.cursor.selected_index;
 
+        if (index === undefined) return undefined;
+
+        return this.topic_rows[index];
+    }
+
+    get_topic_id_from_cursor(): number | undefined {
+        const topic_row = this.get_topic_row();
+
+        if (topic_row === undefined) return undefined;
+
+        return topic_row.topic_id();
+    }
+
+    refresh(): void {
+        this.populate();
+    }
+
+    set_topic_id_from_cursor(): void {
+        this.topic_id = this.get_topic_id_from_cursor();
+    }
+
+    sort(topic_rows: TopicRow[]) {
+        topic_rows.sort((r1, r2) => {
+            return r2.last_msg_id() - r1.last_msg_id();
+        });
+    }
+
+    populate_topic_rows(): TopicRow[] {
+        const stream_id = this.stream_id!;
+        const topic_rows = model.get_topic_rows(stream_id);
+        this.sort(topic_rows);
         return topic_rows;
     }
 
-    make_table(topic_rows: TopicRow[]): HTMLTableElement {
+    make_table(): HTMLTableElement {
+        const topic_rows = this.topic_rows;
         const search_widget = this.search_widget;
         const cursor = this.cursor;
 
@@ -126,40 +145,43 @@ export class TopicList {
         return table_widget.table(columns, row_widgets);
     }
 
-    populate_from_topic_rows(topic_rows: TopicRow[]) {
+    populate() {
         const div = this.div;
 
-        div.innerHTML = "";
-        div.append(this.make_table(topic_rows));
-    }
+        this.topic_rows = this.populate_topic_rows();
+        this.update_cursor();
 
-    populate() {
-        const topic_rows = this.get_topic_rows();
-        this.populate_from_topic_rows(topic_rows);
+        div.innerHTML = "";
+        div.append(this.make_table());
     }
 
     select_index(index: number) {
         this.cursor.select_index(index);
+        this.set_topic_id_from_cursor();
         this.populate();
     }
 
     clear_selection(): void {
         this.cursor.clear();
+        this.set_topic_id_from_cursor();
         this.populate();
     }
 
     surf(): void {
         this.cursor.first();
+        this.set_topic_id_from_cursor();
         this.populate();
     }
 
     down(): void {
         this.cursor.down();
+        this.set_topic_id_from_cursor();
         this.populate();
     }
 
     up(): void {
         this.cursor.up();
+        this.set_topic_id_from_cursor();
         this.populate();
     }
 }
