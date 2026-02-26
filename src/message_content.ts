@@ -1,6 +1,8 @@
 import * as zulip_client from "./backend/zulip_client";
 import { config } from "./secrets";
 
+import * as address from "./address";
+
 function preprocess_img_element(img: HTMLImageElement) {
     let src = img.src;
     const origin = window.location.origin;
@@ -36,6 +38,17 @@ function preprocess_img_element(img: HTMLImageElement) {
     }
 }
 
+function fix_in_site_link(anchor_elem: HTMLAnchorElement) {
+    anchor_elem.addEventListener("click", (e) => {
+        const path = anchor_elem.getAttribute("href")!;
+        console.log("path", path);
+        const addr = address.get_address_from_path(path);
+        console.log("click in-site link", addr);
+        e.stopPropagation();
+        e.preventDefault();
+    });
+}
+
 function preprocess_anchor_element(ele: HTMLAnchorElement) {
     const a_href = ele.getAttribute("href");
 
@@ -44,6 +57,13 @@ function preprocess_anchor_element(ele: HTMLAnchorElement) {
         // it.
         return;
     }
+
+    if (a_href.startsWith("/#narrow/channel")) {
+        fix_in_site_link(ele);
+        return;
+    }
+
+    console.log("a_href", a_href);
 
     const url = new URL(a_href, window.location.href);
 

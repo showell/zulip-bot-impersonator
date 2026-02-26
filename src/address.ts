@@ -15,6 +15,10 @@ function unescape(str: string) {
 }
 
 export function parse_path(path: string): PathInfo | undefined {
+    if (path.startsWith("/")) {
+        path = path.slice(1);
+    }
+
     if (!path.startsWith("#narrow/channel")) {
         return undefined;
     }
@@ -22,11 +26,12 @@ export function parse_path(path: string): PathInfo | undefined {
     const [channel_part, _topic, topic_part, _, _message_part] = path
         .split("/")
         .slice(2);
+
     const channel_id_str = channel_part.split("-")[0]!;
-    return {
-        channel_id: parseInt(channel_id_str),
-        topic_name: unescape(topic_part),
-    };
+    const channel_id = parseInt(channel_id_str);
+    const topic_name = topic_part === undefined ? undefined : unescape(topic_part);
+
+    return { channel_id, topic_name };
 }
 
 function topic_id_lookup(channel_id: number, topic_name: string): number {
@@ -34,13 +39,17 @@ function topic_id_lookup(channel_id: number, topic_name: string): number {
 }
 
 export function get_address_from_path(path: string): Address | undefined {
-    const path_info = parse_path(path);
-
-    if (path_info === undefined) {
-        return undefined;
+    if (path.startsWith("/")) {
+        path = path.slice(1);
     }
 
     if (!path.startsWith("#narrow/channel")) {
+        return undefined;
+    }
+
+    const path_info = parse_path(path);
+
+    if (path_info === undefined) {
         return undefined;
     }
 
