@@ -10,18 +10,22 @@ import * as model from "./backend/model";
 import * as page_widget from "./dom/page_widget";
 
 import { config } from "./secrets";
-import { MessageRow } from "./row_types";
+
+import * as layout from "./layout";
 import { PluginChooser } from "./plugins/plugin_chooser";
 import { PluginHelper } from "./plugin_helper";
+import { MessageRow } from "./row_types";
 import { SearchWidget } from "./search_widget";
 import { StatusBar, create_global_status_bar } from "./status_bar";
 
 export class Page {
-    div: HTMLElement;
+    div: HTMLDivElement;
     plugin_helpers: PluginHelper[];
 
     constructor() {
-        const div = document.body;
+        const div = document.createElement("div");
+        document.body.append(div);
+
         div.style.margin = "0";
         div.style.backgroundColor = "rgb(246, 246, 255)";
         create_global_status_bar();
@@ -114,9 +118,7 @@ export class Page {
         const container_div = page_widget.render_container();
         container_div.append(plugin_helper.plugin.div);
 
-        div.innerHTML = "";
-        div.append(navbar_div);
-        div.append(container_div);
+        layout.redraw_page(div, navbar_div, container_div);
     }
 
     add_search_widget(address: Address): void {
