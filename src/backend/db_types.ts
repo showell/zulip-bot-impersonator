@@ -9,6 +9,7 @@ export type Message = {
     content: string;
     unread: boolean;
     is_super_new: boolean;
+    code_snippets: string[];
 };
 
 export type Stream = {

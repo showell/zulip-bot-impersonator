@@ -1,6 +1,7 @@
 import type { Message } from "./db_types";
 
 import { DB } from "./database";
+import * as parse from "./parse";
 
 export const enum EventFlavor {
     MESSAGE,
@@ -65,7 +66,10 @@ function build_event(raw_event: any): ZulipEvent | undefined {
                     content: raw_message.content,
                     unread,
                     is_super_new: true,
+                    code_snippets: [],
                 };
+                parse.parse_content(message);
+
                 return {
                     flavor: EventFlavor.MESSAGE,
                     message,

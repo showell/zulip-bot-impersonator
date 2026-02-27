@@ -5,6 +5,6 @@ export function parse_content(message: Message) {
     const doc = parser.parseFromString(message.content, "text/html");
 
     doc.querySelectorAll("div.codehilite").forEach((code_div) => {
-        console.log(code_div.textContent);
+        message.code_snippets.push(code_div.textContent);
     });
 }

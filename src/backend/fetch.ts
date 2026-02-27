@@ -37,6 +37,8 @@ async function fetch_users(): Promise<User[]> {
 }
 
 export async function fetch_model_data(): Promise<Database> {
+    console.log("start fetch");
+
     const users = await fetch_users();
 
     const user_map = new Map<number, User>();
@@ -72,7 +74,7 @@ export async function fetch_model_data(): Promise<Database> {
             );
             const unread =
                 row.flags.find((flag: string) => flag === "read") === undefined;
-            return {
+            const message: Message = {
                 id: row.id,
                 type: row.type,
                 sender_id: row.sender_id,
@@ -81,7 +83,10 @@ export async function fetch_model_data(): Promise<Database> {
                 content: row.content,
                 is_super_new: false,
                 unread,
+                code_snippets: [],
             };
+            parse.parse_content(message);
+            return message;
         });
 
     for (const row of rows) {
@@ -99,12 +104,6 @@ export async function fetch_model_data(): Promise<Database> {
     );
 
     console.log(`${message_map.size} messages fetched!`);
-
-    for (const message of message_map.values()) {
-        parse.parse_content(message);
-    }
-
-    console.log("finished parsing");
 
     return {
         current_user_id,
