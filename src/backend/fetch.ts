@@ -4,6 +4,7 @@ import { config } from "../secrets";
 
 import { Database } from "./database";
 import { TopicMap } from "./topic_map";
+import * as parse from "./parse";
 import * as zulip_client from "./zulip_client";
 
 const BATCH_SIZE = 5000;
@@ -98,6 +99,12 @@ export async function fetch_model_data(): Promise<Database> {
     );
 
     console.log(`${message_map.size} messages fetched!`);
+
+    for (const message of message_map.values()) {
+        parse.parse_content(message);
+    }
+
+    console.log("finished parsing");
 
     return {
         current_user_id,

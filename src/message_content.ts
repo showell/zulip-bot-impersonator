@@ -79,7 +79,6 @@ function fix_anchor_links(ele: HTMLAnchorElement) {
         return;
     }
 
-
     const url = new URL(a_href, window.location.href);
 
     if (
