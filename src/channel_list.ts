@@ -4,7 +4,6 @@ import type { ChannelRow } from "./row_types";
 import type { SearchWidget } from "./search_widget";
 
 import * as channel_row_widget from "./dom/channel_row_widget";
-import { render_big_list } from "./dom/render";
 import * as table_widget from "./dom/table_widget";
 
 import { Cursor } from "./cursor";
@@ -17,7 +16,7 @@ export class ChannelList {
     cursor: Cursor;
 
     constructor(search_widget: SearchWidget) {
-        const div = render_big_list();
+        const div = document.createElement("div");
 
         this.cursor = new Cursor();
         this.channel_rows = this.populate_channel_rows();

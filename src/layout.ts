@@ -1,4 +1,4 @@
-import { render_list_heading } from "./render";
+import { render_big_list, render_list_heading } from "./dom/render";
 
 export function redraw_page(
     page_div: HTMLDivElement,
@@ -46,5 +46,8 @@ export function draw_table_pane(
 ) {
     pane_div.innerHTML = "";
     pane_div.append(render_list_heading(heading_text));
-    pane_div.append(table_div);
+
+    const main_div = render_big_list();
+    main_div.append(table_div);
+    pane_div.append(main_div);
 }

@@ -3,7 +3,6 @@ import * as model from "./backend/model";
 import type { ChannelRow, TopicRow } from "./row_types";
 import type { SearchWidget } from "./search_widget";
 
-import { render_big_list } from "./dom/render";
 import * as table_widget from "./dom/table_widget";
 import * as topic_row_widget from "./dom/topic_row_widget";
 
@@ -20,7 +19,7 @@ export class TopicList {
     constructor(channel_row: ChannelRow, search_widget: SearchWidget) {
         this.search_widget = search_widget;
 
-        const div = render_big_list();
+        const div = document.createElement("div");
 
         this.stream_id = channel_row.stream_id();
 
