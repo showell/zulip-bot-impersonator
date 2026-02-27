@@ -29,7 +29,8 @@ export function parse_path(path: string): PathInfo | undefined {
 
     const channel_id_str = channel_part.split("-")[0]!;
     const channel_id = parseInt(channel_id_str);
-    const topic_name = topic_part === undefined ? undefined : unescape(topic_part);
+    const topic_name =
+        topic_part === undefined ? undefined : unescape(topic_part);
 
     return { channel_id, topic_name };
 }

@@ -17,16 +17,11 @@ export class TopicPane {
 
         const heading_text = "#" + channel_row.name();
 
-        layout.draw_table_pane(
-            div,
-            heading_text,
-            topic_list.div,
-        );
+        layout.draw_table_pane(div, heading_text, topic_list.div);
 
         this.topic_list = topic_list;
         this.div = div;
     }
-
 
     topic_selected(): boolean {
         if (this.topic_list === undefined) {

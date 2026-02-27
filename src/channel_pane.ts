@@ -14,11 +14,7 @@ export class ChannelPane {
         const channel_list = new ChannelList(search_widget);
         channel_list.populate();
 
-        layout.draw_table_pane(
-            div,
-            "Channels",
-            channel_list.div,
-        );
+        layout.draw_table_pane(div, "Channels", channel_list.div);
 
         this.channel_list = channel_list;
         this.div = div;

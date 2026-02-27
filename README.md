@@ -21,8 +21,8 @@ I usually keep 4 terminals open:
 
 
 I also lint every now and then:
-* npx oxlint
-* npx prettier src/*.ts src/dom/*ts src/backend/*.ts plugins/*.ts --write
+* `npx oxlint`
+* `npx prettier src/*.ts src/dom/*ts src/backend/*.ts src/plugins/*.ts --write`
 
 ## Tests
 
