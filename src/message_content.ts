@@ -5,7 +5,7 @@ import { APP } from "./app";
 import * as address from "./address";
 import * as popup from "./popup";
 
-function preprocess_img_element(img: HTMLImageElement) {
+function fix_images(img: HTMLImageElement) {
     let src = img.src;
     const origin = window.location.origin;
 
@@ -65,7 +65,7 @@ function fix_in_site_link(anchor_elem: HTMLAnchorElement) {
     });
 }
 
-function preprocess_anchor_element(ele: HTMLAnchorElement) {
+function fix_anchor_links(ele: HTMLAnchorElement) {
     const a_href = ele.getAttribute("href");
 
     if (!a_href || a_href === "http://") {
@@ -103,15 +103,15 @@ function preprocess_anchor_element(ele: HTMLAnchorElement) {
     ele.addEventListener("click", (e) => e.stopPropagation());
 }
 
-function preprocess_message_content(html_content: string): DocumentFragment {
+function fix_content(html_content: string): DocumentFragment {
     const template = document.createElement("template");
     template.innerHTML = html_content;
     template.content
         .querySelectorAll("a")
-        .forEach((ele) => preprocess_anchor_element(ele));
+        .forEach((ele) => fix_anchor_links(ele));
     template.content
         .querySelectorAll("img")
-        .forEach((ele) => preprocess_img_element(ele));
+        .forEach((ele) => fix_images(ele));
     return template.content;
 }
 
@@ -120,6 +120,6 @@ export function render_message_content(content: string): HTMLElement {
     div.classList.add("rendered_markdown");
     div.style.marginLeft = "20px";
     div.style.marginRight = "20px";
-    div.append(preprocess_message_content(content));
+    div.append(fix_content(content));
     return div;
 }
