@@ -14,8 +14,8 @@ export function render_pane(): HTMLElement {
     div.style.paddingLeft = "13px";
     div.style.paddingRight = "13px";
     div.style.borderRadius = "8px";
-    div.style.border = "1px #AAAAFF solid";
-    div.style.marginRight = "25px";
+    div.style.border = "1px #CCCCFF solid";
+    div.style.marginRight = "12px";
     div.style.height = "fit-content";
 
     return div;

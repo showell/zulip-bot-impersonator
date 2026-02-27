@@ -8,7 +8,7 @@ function render_heading(stream_name: string): HTMLElement {
     const title = `Start new topic on channel: ${stream_name}`;
     const div = render_list_heading(title);
 
-    div.style.color = "violet";
+    div.style.color = "green";
 
     return div;
 }
