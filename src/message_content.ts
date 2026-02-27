@@ -103,15 +103,42 @@ function fix_anchor_links(ele: HTMLAnchorElement) {
     ele.addEventListener("click", (e) => e.stopPropagation());
 }
 
+function fix_emojis(elem: Element) {
+    const span = elem as HTMLSpanElement;
+    console.log("span", span);
+
+    const emoji_unicode = Array.from(span.classList)[1];
+    console.log("emoji_unicode", emoji_unicode);
+
+    if (emoji_unicode === undefined) {
+        return;
+    }
+
+    const unicode_hex = emoji_unicode.split("-")[1];
+
+    if (unicode_hex === undefined) {
+        return;
+    }
+
+    const ch = String.fromCodePoint(parseInt(unicode_hex, 16));
+
+    span.innerText = ch;
+    span.style.fontSize = "30px";
+    span.style.marginTop = "3px";
+    span.style.marginBottom = "2px";
+    span.style.display = "inline-block";
+}
+
 function fix_content(html_content: string): DocumentFragment {
     const template = document.createElement("template");
     template.innerHTML = html_content;
     template.content
         .querySelectorAll("a")
         .forEach((ele) => fix_anchor_links(ele));
+    template.content.querySelectorAll("img").forEach((ele) => fix_images(ele));
     template.content
-        .querySelectorAll("img")
-        .forEach((ele) => fix_images(ele));
+        .querySelectorAll("span.emoji")
+        .forEach((ele) => fix_emojis(ele));
     return template.content;
 }
 
