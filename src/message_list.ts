@@ -5,7 +5,7 @@ import * as model from "./backend/model";
 import * as outbound from "./backend/outbound";
 
 import { MessageRowWidget } from "./message_row_widget";
-import { render_big_list, render_spacer } from "./render";
+import { render_big_list } from "./dom/render";
 import { MessageRow } from "./row_types";
 import { SmartList } from "./smart_list";
 
@@ -76,8 +76,6 @@ export class MessageList {
         div.style.minWidth = "350px";
         div.style.maxWidth = "900px";
         div.append(smart_list.div);
-        div.append(render_spacer());
-        div.append(render_spacer());
 
         this.div = div;
         this.rows = rows;
