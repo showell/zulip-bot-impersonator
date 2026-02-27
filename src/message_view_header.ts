@@ -16,10 +16,6 @@ function render_topic_heading(topic_row: TopicRow): HTMLElement {
     div.style.paddingBottom = "0px";
     div.style.fontSize = "19px";
 
-    if (topic_row.unread_count() > 0) {
-        div.style.backgroundColor = "lavender";
-    }
-
     return div;
 }
 
