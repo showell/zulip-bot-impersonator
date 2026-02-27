@@ -1,6 +1,7 @@
 import type { ZulipEvent } from "../backend/event";
-import type { PluginHelper } from "../plugin_helper";
+import type { Plugin, PluginHelper } from "../plugin_helper";
 
+import { CodeSearch } from "./code_search";
 import { EventRadio } from "./event_radio";
 
 export class PluginChooser {
@@ -16,14 +17,17 @@ export class PluginChooser {
 
         div.innerText = "We only have one plugin so far!";
 
-        const button = document.createElement("button");
-        button.innerText = "Launch event radio";
-        button.addEventListener("click", () => {
-            const event_radio = new EventRadio();
-            plugin_helper.add_plugin(event_radio);
-        });
+        function add_plugin(name: string, make_plugin: () => Plugin) {
+            const button = document.createElement("button");
+            button.innerText = `Launch ${name}`;
+            button.addEventListener("click", () => {
+                plugin_helper.add_plugin(make_plugin());
+            });
+            div.append(button);
+        }
 
-        div.append(button);
+        add_plugin("Event Radio", () => new EventRadio());
+        add_plugin("Code Search", () => new CodeSearch());
 
         plugin_helper.update_label("Plugins");
     }

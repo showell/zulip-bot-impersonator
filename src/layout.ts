@@ -10,7 +10,7 @@ export function redraw_page(
     page_div.append(plugin_div);
 
     plugin_div.style.marginTop = "7px";
-    page_div.style.height = "100uv";
+    page_div.style.height = "100vh";
 }
 
 export function make_navbar(

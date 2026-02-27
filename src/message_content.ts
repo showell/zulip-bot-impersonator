@@ -26,7 +26,6 @@ function fix_images(img: HTMLImageElement) {
                 }
                 const temp_src = await zulip_client.fetch_image(original_src);
                 img.src = temp_src;
-                img.style.width = "350px";
                 img.addEventListener("click", (e) => {
                     const div = document.createElement("div");
                     const img = document.createElement("img");

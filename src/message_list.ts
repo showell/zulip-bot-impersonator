@@ -20,7 +20,7 @@ export class MessageList {
     index_map: Map<number, number>;
     rows: MessageInfo[];
 
-    constructor(filter: Filter) {
+    constructor(filter: Filter, max_width: number) {
         const self = this;
 
         this.filter = filter;
@@ -73,7 +73,7 @@ export class MessageList {
         });
 
         div.style.minWidth = "350px";
-        div.style.maxWidth = "900px";
+        div.style.maxWidth = `${max_width}px`;
         div.append(smart_list.div);
 
         this.div = div;

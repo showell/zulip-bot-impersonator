@@ -10,7 +10,6 @@ function render_message_box() {
     div.style.paddingTop = "5px";
     div.style.marginBottom = "5px";
     div.style.borderBottom = "1px dotted #000080";
-    div.style.maxWidth = "500px";
     div.style.fontSize = "16px";
     div.style.fontFamily = `"Source Sans 3 VF", sans-serif`;
     div.style.lineHeight = "22.4px";
