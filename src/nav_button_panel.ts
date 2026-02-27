@@ -65,6 +65,7 @@ export class ButtonPanel {
 
         this.fork = new Button("fork", () => {
             search_widget.fork();
+            this.fork.set_normal_color();
         });
 
         div.append(this.close.div);

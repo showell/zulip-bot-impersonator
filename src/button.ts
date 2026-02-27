@@ -59,4 +59,8 @@ export class Button {
     focus(): void {
         this.button.focus();
     }
+
+    set_normal_color(): void {
+        this.button.style.backgroundColor = "#000080";
+    }
 }
