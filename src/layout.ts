@@ -7,6 +7,7 @@ export function redraw_page(
     page_div.append(navbar_div);
     page_div.append(plugin_div);
 
+    plugin_div.style.marginTop = "7px";
     page_div.style.height = "100uv";
 }
 

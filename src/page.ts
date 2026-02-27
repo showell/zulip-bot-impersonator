@@ -27,7 +27,6 @@ export class Page {
         document.body.append(div);
 
         div.style.margin = "0";
-        div.style.backgroundColor = "rgb(246, 246, 255)";
         div.style.marginLeft = "8px";
         create_global_status_bar();
 

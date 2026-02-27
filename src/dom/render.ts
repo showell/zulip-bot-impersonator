@@ -9,9 +9,12 @@ export function render_spacer(): HTMLElement {
 export function render_pane(): HTMLElement {
     const div = document.createElement("div");
     div.style.backgroundColor = "white";
-    div.style.paddingLeft = "10px";
-    div.style.paddingRight = "10px";
-    div.style.borderRadius = "5px";
+    div.style.paddingTop = "10px";
+    div.style.paddingBottom = "10px";
+    div.style.paddingLeft = "13px";
+    div.style.paddingRight = "13px";
+    div.style.borderRadius = "8px";
+    div.style.border = "1px #AAAAFF solid";
     div.style.marginRight = "25px";
     div.style.height = "fit-content";
 
@@ -21,6 +24,7 @@ export function render_pane(): HTMLElement {
 export function render_big_list(): HTMLElement {
     const div = document.createElement("div");
     div.style.paddingRight = "5px";
+    div.style.marginBottom = "4px";
     div.style.maxHeight = "70vh";
     div.style.overflowY = "auto";
     return div;

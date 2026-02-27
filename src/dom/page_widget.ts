@@ -77,7 +77,6 @@ export function render_navbar(
     navbar_div.style.marginTop = "8px";
     navbar_div.style.top = "0px";
     navbar_div.style.zIndex = "100";
-    navbar_div.style.backgroundColor = "rgb(246, 246, 255)";
 
     return navbar_div;
 }
