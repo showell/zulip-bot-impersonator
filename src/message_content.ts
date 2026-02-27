@@ -79,7 +79,6 @@ function fix_anchor_links(ele: HTMLAnchorElement) {
         return;
     }
 
-    console.log("a_href", a_href);
 
     const url = new URL(a_href, window.location.href);
 
@@ -105,10 +104,8 @@ function fix_anchor_links(ele: HTMLAnchorElement) {
 
 function fix_emojis(elem: Element) {
     const span = elem as HTMLSpanElement;
-    console.log("span", span);
 
     const emoji_unicode = Array.from(span.classList)[1];
-    console.log("emoji_unicode", emoji_unicode);
 
     if (emoji_unicode === undefined) {
         return;

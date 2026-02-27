@@ -97,6 +97,8 @@ export async function fetch_model_data(): Promise<Database> {
         messages.map((message) => [message.id, message]),
     );
 
+    console.log(`${message_map.size} messages fetched!`);
+
     return {
         current_user_id,
         user_map,
