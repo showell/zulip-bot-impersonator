@@ -43,7 +43,7 @@ function tab_bottom_border_spacer(): HTMLDivElement {
     return spacer;
 }
 
-function make_button_bar(
+export function make_button_bar(
     tab_button_divs: HTMLDivElement[],
     add_search_widget: () => void,
 ): HTMLDivElement {
@@ -63,20 +63,4 @@ function make_button_bar(
     button_bar.append(tab_bottom_border_spacer());
 
     return button_bar;
-}
-
-export function render_navbar(
-    status_bar_div: HTMLDivElement,
-    tab_button_divs: HTMLDivElement[],
-    add_search_widget: () => void,
-) {
-    const navbar_div = document.createElement("div");
-    navbar_div.append(status_bar_div);
-    navbar_div.append(make_button_bar(tab_button_divs, add_search_widget));
-    navbar_div.style.position = "sticky";
-    navbar_div.style.marginTop = "8px";
-    navbar_div.style.top = "0px";
-    navbar_div.style.zIndex = "100";
-
-    return navbar_div;
 }

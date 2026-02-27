@@ -11,6 +11,21 @@ export function redraw_page(
     page_div.style.height = "100uv";
 }
 
+export function make_navbar(
+    status_bar_div: HTMLDivElement,
+    button_bar_div: HTMLDivElement,
+) {
+    const navbar_div = document.createElement("div");
+    navbar_div.append(status_bar_div);
+    navbar_div.append(button_bar_div);
+    navbar_div.style.position = "sticky";
+    navbar_div.style.marginTop = "8px";
+    navbar_div.style.top = "0px";
+    navbar_div.style.zIndex = "100";
+
+    return navbar_div;
+}
+
 export function draw_search_widget(
     search_widget_div: HTMLDivElement,
     button_panel_div: HTMLDivElement,

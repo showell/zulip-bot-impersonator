@@ -109,10 +109,14 @@ export class Page {
             });
         }
 
-        const navbar_div = page_widget.render_navbar(
-            StatusBar.div,
+        const button_bar_div = page_widget.make_button_bar(
             tab_button_divs,
             add_search_widget,
+        );
+
+        const navbar_div = layout.make_navbar(
+            StatusBar.div,
+            button_bar_div,
         );
 
         layout.redraw_page(div, navbar_div, plugin_helper.plugin.div);
