@@ -39,7 +39,19 @@ export function draw_search_widget(
     search_widget_div.append(pane_manager_div);
 }
 
-export function layout_main_pane_div(div: HTMLDivElement): void {
+export function layout_pane_div(div: HTMLDivElement) {
+    div.style.backgroundColor = "white";
+    div.style.paddingTop = "10px";
+    div.style.paddingBottom = "10px";
+    div.style.paddingLeft = "13px";
+    div.style.paddingRight = "13px";
+    div.style.borderRadius = "8px";
+    div.style.border = "1px #CCCCFF solid";
+    div.style.marginRight = "12px";
+    div.style.height = "fit-content";
+}
+
+function layout_main_pane_div(div: HTMLDivElement): void {
     div.style.paddingRight = "5px";
     div.style.marginBottom = "4px";
     div.style.maxHeight = "70vh";
@@ -51,6 +63,8 @@ export function draw_table_pane(
     heading_text: string,
     table_div: HTMLDivElement,
 ) {
+    layout_pane_div(pane_div);
+
     pane_div.innerHTML = "";
     pane_div.append(render_list_heading(heading_text));
 
@@ -65,6 +79,8 @@ export function draw_list_pane(
     header_div: HTMLDivElement,
     list_div: HTMLDivElement,
 ): void {
+    layout_pane_div(pane_div);
+
     pane_div.innerHTML = "";
     pane_div.append(header_div);
     pane_div.append(list_div);

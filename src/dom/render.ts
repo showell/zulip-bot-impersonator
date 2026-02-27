@@ -1,18 +1,3 @@
-export function render_pane(): HTMLDivElement {
-    const div = document.createElement("div");
-    div.style.backgroundColor = "white";
-    div.style.paddingTop = "10px";
-    div.style.paddingBottom = "10px";
-    div.style.paddingLeft = "13px";
-    div.style.paddingRight = "13px";
-    div.style.borderRadius = "8px";
-    div.style.border = "1px #CCCCFF solid";
-    div.style.marginRight = "12px";
-    div.style.height = "fit-content";
-
-    return div;
-}
-
 export function render_list_heading(name: string): HTMLElement {
     const div = document.createElement("div");
 

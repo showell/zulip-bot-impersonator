@@ -2,14 +2,13 @@ import type { SearchWidget } from "./search_widget";
 
 import { ChannelList } from "./channel_list";
 import * as layout from "./layout";
-import { render_pane } from "./render";
 
 export class ChannelPane {
     div: HTMLDivElement;
     channel_list: ChannelList;
 
     constructor(search_widget: SearchWidget) {
-        const div = render_pane();
+        const div = document.createElement("div");
 
         const channel_list = new ChannelList(search_widget);
         channel_list.populate();

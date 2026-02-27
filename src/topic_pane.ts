@@ -2,7 +2,6 @@ import type { ChannelRow } from "./row_types";
 import type { SearchWidget } from "./search_widget";
 
 import * as layout from "./layout";
-import { render_pane } from "./render";
 import { TopicList } from "./topic_list";
 
 export class TopicPane {
@@ -10,7 +9,7 @@ export class TopicPane {
     topic_list: TopicList;
 
     constructor(channel_row: ChannelRow, search_widget: SearchWidget) {
-        const div = render_pane();
+        const div = document.createElement("div");
 
         const topic_list = new TopicList(channel_row, search_widget);
         topic_list.populate();

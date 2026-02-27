@@ -4,14 +4,13 @@ import type { TopicRow } from "./row_types";
 import * as layout from "./layout";
 import { MessageList } from "./message_list";
 import { MessageViewHeader } from "./message_view_header";
-import { render_pane } from "./render";
 
 export class MessagePane {
     div: HTMLDivElement;
     message_list: MessageList;
 
     constructor(topic_row: TopicRow) {
-        const div = render_pane();
+        const div = document.createElement("div");
 
         const topic_line = new MessageViewHeader(topic_row);
         const message_list = new MessageList(

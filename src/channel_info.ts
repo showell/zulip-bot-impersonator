@@ -5,8 +5,8 @@ import * as model from "./backend/model";
 
 import type { ChannelRow } from "./row_types";
 
+import * as layout from "./layout";
 import { render_message_content } from "./message_content";
-import { render_pane } from "./render";
 
 function render_text(text: string) {
     const div = document.createElement("div");
@@ -29,7 +29,8 @@ export class ChannelInfo {
     div: HTMLElement;
 
     constructor(channel_row: ChannelRow) {
-        const div = render_pane();
+        const div = document.createElement("div");
+        layout.layout_pane_div(div);
 
         const rendered_description = channel_row.rendered_description();
 

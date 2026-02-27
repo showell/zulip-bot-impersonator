@@ -1,5 +1,6 @@
 import { ComposeBox } from "./compose";
-import { render_list_heading, render_pane } from "./render";
+import * as layout from "./layout";
+import { render_list_heading } from "./render";
 import { TopicRow } from "./row_types";
 
 function render_heading(stream_name: string): HTMLElement {
@@ -16,7 +17,8 @@ export class ReplyPane {
     compose_box: ComposeBox;
 
     constructor(topic_row: TopicRow) {
-        const div = render_pane();
+        const div = document.createElement("div");
+        layout.layout_pane_div(div);
 
         div.innerHTML = "";
         div.style.height = "fit-content";

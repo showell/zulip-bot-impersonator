@@ -1,7 +1,8 @@
 import type { ChannelRow } from "./row_types";
 
+import * as layout from "./layout";
 import { ComposeBox } from "./compose";
-import { render_list_heading, render_pane } from "./render";
+import { render_list_heading } from "./render";
 import { StatusBar } from "./status_bar";
 
 function render_heading(stream_name: string): HTMLElement {
@@ -18,7 +19,8 @@ export class AddTopicPane {
     compose_box: ComposeBox;
 
     constructor(channel_row: ChannelRow) {
-        const div = render_pane();
+        const div = document.createElement("div");
+        layout.layout_pane_div(div);
 
         StatusBar.inform("Choose a fairly short topic name, please.");
 
