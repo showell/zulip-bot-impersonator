@@ -6,7 +6,7 @@ export function render_spacer(): HTMLElement {
     return div;
 }
 
-export function render_pane(): HTMLElement {
+export function render_pane(): HTMLDivElement {
     const div = document.createElement("div");
     div.style.backgroundColor = "white";
     div.style.paddingTop = "10px";
@@ -21,7 +21,7 @@ export function render_pane(): HTMLElement {
     return div;
 }
 
-export function render_big_list(): HTMLElement {
+export function render_big_list(): HTMLDivElement {
     const div = document.createElement("div");
     div.style.paddingRight = "5px";
     div.style.marginBottom = "4px";

@@ -10,7 +10,7 @@ import * as topic_row_widget from "./dom/topic_row_widget";
 import { Cursor } from "./cursor";
 
 export class TopicList {
-    div: HTMLElement;
+    div: HTMLDivElement;
     topic_rows: TopicRow[];
     cursor: Cursor;
     stream_id: number;

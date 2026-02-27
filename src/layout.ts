@@ -1,3 +1,5 @@
+import { render_list_heading } from "./render";
+
 export function redraw_page(
     page_div: HTMLDivElement,
     navbar_div: HTMLDivElement,
@@ -37,4 +39,12 @@ export function draw_search_widget(
     search_widget_div.append(pane_manager_div);
 }
 
-
+export function draw_table_pane(
+    pane_div: HTMLDivElement,
+    heading_text: string,
+    table_div: HTMLDivElement,
+) {
+    pane_div.innerHTML = "";
+    pane_div.append(render_list_heading(heading_text));
+    pane_div.append(table_div);
+}

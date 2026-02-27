@@ -1,7 +1,8 @@
 import type { ChannelRow } from "./row_types";
 import type { SearchWidget } from "./search_widget";
 
-import { render_list_heading, render_pane } from "./render";
+import * as layout from "./layout";
+import { render_pane } from "./render";
 import { TopicList } from "./topic_list";
 
 export class TopicPane {
@@ -11,15 +12,21 @@ export class TopicPane {
     constructor(channel_row: ChannelRow, search_widget: SearchWidget) {
         const div = render_pane();
 
-        this.topic_list = new TopicList(channel_row, search_widget);
-        this.topic_list.populate();
+        const topic_list = new TopicList(channel_row, search_widget);
+        topic_list.populate();
 
-        div.innerHTML = "";
-        div.append(render_list_heading("#" + channel_row.name()));
-        div.append(this.topic_list.div);
+        const heading_text = "#" + channel_row.name();
 
+        layout.draw_table_pane(
+            div,
+            heading_text,
+            topic_list.div,
+        );
+
+        this.topic_list = topic_list;
         this.div = div;
     }
+
 
     topic_selected(): boolean {
         if (this.topic_list === undefined) {
