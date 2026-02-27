@@ -47,6 +47,7 @@ export function filtered_messages(filter: Filter): Message[] {
             result.push(message);
         }
     }
+    result.sort((m1, m2) => m1.id - m2.id);
     return result;
 }
 
