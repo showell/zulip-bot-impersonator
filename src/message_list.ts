@@ -73,6 +73,8 @@ export class MessageList {
             },
         });
 
+        div.style.minWidth = "350px";
+        div.style.maxWidth = "900px";
         div.append(smart_list.div);
         div.append(render_spacer());
         div.append(render_spacer());

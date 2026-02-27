@@ -13,7 +13,6 @@ export class MessagePane {
         const div = render_pane();
 
         div.innerHTML = "";
-        div.style.minWidth = "350px";
 
         const topic_line = new MessageViewHeader(topic_row);
         const message_list = new MessageList(
