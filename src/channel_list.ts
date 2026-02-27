@@ -11,7 +11,7 @@ import { Cursor } from "./cursor";
 
 export class ChannelList {
     search_widget: SearchWidget;
-    div: HTMLElement;
+    div: HTMLDivElement;
     channel_id?: number;
     channel_rows: ChannelRow[];
     cursor: Cursor;
