@@ -10,3 +10,15 @@ export function redraw_page(
     page_div.style.height = "100uv";
 }
 
+export function draw_search_widget(
+    search_widget_div: HTMLDivElement,
+    button_panel_div: HTMLDivElement,
+    pane_manager_div: HTMLDivElement,
+) {
+    search_widget_div.innerHTML = "";
+
+    search_widget_div.append(button_panel_div);
+    search_widget_div.append(pane_manager_div);
+}
+
+

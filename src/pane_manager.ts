@@ -8,7 +8,7 @@ type Pane = {
 };
 
 export class PaneManager {
-    div: HTMLElement;
+    div: HTMLDivElement;
     panes: Pane[];
 
     constructor() {

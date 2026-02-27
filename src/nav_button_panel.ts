@@ -2,7 +2,7 @@ import { Button } from "./button";
 import type { SearchWidget } from "./search_widget";
 
 export class ButtonPanel {
-    div: HTMLElement;
+    div: HTMLDivElement;
     close: Button;
     surf_channels: Button;
     prev_channel: Button;

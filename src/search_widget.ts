@@ -11,6 +11,8 @@ import type { PluginHelper } from "./plugin_helper";
 import type { ChannelRow, TopicRow } from "./row_types";
 import type { TopicList } from "./topic_list";
 
+import * as layout from "./layout";
+
 import { ButtonPanel } from "./nav_button_panel";
 import { ChannelPane } from "./channel_pane";
 import { ChannelView } from "./channel_view";
@@ -62,10 +64,7 @@ export class SearchWidget {
             pane_widget: channel_pane,
         });
 
-        div.innerHTML = "";
-
-        div.append(button_panel.div);
-        div.append(pane_manager.div);
+        layout.draw_search_widget(div, button_panel.div, pane_manager.div);
 
         this.button_panel = button_panel;
         this.pane_manager = pane_manager;
