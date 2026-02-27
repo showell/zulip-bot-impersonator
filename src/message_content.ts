@@ -3,6 +3,7 @@ import { config } from "./secrets";
 
 import { APP } from "./app";
 import * as address from "./address";
+import * as popup from "./popup";
 
 function preprocess_img_element(img: HTMLImageElement) {
     let src = img.src;
@@ -24,11 +25,22 @@ function preprocess_img_element(img: HTMLImageElement) {
                     original_src = "/" + parts.join("/");
                 }
                 const temp_src = await zulip_client.fetch_image(original_src);
-                img.setAttribute("src", temp_src);
+                img.src = temp_src;
                 img.style.width = "350px";
                 img.addEventListener("click", (e) => {
-                    // we don't have an image viewer
-                    alert("use left click for now, please");
+                    const div = document.createElement("div");
+                    const img = document.createElement("img");
+                    img.src = temp_src;
+                    img.style.width = "70vw";
+                    div.append(img);
+                    div.style.overflowX = "auto";
+                    div.style.overflowY = "auto";
+                    popup.pop({
+                        div,
+                        confirm_button_text: "Ok",
+                        callback: () => {},
+                    });
+
                     e.stopPropagation();
                     e.preventDefault();
                 });

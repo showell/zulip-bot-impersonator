@@ -10,11 +10,12 @@ function render_div_button(label: string): DivButton {
     const button = document.createElement("button");
     button.innerText = label;
     button.style.color = "white";
+    button.style.minWidth = "80px";
     button.style.backgroundColor = "#000080";
     button.style.marginRight = "3px";
 
     button.addEventListener("focus", () => {
-        button.style.backgroundColor = "green";
+        button.style.backgroundColor = "#00BB00";
     });
 
     button.addEventListener("blur", () => {
@@ -34,6 +35,7 @@ export class Button {
         const { div, button } = render_div_button(label);
         this.div = div;
         this.button = button;
+        this.button.style.borderRadius = "3px";
 
         this.width = div.style.width;
 
