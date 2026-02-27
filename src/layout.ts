@@ -51,3 +51,14 @@ export function draw_table_pane(
     main_div.append(table_div);
     pane_div.append(main_div);
 }
+
+export function draw_list_pane(
+    pane_div: HTMLDivElement,
+    header_div: HTMLDivElement,
+    list_div: HTMLDivElement,
+): void {
+    pane_div.innerHTML = "";
+    pane_div.append(header_div);
+    pane_div.append(list_div);
+}
+

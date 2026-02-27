@@ -20,7 +20,7 @@ function render_topic_heading(topic_row: TopicRow): HTMLElement {
 }
 
 export class MessageViewHeader {
-    div: HTMLElement;
+    div: HTMLDivElement;
 
     constructor(topic_row: TopicRow) {
         const div = document.createElement("div");

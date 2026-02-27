@@ -15,7 +15,7 @@ type MessageInfo = {
 };
 
 export class MessageList {
-    div: HTMLElement;
+    div: HTMLDivElement;
     filter: Filter;
     smart_list: SmartList;
     index_map: Map<number, number>;
