@@ -13,15 +13,6 @@ export function render_pane(): HTMLDivElement {
     return div;
 }
 
-export function render_big_list(): HTMLDivElement {
-    const div = document.createElement("div");
-    div.style.paddingRight = "5px";
-    div.style.marginBottom = "4px";
-    div.style.maxHeight = "70vh";
-    div.style.overflowY = "auto";
-    return div;
-}
-
 export function render_list_heading(name: string): HTMLElement {
     const div = document.createElement("div");
 

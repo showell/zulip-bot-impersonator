@@ -5,7 +5,6 @@ import * as model from "./backend/model";
 import * as outbound from "./backend/outbound";
 
 import { MessageRowWidget } from "./message_row_widget";
-import { render_big_list } from "./dom/render";
 import { MessageRow } from "./row_types";
 import { SmartList } from "./smart_list";
 
@@ -28,7 +27,7 @@ export class MessageList {
 
         this.index_map = new Map<number, number>();
 
-        const div = render_big_list();
+        const div = document.createElement("div");
 
         const messages = model.filtered_messages(filter);
 

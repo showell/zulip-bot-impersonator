@@ -1,4 +1,4 @@
-import { render_big_list, render_list_heading } from "./dom/render";
+import { render_list_heading } from "./dom/render";
 
 export function redraw_page(
     page_div: HTMLDivElement,
@@ -39,6 +39,13 @@ export function draw_search_widget(
     search_widget_div.append(pane_manager_div);
 }
 
+export function layout_main_pane_div(div: HTMLDivElement): void {
+    div.style.paddingRight = "5px";
+    div.style.marginBottom = "4px";
+    div.style.maxHeight = "70vh";
+    div.style.overflowY = "auto";
+}
+
 export function draw_table_pane(
     pane_div: HTMLDivElement,
     heading_text: string,
@@ -47,7 +54,8 @@ export function draw_table_pane(
     pane_div.innerHTML = "";
     pane_div.append(render_list_heading(heading_text));
 
-    const main_div = render_big_list();
+    const main_div = document.createElement("div");
+    layout_main_pane_div(main_div);
     main_div.append(table_div);
     pane_div.append(main_div);
 }
@@ -60,5 +68,5 @@ export function draw_list_pane(
     pane_div.innerHTML = "";
     pane_div.append(header_div);
     pane_div.append(list_div);
+    layout_main_pane_div(list_div);
 }
-
