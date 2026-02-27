@@ -75,18 +75,9 @@ export function render_navbar(
     navbar_div.append(make_button_bar(tab_button_divs, add_search_widget));
     navbar_div.style.position = "sticky";
     navbar_div.style.marginTop = "8px";
-    navbar_div.style.marginLeft = "8px";
     navbar_div.style.top = "0px";
     navbar_div.style.zIndex = "100";
     navbar_div.style.backgroundColor = "rgb(246, 246, 255)";
 
     return navbar_div;
-}
-
-export function render_container(): HTMLDivElement {
-    const container_div = document.createElement("div");
-    container_div.style.overflowY = "auto";
-    container_div.style.marginLeft = "8px";
-
-    return container_div;
 }

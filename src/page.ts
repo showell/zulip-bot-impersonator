@@ -28,6 +28,7 @@ export class Page {
 
         div.style.margin = "0";
         div.style.backgroundColor = "rgb(246, 246, 255)";
+        div.style.marginLeft = "8px";
         create_global_status_bar();
 
         div.append(StatusBar.div);
@@ -115,10 +116,7 @@ export class Page {
             add_search_widget,
         );
 
-        const container_div = page_widget.render_container();
-        container_div.append(plugin_helper.plugin.div);
-
-        layout.redraw_page(div, navbar_div, container_div);
+        layout.redraw_page(div, navbar_div, plugin_helper.plugin.div);
     }
 
     add_search_widget(address: Address): void {

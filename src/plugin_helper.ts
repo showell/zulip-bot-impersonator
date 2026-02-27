@@ -14,7 +14,7 @@ class Model {
 }
 
 export type Plugin = {
-    div: HTMLElement;
+    div: HTMLDivElement;
     start: (plugin_helper: PluginHelper) => void;
     handle_event: (event: ZulipEvent) => void;
 };

@@ -38,7 +38,7 @@ function narrow_label(
 }
 
 export class SearchWidget {
-    div: HTMLElement;
+    div: HTMLDivElement;
     button_panel: ButtonPanel;
     pane_manager: PaneManager;
     channel_pane: ChannelPane;
