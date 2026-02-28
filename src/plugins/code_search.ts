@@ -36,6 +36,5 @@ export class CodeSearch {
         div.append(message_list.div);
     }
 
-    handle_event(event: ZulipEvent): void {
-    }
+    handle_event(_event: ZulipEvent): void {}
 }

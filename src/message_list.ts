@@ -40,9 +40,7 @@ export class MessageList {
                 return message_row_widget.div;
             },
             when_done() {
-                const unread_index = rows.findIndex(
-                    (row) => row.unread,
-                );
+                const unread_index = rows.findIndex((row) => row.unread);
                 if (unread_index >= 0) {
                     smart_list.scroll_index_to_top(unread_index);
                 }
