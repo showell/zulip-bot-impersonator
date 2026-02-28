@@ -36,7 +36,7 @@ export class CodeSearch {
         const messages = model.filtered_messages(filter);
         messages.reverse();
 
-        const message_list = new MessageList({ messages, filter, max_width: 750 });
+        const message_list = new MessageList({ messages, filter, max_width: 750, topic_id: undefined });
 
         div.append(message_list.div);
     }

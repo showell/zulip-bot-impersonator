@@ -148,6 +148,12 @@ export class MessageRow {
         return `#**${channel_name}**`;
     }
 
+    channel_topic(): string {
+        const channel_name = this.stream_name();
+        const topic_name = this.topic_name();
+        return `#${channel_name} > ${topic_name}`;
+    }
+
     topic_link(): string {
         const channel_name = this.stream_name();
         const topic_name = this.topic_name();

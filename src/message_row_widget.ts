@@ -51,10 +51,22 @@ function top_line(message_row: MessageRow): HTMLDivElement {
     return div;
 }
 
+function address_line(message_row: MessageRow): HTMLDivElement {
+    const div = document.createElement("div");
+    div.style.marginTop = "3px";
+    div.style.marginBottom = "3px";
+    div.innerText = message_row.channel_topic();
+    div.style.fontSize = "16px";
+    div.style.fontWeight = "bold";
+    div.style.color = "rgb(51, 51, 51)";
+
+    return div;
+}
+
 export class MessageRowWidget {
     div: HTMLElement;
 
-    constructor(message_row: MessageRow) {
+    constructor(message_row: MessageRow, topic_id: number | undefined) {
         const div = render_message_box();
 
         div.addEventListener("click", (e) => {
@@ -81,6 +93,10 @@ export class MessageRowWidget {
         }
 
         div.append(top_line(message_row));
+
+        if (message_row.topic_id() !== topic_id) {
+            div.append(address_line(message_row));
+        }
 
         const content = message_row.content();
         const content_div = render_message_content(content);

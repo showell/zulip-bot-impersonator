@@ -38,9 +38,9 @@ export class EventRadio {
             const address_div = document.createElement("div");
             const stream_name = message_row.stream_name();
             const topic_name = message_row.topic_name();
-            address_div.innerText = `${stream_name} > ${topic_name}`;
 
-            const message_row_widget = new MessageRowWidget(message_row);
+            const topic_id = undefined;
+            const message_row_widget = new MessageRowWidget(message_row, topic_id);
 
             div.append(address_div);
             div.append(message_row_widget.div);

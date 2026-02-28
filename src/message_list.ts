@@ -11,6 +11,7 @@ type MessageListConfig = {
     messages: Message[];
     filter: Filter;
     max_width: number;
+    topic_id: number | undefined;
 };
 
 export class MessageList {
@@ -21,10 +22,11 @@ export class MessageList {
     rows: Message[];
     pending_index: number | undefined;
     done_loading: boolean;
+    topic_id: number | undefined;
 
     constructor(config: MessageListConfig) {
         const self = this;
-        const { messages, filter, max_width } = config;
+        const { messages, filter, max_width, topic_id } = config;
 
         const rows = [...messages];
 
@@ -44,7 +46,7 @@ export class MessageList {
                 self.index_map.set(message.id, index);
 
                 const message_row = new MessageRow(message);
-                const message_row_widget = new MessageRowWidget(message_row);
+                const message_row_widget = new MessageRowWidget(message_row, topic_id);
 
                 return message_row_widget.div;
             },
@@ -67,6 +69,7 @@ export class MessageList {
         this.div = div;
         this.rows = rows;
         this.smart_list = smart_list;
+        this.topic_id = topic_id;
     }
 
     maybe_go_to_first_unread() {
@@ -133,7 +136,7 @@ export class MessageList {
         this.index_map.set(message.id, rows.length - 1);
 
         const message_row = new MessageRow(message);
-        const message_row_widget = new MessageRowWidget(message_row);
+        const message_row_widget = new MessageRowWidget(message_row, this.topic_id);
 
         const was_near_bottom = this.near_bottom();
         console.log("was_near_bottom", was_near_bottom);
