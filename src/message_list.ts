@@ -44,9 +44,10 @@ export class MessageList {
             },
             when_done() {
                 self.done_loading = true;
-                if (self.pending_index) {
+                if (self.pending_index !== undefined) {
                     smart_list.scroll_index_to_top(self.pending_index);
                 } else {
+                    console.log("first unread");
                     self.maybe_go_to_first_unread();
                 }
             },
@@ -63,6 +64,9 @@ export class MessageList {
     }
 
     maybe_go_to_first_unread() {
+        const rows = this.rows;
+        const smart_list = this.smart_list;
+
         const unread_index = rows.findIndex((row) => row.unread);
         if (unread_index >= 0) {
             smart_list.scroll_index_to_top(unread_index);
