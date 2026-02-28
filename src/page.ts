@@ -130,7 +130,7 @@ export class Page {
             );
         }
 
-        if (event.flavor === EventFlavor.MUTATE_MESSAGE) {
+        if (event.flavor === EventFlavor.MUTATE_MESSAGE_CONTENT) {
             const message = DB.message_map.get(event.message_id)!;
             const message_row = new MessageRow(message);
             const sender_name = message_row.sender_name();

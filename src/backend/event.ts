@@ -5,7 +5,7 @@ import * as parse from "./parse";
 
 export const enum EventFlavor {
     MESSAGE,
-    MUTATE_MESSAGE,
+    MUTATE_MESSAGE_CONTENT,
     MUTATE_UNREAD,
     UNKNOWN,
 }
@@ -22,8 +22,8 @@ type MutateUnreadEvent = {
     unread: boolean;
 };
 
-type MutateMessageEvent = {
-    flavor: EventFlavor.MUTATE_MESSAGE;
+type MutateMessageContentEvent = {
+    flavor: EventFlavor.MUTATE_MESSAGE_CONTENT;
     message_id: number;
     raw_content: string;
     content: string;
@@ -36,7 +36,7 @@ type UnknownEvent = {
 
 export type ZulipEvent =
     | MessageEvent
-    | MutateMessageEvent
+    | MutateMessageContentEvent
     | MutateUnreadEvent
     | UnknownEvent;
 
@@ -95,7 +95,7 @@ function build_event(raw_event: any): ZulipEvent | undefined {
 
         case "update_message": {
             return {
-                flavor: EventFlavor.MUTATE_MESSAGE,
+                flavor: EventFlavor.MUTATE_MESSAGE_CONTENT,
                 message_id: raw_event.message_id,
                 raw_content: raw_event.content,
                 content: raw_event.rendered_content,
