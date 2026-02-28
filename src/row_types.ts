@@ -130,6 +130,10 @@ export class MessageRow {
         return model.stream_name_for(this._message.stream_id);
     }
 
+    timestamp(): number {
+        return this._message.timestamp;
+    }
+
     topic_id(): number {
         return this._message.topic_id;
     }

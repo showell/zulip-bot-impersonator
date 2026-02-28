@@ -58,15 +58,16 @@ function build_event(raw_event: any): ZulipEvent | undefined {
                     undefined;
 
                 const message: Message = {
+                    code_snippets: [],
+                    content: raw_message.content,
                     id: raw_message.id,
-                    type: "stream",
+                    is_super_new: true,
                     sender_id: raw_message.sender_id,
                     stream_id: raw_message.stream_id,
+                    timestamp: raw_message.content,
                     topic_id: topic.topic_id,
-                    content: raw_message.content,
+                    type: "stream",
                     unread,
-                    is_super_new: true,
-                    code_snippets: [],
                 };
                 parse.parse_content(message);
 

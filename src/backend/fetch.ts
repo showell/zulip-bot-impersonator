@@ -75,15 +75,16 @@ export async function fetch_model_data(): Promise<Database> {
             const unread =
                 row.flags.find((flag: string) => flag === "read") === undefined;
             const message: Message = {
-                id: row.id,
-                type: row.type,
-                sender_id: row.sender_id,
-                topic_id: topic.topic_id,
-                stream_id: row.stream_id,
-                content: row.content,
-                is_super_new: false,
-                unread,
                 code_snippets: [],
+                content: row.content,
+                id: row.id,
+                is_super_new: false,
+                sender_id: row.sender_id,
+                stream_id: row.stream_id,
+                timestamp: row.timestamp,
+                topic_id: topic.topic_id,
+                type: row.type,
+                unread,
             };
             parse.parse_content(message);
             return message;

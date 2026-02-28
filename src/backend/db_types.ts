@@ -1,15 +1,16 @@
 export type StreamType = "stream";
 
 export type Message = {
+    code_snippets: string[];
+    content: string;
     id: number;
-    type: "stream";
+    is_super_new: boolean;
     sender_id: number;
     stream_id: number;
+    timestamp: number;
     topic_id: number;
-    content: string;
+    type: "stream";
     unread: boolean;
-    is_super_new: boolean;
-    code_snippets: string[];
 };
 
 export type Stream = {

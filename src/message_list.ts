@@ -8,17 +8,12 @@ import { MessageRowWidget } from "./message_row_widget";
 import { MessageRow } from "./row_types";
 import { SmartList } from "./smart_list";
 
-type MessageInfo = {
-    message: Message;
-    use_sender: boolean;
-};
-
 export class MessageList {
     div: HTMLDivElement;
     filter: Filter;
     smart_list: SmartList;
     index_map: Map<number, number>;
-    rows: MessageInfo[];
+    rows: Message[];
 
     constructor(filter: Filter, max_width: number) {
         const self = this;
@@ -29,42 +24,24 @@ export class MessageList {
 
         const div = document.createElement("div");
 
-        const messages = model.filtered_messages(filter);
-
-        const rows: MessageInfo[] = [];
-
-        let prev_sender_id: number | undefined;
-
-        for (const message of messages) {
-            let sender_id: number | undefined = message.sender_id;
-
-            const use_sender = sender_id !== prev_sender_id;
-
-            if (use_sender) {
-                prev_sender_id = sender_id;
-            }
-
-            rows.push({ message, use_sender });
-        }
+        const rows = model.filtered_messages(filter);
 
         const smart_list = new SmartList({
             size: rows.length,
             get_div(index: number) {
-                const { message, use_sender } = rows[index];
+                const message = rows[index];
 
                 // remember our index for updates
                 self.index_map.set(message.id, index);
 
                 const message_row = new MessageRow(message);
-                const message_row_widget = new MessageRowWidget(
-                    message_row,
-                    use_sender,
-                );
+                const message_row_widget = new MessageRowWidget(message_row);
+
                 return message_row_widget.div;
             },
             when_done() {
                 const unread_index = rows.findIndex(
-                    (row) => row.message.unread,
+                    (row) => row.unread,
                 );
                 if (unread_index >= 0) {
                     smart_list.scroll_index_to_top(unread_index);
@@ -83,9 +60,6 @@ export class MessageList {
 
     mark_topic_read() {
         const unread_message_ids = this.rows
-            .map((row) => {
-                return row.message;
-            })
             .filter((message) => message.unread)
             .map((message) => message.id);
 
@@ -115,16 +89,11 @@ export class MessageList {
             return;
         }
 
-        const use_sender = true;
-
-        rows.push({ message, use_sender });
+        rows.push(message);
         this.index_map.set(message.id, rows.length - 1);
 
         const message_row = new MessageRow(message);
-        const message_row_widget = new MessageRowWidget(
-            message_row,
-            use_sender,
-        );
+        const message_row_widget = new MessageRowWidget(message_row);
 
         const was_near_bottom = this.near_bottom();
         console.log("was_near_bottom", was_near_bottom);

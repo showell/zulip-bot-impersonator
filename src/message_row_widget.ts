@@ -24,28 +24,35 @@ function render_sender_name(sender_name: string): HTMLElement {
     div.style.fontWeight = "bold";
     div.style.fontSize = "16px";
     div.style.color = "rgb(51, 51, 51)";
-    div.style.lineHeight = "35px";
-    div.style.marginTop = "2px";
     return div;
 }
 
-class MessageSender {
-    div: HTMLElement;
+function time_widget(timestamp: number): HTMLDivElement {
+    const div = document.createElement("div");
+    const date = new Date(timestamp * 1000);
+    const formatted_time = date.toLocaleString();
+    div.innerText = `${formatted_time}`;
+    div.style.fontSize = "12px";
+    div.style.marginLeft = "5px";
+    return div;
+}
 
-    constructor(message_row: MessageRow) {
-        const div = document.createElement("div");
-        div.style.display = "flex";
+function top_line(message_row: MessageRow): HTMLDivElement {
+    const div = document.createElement("div");
+    div.style.display = "flex";
+    div.style.alignItems = "flex-end";
+    div.style.marginTop = "12px";
 
-        div.append(render_sender_name(message_row.sender_name()));
+    div.append(render_sender_name(message_row.sender_name()));
+    div.append(time_widget(message_row.timestamp()));
 
-        this.div = div;
-    }
+    return div;
 }
 
 export class MessageRowWidget {
     div: HTMLElement;
 
-    constructor(message_row: MessageRow, show_sender: boolean) {
+    constructor(message_row: MessageRow) {
         const div = render_message_box();
 
         div.addEventListener("click", (e) => {
@@ -67,10 +74,7 @@ export class MessageRowWidget {
             div.style.border = "1px violet solid";
         }
 
-        if (show_sender) {
-            const sender = new MessageSender(message_row);
-            div.append(sender.div);
-        }
+        div.append(top_line(message_row));
 
         const content = message_row.content();
         const content_div = render_message_content(content);

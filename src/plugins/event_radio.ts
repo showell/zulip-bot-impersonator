@@ -32,7 +32,6 @@ export class EventRadio {
 
         if (event.flavor === EventFlavor.MESSAGE) {
             const message = event.message;
-            const use_sender = true;
 
             const message_row = new MessageRow(message);
 
@@ -41,10 +40,7 @@ export class EventRadio {
             const topic_name = message_row.topic_name();
             address_div.innerText = `${stream_name} > ${topic_name}`;
 
-            const message_row_widget = new MessageRowWidget(
-                message_row,
-                use_sender,
-            );
+            const message_row_widget = new MessageRowWidget(message_row);
 
             div.append(address_div);
             div.append(message_row_widget.div);
