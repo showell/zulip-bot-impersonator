@@ -80,6 +80,10 @@ function fix_videos(video: HTMLVideoElement) {
         const temp_src = await get_temporary_upload(src);
         video.src = temp_src;
         video.style.width = "90%";
+        const a_tag = video.closest("a");
+        if (a_tag) {
+            a_tag.href = temp_src;
+        }
     }
 
     use_temporary_url();
