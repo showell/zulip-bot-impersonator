@@ -3,6 +3,8 @@ import * as model from "./backend/model";
 import type { Message, Stream, Topic } from "./backend/db_types.ts";
 import type { ListInfo } from "./backend/message_list.ts";
 
+import type { Address } from "./address";
+
 import { DB } from "./backend/database";
 
 /*
@@ -104,6 +106,14 @@ export class MessageRow {
         this._message = message;
     }
 
+    address(): Address {
+        return {
+            channel_id: this.channel_id(),
+            topic_id: this.topic_id(),
+            message_id: this.message_id(),
+        };
+    }
+
     message_id(): number {
         return this._message.id;
     }
@@ -132,6 +142,10 @@ export class MessageRow {
 
     timestamp(): number {
         return this._message.timestamp;
+    }
+
+    channel_id(): number {
+        return this._message.stream_id;
     }
 
     topic_id(): number {

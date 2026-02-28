@@ -11,10 +11,12 @@ import * as page_widget from "./dom/page_widget";
 
 import { config } from "./secrets";
 
-import * as address from "./address";
-import * as layout from "./layout";
+import { CodeSearch } from "./plugins/code_search";
 import { PluginChooser } from "./plugins/plugin_chooser";
 import { PluginHelper } from "./plugin_helper";
+
+import * as address from "./address";
+import * as layout from "./layout";
 import { MessageRow } from "./row_types";
 import { SearchWidget } from "./search_widget";
 import { StatusBar, create_global_status_bar } from "./status_bar";
@@ -41,8 +43,8 @@ export class Page {
     }
 
     start(): void {
-        const plugin_chooser = new PluginChooser();
-        this.add_plugin(plugin_chooser);
+        this.add_plugin(new PluginChooser());
+        this.add_plugin(new CodeSearch());
 
         this.add_search_widget(address.nada());
         this.update_title();

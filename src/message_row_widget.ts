@@ -2,6 +2,8 @@ import type { MessageRow } from "./row_types";
 
 import * as mouse_drag from "./util/mouse_drag";
 
+import { APP } from "./app";
+import { Button } from "./button";
 import { render_message_content } from "./message_content";
 import { MessagePopup } from "./message_popup";
 import { pop } from "./popup";
@@ -53,13 +55,25 @@ function top_line(message_row: MessageRow): HTMLDivElement {
 
 function address_line(message_row: MessageRow): HTMLDivElement {
     const div = document.createElement("div");
+    div.style.display = "flex";
     div.style.marginTop = "3px";
     div.style.marginBottom = "3px";
-    div.innerText = message_row.channel_topic();
-    div.style.fontSize = "16px";
-    div.style.fontWeight = "bold";
-    div.style.color = "rgb(51, 51, 51)";
 
+    const from_div = document.createElement("div");
+    from_div.innerText = message_row.channel_topic();
+    from_div.style.fontSize = "16px";
+    from_div.style.fontWeight = "bold";
+    from_div.style.color = "rgb(51, 51, 51)";
+
+    const button = new Button("view", () => {
+        APP.add_search_widget(message_row.address());
+        button.set_normal_color();
+    });
+
+    button.div.style.marginRight = "10px";
+
+    div.append(button.div);
+    div.append(from_div);
     return div;
 }
 

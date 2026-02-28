@@ -39,8 +39,10 @@ export class Button {
 
         this.width = div.style.width;
 
-        button.addEventListener("click", () => {
+        button.addEventListener("click", (e: Event) => {
             callback();
+            e.preventDefault();
+            e.stopPropagation();
         });
 
         this.show();
