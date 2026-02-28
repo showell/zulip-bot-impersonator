@@ -52,12 +52,37 @@ async function get_temporary_upload(src: string): Promise<string> {
     let original_src;
     const parts = src.slice(1).split("/");
     if (parts[1] === "thumbnail") {
-        original_src =
-            "/user_uploads/" + parts.slice(2, -1).join("/");
+        original_src = "/user_uploads/" + parts.slice(2, -1).join("/");
     } else {
         original_src = "/" + parts.join("/");
     }
     return await zulip_client.fetch_image(original_src);
+}
+
+function fix_videos(video: HTMLVideoElement) {
+    let src = video.src;
+    const origin = window.location.origin;
+
+    if (!src.startsWith(origin)) {
+        // 3rd-party images should work fine
+        return;
+    }
+    src = src.slice(origin.length);
+
+    if (!src.startsWith("/user_uploads/")) {
+        console.log(`Unexpected src: ${src}`);
+        return;
+    }
+
+    video.setAttribute("src", config.realm_url + src);
+
+    async function use_temporary_url() {
+        const temp_src = await get_temporary_upload(src);
+        video.src = temp_src;
+        video.style.width = "90%";
+    }
+
+    use_temporary_url();
 }
 
 function fix_images(img: HTMLImageElement) {
@@ -174,6 +199,9 @@ function fix_content(html_content: string): DocumentFragment {
         .querySelectorAll("a")
         .forEach((ele) => fix_anchor_links(ele));
     template.content.querySelectorAll("img").forEach((ele) => fix_images(ele));
+    template.content
+        .querySelectorAll("video")
+        .forEach((ele) => fix_videos(ele));
     template.content
         .querySelectorAll("span.emoji")
         .forEach((ele) => fix_emojis(ele));
