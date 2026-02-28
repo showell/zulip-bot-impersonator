@@ -17,6 +17,7 @@ function test_paths() {
     const path_info = address.parse_path(path)!;
     assert_equal(path_info.channel_id, 554653);
     assert_equal(path_info.topic_name, "resizable gif picker");
+    assert_equal(path_info.message_id, 576031852);
 }
 
 test_paths();

@@ -3,12 +3,22 @@ import { DB } from "./backend/database";
 export type Address = {
     channel_id: number | undefined;
     topic_id: number | undefined;
+    message_id: number | undefined;
 };
 
 export type PathInfo = {
     channel_id: number | undefined;
     topic_name: string | undefined;
+    message_id: number | undefined;
 };
+
+export function nada(): Address {
+    return {
+        channel_id: undefined,
+        topic_id: undefined,
+        message_id: undefined,
+    };
+}
 
 function unescape(str: string) {
     return decodeURIComponent(str.replace(/\./g, "%"));
@@ -23,7 +33,7 @@ export function parse_path(path: string): PathInfo | undefined {
         return undefined;
     }
 
-    const [channel_part, _topic, topic_part, _, _message_part] = path
+    const [channel_part, _topic, topic_part, _, message_part] = path
         .split("/")
         .slice(2);
 
@@ -32,7 +42,9 @@ export function parse_path(path: string): PathInfo | undefined {
     const topic_name =
         topic_part === undefined ? undefined : unescape(topic_part);
 
-    return { channel_id, topic_name };
+    const message_id = message_part === undefined ? undefined : parseInt(message_part);
+
+    return { channel_id, topic_name, message_id };
 }
 
 function topic_id_lookup(channel_id: number, topic_name: string): number {
@@ -61,8 +73,10 @@ export function get_address_from_path(path: string): Address | undefined {
             ? topic_id_lookup(channel_id, topic_name)
             : undefined;
 
+
     return {
         channel_id,
         topic_id,
+        message_id: path_info.message_id,
     };
 }

@@ -75,7 +75,8 @@ export class SearchWidget {
     fork(): void {
         const channel_id = this.get_channel_id();
         const topic_id = this.get_topic_id();
-        const address = { channel_id, topic_id };
+        const message_id = undefined; // for now
+        const address = { channel_id, topic_id, message_id };
         const new_search_widget = new SearchWidget(address);
         this.plugin_helper!.add_plugin(new_search_widget);
     }
@@ -106,6 +107,12 @@ export class SearchWidget {
             this.update_channel();
             this.channel_view!.select_topic_id(start_address.topic_id);
             this.update_topic();
+
+            if (start_address.message_id) {
+                const message_list = this.get_message_list()!;
+                message_list.go_to_message_id(start_address.message_id);
+            }
+
             return;
         }
 

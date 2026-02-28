@@ -11,6 +11,7 @@ import * as page_widget from "./dom/page_widget";
 
 import { config } from "./secrets";
 
+import * as address from "./address";
 import * as layout from "./layout";
 import { PluginChooser } from "./plugins/plugin_chooser";
 import { PluginHelper } from "./plugin_helper";
@@ -43,9 +44,7 @@ export class Page {
         const plugin_chooser = new PluginChooser();
         this.add_plugin(plugin_chooser);
 
-        const channel_id = undefined;
-        const topic_id = undefined;
-        this.add_search_widget({ channel_id, topic_id });
+        this.add_search_widget(address.nada());
         this.update_title();
     }
 
@@ -103,10 +102,7 @@ export class Page {
         });
 
         function add_search_widget(): void {
-            self.add_search_widget({
-                channel_id: undefined,
-                topic_id: undefined,
-            });
+            self.add_search_widget(address.nada());
         }
 
         const button_bar_div = page_widget.make_button_bar(

@@ -57,6 +57,18 @@ export class MessageList {
         this.smart_list = smart_list;
     }
 
+    go_to_message_id(message_id: number) {
+        const rows = this.rows;
+        const smart_list = this.smart_list;
+
+        console.log("trying to go to", message_id);
+        const index = rows.findIndex((message) => message.id === message_id);
+        if (index >= 0) {
+            console.log("index", index);
+            smart_list.scroll_index_to_top(index);
+        }
+    }
+
     focus() {
         this.div.focus();
     }
