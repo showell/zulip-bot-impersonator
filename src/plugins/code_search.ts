@@ -3,6 +3,8 @@ import type { ZulipEvent } from "../backend/event";
 
 import type { PluginHelper } from "../plugin_helper";
 
+import * as model from "../backend/model";
+
 import { MessageList } from "../message_list";
 
 export class CodeSearch {
@@ -31,7 +33,10 @@ export class CodeSearch {
             },
         };
 
-        const message_list = new MessageList({ filter, max_width: 750 });
+        const messages = model.filtered_messages(filter);
+        messages.reverse();
+
+        const message_list = new MessageList({ messages, filter, max_width: 750 });
 
         div.append(message_list.div);
     }

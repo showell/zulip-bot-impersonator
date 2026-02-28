@@ -1,6 +1,8 @@
 import { topic_filter } from "./backend/filter";
 import type { TopicRow } from "./row_types";
 
+import * as model from "./backend/model";
+
 import * as layout from "./layout";
 import { MessageList } from "./message_list";
 import { MessageViewHeader } from "./message_view_header";
@@ -14,10 +16,11 @@ export class MessagePane {
 
         const topic_line = new MessageViewHeader(topic_row);
 
-        const message_list = new MessageList({
-            filter: topic_filter(topic_row.topic_id()),
-            max_width: 500,
-        });
+        const filter = topic_filter(topic_row.topic_id());
+        const messages = model.filtered_messages(filter);
+        const max_width = 500;
+
+        const message_list = new MessageList({ messages, filter, max_width });
 
         layout.draw_list_pane(div, topic_line.div, message_list.div);
 

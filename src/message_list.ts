@@ -1,7 +1,6 @@
 import type { Message } from "./backend/db_types";
 import type { Filter } from "./backend/filter";
 
-import * as model from "./backend/model";
 import * as outbound from "./backend/outbound";
 
 import { MessageRowWidget } from "./message_row_widget";
@@ -9,6 +8,7 @@ import { MessageRow } from "./row_types";
 import { SmartList } from "./smart_list";
 
 type MessageListConfig = {
+    messages: Message[];
     filter: Filter;
     max_width: number;
 };
@@ -24,7 +24,9 @@ export class MessageList {
 
     constructor(config: MessageListConfig) {
         const self = this;
-        const { filter, max_width } = config;
+        const { messages, filter, max_width } = config;
+
+        const rows = [...messages];
 
         this.filter = filter;
         this.done_loading = false;
@@ -32,8 +34,6 @@ export class MessageList {
         this.index_map = new Map<number, number>();
 
         const div = document.createElement("div");
-
-        const rows = model.filtered_messages(filter);
 
         const smart_list = new SmartList({
             size: rows.length,
