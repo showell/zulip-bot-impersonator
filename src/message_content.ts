@@ -63,39 +63,44 @@ function fix_images(img: HTMLImageElement) {
     let src = img.src;
     const origin = window.location.origin;
 
-    if (src.startsWith(origin)) {
-        src = src.slice(origin.length);
-
-        if (src.startsWith("/user_uploads/")) {
-            img.setAttribute("src", config.realm_url + src);
-
-            async function use_temporary_url() {
-                const temp_src = await get_temporary_upload(src);
-                img.src = temp_src;
-                img.style.width = "90%";
-
-                img.addEventListener("click", (e) => {
-                    const div = document.createElement("div");
-                    const img = document.createElement("img");
-                    img.src = temp_src;
-                    img.style.width = "70vw";
-                    div.append(img);
-                    div.style.overflowX = "auto";
-                    div.style.overflowY = "auto";
-                    popup.pop({
-                        div,
-                        confirm_button_text: "Ok",
-                        callback: () => {},
-                    });
-
-                    e.stopPropagation();
-                    e.preventDefault();
-                });
-            }
-
-            use_temporary_url();
-        }
+    if (!src.startsWith(origin)) {
+        // 3rd-party images should work fine
+        return;
     }
+    src = src.slice(origin.length);
+
+    if (!src.startsWith("/user_uploads/")) {
+        console.log(`Unexpected src: ${src}`);
+        return;
+    }
+
+    img.setAttribute("src", config.realm_url + src);
+
+    async function use_temporary_url() {
+        const temp_src = await get_temporary_upload(src);
+        img.src = temp_src;
+        img.style.width = "90%";
+
+        img.addEventListener("click", (e) => {
+            const div = document.createElement("div");
+            const img = document.createElement("img");
+            img.src = temp_src;
+            img.style.width = "70vw";
+            div.append(img);
+            div.style.overflowX = "auto";
+            div.style.overflowY = "auto";
+            popup.pop({
+                div,
+                confirm_button_text: "Ok",
+                callback: () => {},
+            });
+
+            e.stopPropagation();
+            e.preventDefault();
+        });
+    }
+
+    use_temporary_url();
 }
 
 function fix_in_site_link(anchor_elem: HTMLAnchorElement) {
