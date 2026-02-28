@@ -5,6 +5,7 @@ import * as parse from "./parse";
 
 export const enum EventFlavor {
     MESSAGE,
+    MUTATE_MESSAGE_ADDRESS,
     MUTATE_MESSAGE_CONTENT,
     MUTATE_UNREAD,
     UNKNOWN,
@@ -22,6 +23,13 @@ type MutateUnreadEvent = {
     unread: boolean;
 };
 
+type MutateMessageAddressEvent = {
+    flavor: EventFlavor.MUTATE_MESSAGE_ADDRESS;
+    message_ids: number[];
+    new_channel_id: number;
+    new_topic_id: number;
+};
+
 type MutateMessageContentEvent = {
     flavor: EventFlavor.MUTATE_MESSAGE_CONTENT;
     message_id: number;
@@ -36,6 +44,7 @@ type UnknownEvent = {
 
 export type ZulipEvent =
     | MessageEvent
+    | MutateMessageAddressEvent
     | MutateMessageContentEvent
     | MutateUnreadEvent
     | UnknownEvent;
@@ -94,6 +103,19 @@ function build_event(raw_event: any): ZulipEvent | undefined {
         }
 
         case "update_message": {
+            if (raw_event.message_ids && raw_event.orig_content === undefined) {
+                const new_channel_id = raw_event.new_stream_id ?? raw_event.stream_id;
+                const new_topic_name = raw_event.subject ?? raw_event.orig_subject;
+                const new_topic_id = DB.topic_map.get_topic_id(new_channel_id, new_topic_name);
+
+                return {
+                    flavor: EventFlavor.MUTATE_MESSAGE_ADDRESS,
+                    message_ids: raw_event.message_ids,
+                    new_channel_id,
+                    new_topic_id,
+                };
+            }
+
             return {
                 flavor: EventFlavor.MUTATE_MESSAGE_CONTENT,
                 message_id: raw_event.message_id,

@@ -130,6 +130,13 @@ export class Page {
             );
         }
 
+        if (event.flavor === EventFlavor.MUTATE_MESSAGE_ADDRESS) {
+            // We eventually need to be more specific here.
+            StatusBar.scold(
+                `${event.message_ids.length} messages have been moved!`,
+            );
+        }
+
         if (event.flavor === EventFlavor.MUTATE_MESSAGE_CONTENT) {
             const message = DB.message_map.get(event.message_id)!;
             const message_row = new MessageRow(message);

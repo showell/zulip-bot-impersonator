@@ -26,6 +26,13 @@ export function handle_event(event: ZulipEvent): void {
         add_message_to_cache(event.message);
     }
 
+    if (event.flavor === EventFlavor.MUTATE_MESSAGE_ADDRESS) {
+        mutate_messages(event.message_ids, (message) => {
+            message.stream_id = event.new_channel_id;
+            message.topic_id = event.new_topic_id;
+        });
+    }
+
     if (event.flavor === EventFlavor.MUTATE_MESSAGE_CONTENT) {
         mutate_message(event.message_id, (message) => {
             message.content = event.content;

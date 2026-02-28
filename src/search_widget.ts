@@ -364,6 +364,10 @@ export class SearchWidget {
             this.handle_incoming_message(event.message);
         }
 
+        if (event.flavor === EventFlavor.MUTATE_MESSAGE_ADDRESS) {
+            this.refresh_message_ids(event.message_ids);
+        }
+
         if (event.flavor === EventFlavor.MUTATE_MESSAGE_CONTENT) {
             this.refresh_message_ids([event.message_id]);
         }
