@@ -13,10 +13,11 @@ export class MessagePane {
         const div = document.createElement("div");
 
         const topic_line = new MessageViewHeader(topic_row);
-        const message_list = new MessageList(
-            topic_filter(topic_row.topic_id()),
-            500,
-        );
+
+        const message_list = new MessageList({
+            filter: topic_filter(topic_row.topic_id()),
+            max_width: 500,
+        });
 
         layout.draw_list_pane(div, topic_line.div, message_list.div);
 

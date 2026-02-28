@@ -31,7 +31,7 @@ export class CodeSearch {
             },
         };
 
-        const message_list = new MessageList(filter, 750);
+        const message_list = new MessageList({ filter, max_width: 750 });
 
         div.append(message_list.div);
     }

@@ -8,6 +8,11 @@ import { MessageRowWidget } from "./message_row_widget";
 import { MessageRow } from "./row_types";
 import { SmartList } from "./smart_list";
 
+type MessageListConfig = {
+    filter: Filter;
+    max_width: number;
+};
+
 export class MessageList {
     div: HTMLDivElement;
     filter: Filter;
@@ -17,8 +22,9 @@ export class MessageList {
     pending_index: number | undefined;
     done_loading: boolean;
 
-    constructor(filter: Filter, max_width: number) {
+    constructor(config: MessageListConfig) {
         const self = this;
+        const { filter, max_width } = config;
 
         this.filter = filter;
         this.done_loading = false;
