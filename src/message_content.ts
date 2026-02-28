@@ -47,6 +47,18 @@ function fix_code_blocks(code_div: Element) {
     });
 }
 
+async function get_temporary_upload(src: string): Promise<string> {
+    let original_src;
+    const parts = src.slice(1).split("/");
+    if (parts[1] === "thumbnail") {
+        original_src =
+            "/user_uploads/" + parts.slice(2, -1).join("/");
+    } else {
+        original_src = "/" + parts.join("/");
+    }
+    return await zulip_client.fetch_image(original_src);
+}
+
 function fix_images(img: HTMLImageElement) {
     let src = img.src;
     const origin = window.location.origin;
@@ -58,15 +70,7 @@ function fix_images(img: HTMLImageElement) {
             img.setAttribute("src", config.realm_url + src);
 
             async function use_temporary_url() {
-                let original_src;
-                const parts = src.slice(1).split("/");
-                if (parts[1] === "thumbnail") {
-                    original_src =
-                        "/user_uploads/" + parts.slice(2, -1).join("/");
-                } else {
-                    original_src = "/" + parts.join("/");
-                }
-                const temp_src = await zulip_client.fetch_image(original_src);
+                const temp_src = await get_temporary_upload(src);
                 img.src = temp_src;
                 img.style.width = "90%";
 
