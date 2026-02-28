@@ -19,7 +19,7 @@ export class ButtonPanel {
         const div = document.createElement("div");
         div.style.display = "flex";
         div.style.maxHeight = "fit-content";
-        div.style.marginTop = "4px";
+        div.style.marginTop = "11px";
         div.style.marginBottom = "14px";
 
         this.close = new Button("close", () => {
