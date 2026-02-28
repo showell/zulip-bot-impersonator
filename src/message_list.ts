@@ -49,11 +49,16 @@ export class MessageList {
 
         div.style.minWidth = "350px";
         div.style.maxWidth = `${max_width}px`;
+        div.tabIndex = 0;
         div.append(smart_list.div);
 
         this.div = div;
         this.rows = rows;
         this.smart_list = smart_list;
+    }
+
+    focus() {
+        this.div.focus();
     }
 
     mark_topic_read() {
