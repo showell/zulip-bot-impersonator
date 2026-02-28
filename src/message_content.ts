@@ -14,6 +14,8 @@ function fix_code_blocks(code_div: Element) {
 
         const code = code_div.cloneNode(true) as HTMLDivElement;
         code.className = "";
+        code.style.fontFamily = 'Courier New, Courier, monospace';
+        code.style.fontSize = "20px";
         code.style.overflowX = "auto";
         code.style.overflowY = "auto";
         code.style.maxHeight = "80vh";
