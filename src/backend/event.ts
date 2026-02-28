@@ -104,9 +104,14 @@ function build_event(raw_event: any): ZulipEvent | undefined {
 
         case "update_message": {
             if (raw_event.message_ids && raw_event.orig_content === undefined) {
-                const new_channel_id = raw_event.new_stream_id ?? raw_event.stream_id;
-                const new_topic_name = raw_event.subject ?? raw_event.orig_subject;
-                const new_topic_id = DB.topic_map.get_topic_id(new_channel_id, new_topic_name);
+                const new_channel_id =
+                    raw_event.new_stream_id ?? raw_event.stream_id;
+                const new_topic_name =
+                    raw_event.subject ?? raw_event.orig_subject;
+                const new_topic_id = DB.topic_map.get_topic_id(
+                    new_channel_id,
+                    new_topic_name,
+                );
 
                 return {
                     flavor: EventFlavor.MUTATE_MESSAGE_ADDRESS,

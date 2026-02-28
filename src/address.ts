@@ -42,7 +42,8 @@ export function parse_path(path: string): PathInfo | undefined {
     const topic_name =
         topic_part === undefined ? undefined : unescape(topic_part);
 
-    const message_id = message_part === undefined ? undefined : parseInt(message_part);
+    const message_id =
+        message_part === undefined ? undefined : parseInt(message_part);
 
     return { channel_id, topic_name, message_id };
 }
@@ -72,7 +73,6 @@ export function get_address_from_path(path: string): Address | undefined {
         channel_id && topic_name
             ? topic_id_lookup(channel_id, topic_name)
             : undefined;
-
 
     return {
         channel_id,
