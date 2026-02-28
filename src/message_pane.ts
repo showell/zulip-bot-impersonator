@@ -21,7 +21,12 @@ export class MessagePane {
         const messages = model.filtered_messages(filter);
         const max_width = 500;
 
-        const message_list = new MessageList({ messages, filter, max_width, topic_id });
+        const message_list = new MessageList({
+            messages,
+            filter,
+            max_width,
+            topic_id,
+        });
 
         layout.draw_list_pane(div, topic_line.div, message_list.div);
 

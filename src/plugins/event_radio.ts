@@ -40,7 +40,10 @@ export class EventRadio {
             const topic_name = message_row.topic_name();
 
             const topic_id = undefined;
-            const message_row_widget = new MessageRowWidget(message_row, topic_id);
+            const message_row_widget = new MessageRowWidget(
+                message_row,
+                topic_id,
+            );
 
             div.append(address_div);
             div.append(message_row_widget.div);
