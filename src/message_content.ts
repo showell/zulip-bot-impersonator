@@ -18,9 +18,9 @@ function fix_code_blocks(code_div: Element) {
         heading.style.fontSize = "25px";
         heading.style.fontWeight = "bold";
 
-        const code = code_div.cloneNode(true) as HTMLDivElement;
-        code.className = "";
-        code.style.fontFamily = 'Courier New, Courier, monospace';
+        const code = document.createElement("pre");
+        code.innerText = code_div.textContent;
+        code.tabIndex = 0;
         code.style.fontSize = "20px";
         code.style.overflowX = "auto";
         code.style.overflowY = "auto";
@@ -35,8 +35,12 @@ function fix_code_blocks(code_div: Element) {
         popup.pop({
             div,
             confirm_button_text: "Ok",
-            callback: () => {},
+            callback: () => {
+                // nothing to do
+            },
         });
+
+        code.focus();
 
         e.stopPropagation();
         e.preventDefault();

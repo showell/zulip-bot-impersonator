@@ -1,3 +1,5 @@
+import { Button } from "./button";
+
 class DialogShell {
     popup_element: HTMLDialogElement;
 
@@ -40,12 +42,14 @@ class DialogShell {
 type PopupOptions = {
     div: HTMLDivElement;
     confirm_button_text: string;
+    // called when user finishes
     callback: () => void;
 };
 
-export function pop(info: PopupOptions): void {
+export function pop(info: PopupOptions): Popup {
     const popup = new Popup();
     popup.show(info);
+    return popup;
 }
 
 class Popup {
@@ -55,30 +59,18 @@ class Popup {
         this.dialog_shell = new DialogShell();
     }
 
-    make_button(text: string): HTMLElement {
-        const button = document.createElement("button");
-        button.style.cursor = "pointer";
-        button.style.maxWidth = "fit-content";
-        button.style.paddingLeft = "15px";
-        button.style.paddingRight = "15px";
-        button.style.paddingTop = "5px";
-        button.style.paddingBottom = "5px";
-        button.style.marginTop = "15px";
-        button.style.backgroundColor = "#000080";
-        button.style.color = "white";
-
-        button.innerText = text;
-        return button;
-    }
-
     show(info: PopupOptions) {
         const self = this;
 
-        const button = this.make_button(info.confirm_button_text);
-        button.addEventListener("click", () => self.finish(info.callback));
+        const button = new Button(
+            info.confirm_button_text,
+            () => {
+                self.finish(info.callback);
+            },
+        );
 
         const button_div = document.createElement("div");
-        button_div.append(button);
+        button_div.append(button.div);
         button_div.style.display = "flex";
         button_div.style.justifyContent = "end";
 
