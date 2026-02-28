@@ -64,7 +64,7 @@ function build_event(raw_event: any): ZulipEvent | undefined {
                     is_super_new: true,
                     sender_id: raw_message.sender_id,
                     stream_id: raw_message.stream_id,
-                    timestamp: raw_message.content,
+                    timestamp: raw_message.timestamp,
                     topic_id: topic.topic_id,
                     type: "stream",
                     unread,
