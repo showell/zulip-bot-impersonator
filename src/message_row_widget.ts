@@ -1,5 +1,7 @@
 import type { MessageRow } from "./row_types";
 
+import * as mouse_drag from "./util/mouse_drag";
+
 import { render_message_content } from "./message_content";
 import { MessagePopup } from "./message_popup";
 import { pop } from "./popup";
@@ -56,6 +58,10 @@ export class MessageRowWidget {
         const div = render_message_box();
 
         div.addEventListener("click", (e) => {
+            if (mouse_drag.is_drag(e)) {
+                return;
+            }
+
             const message_popup = new MessagePopup(message_row);
             pop({
                 div: message_popup.div,

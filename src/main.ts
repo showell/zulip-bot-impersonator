@@ -4,6 +4,8 @@ import * as zulip_client from "./backend/zulip_client";
 
 import { config } from "./secrets";
 
+import * as mouse_drag from "./util/mouse_drag";
+
 import * as app from "./app";
 import { Page } from "./page";
 
@@ -14,6 +16,8 @@ export async function run() {
     // for our initial download of Zulip data.  But
     // this is nice to have while data is still loading.
     document.title = config.nickname;
+
+    mouse_drag.initialize();
 
     // do before fetching to get "spinner"
     const page = new Page();

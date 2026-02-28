@@ -1,12 +1,18 @@
 import * as zulip_client from "./backend/zulip_client";
 import { config } from "./secrets";
 
+import * as mouse_drag from "./util/mouse_drag";
+
 import { APP } from "./app";
 import * as address from "./address";
 import * as popup from "./popup";
 
 function fix_code_blocks(code_div: Element) {
     code_div.addEventListener("click", (e) => {
+        if (mouse_drag.is_drag(e)) {
+            return;
+        }
+
         const heading = document.createElement("div");
         heading.innerText = "Raw Code View";
         heading.style.fontSize = "25px";
