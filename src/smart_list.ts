@@ -124,6 +124,11 @@ export class SmartList {
             console.log("should call this only in when_done callback");
             return;
         }
+
+        // Work around lazy-loading images
         this.dummies[index].scroll_to_top();
+        setTimeout(() => {
+            this.dummies[index].scroll_to_top();
+        }, 300);
     }
 }
