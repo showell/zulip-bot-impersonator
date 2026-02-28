@@ -14,11 +14,14 @@ export class MessageList {
     smart_list: SmartList;
     index_map: Map<number, number>;
     rows: Message[];
+    pending_index: number | undefined;
+    done_loading: boolean;
 
     constructor(filter: Filter, max_width: number) {
         const self = this;
 
         this.filter = filter;
+        this.done_loading = false;
 
         this.index_map = new Map<number, number>();
 
@@ -40,9 +43,11 @@ export class MessageList {
                 return message_row_widget.div;
             },
             when_done() {
-                const unread_index = rows.findIndex((row) => row.unread);
-                if (unread_index >= 0) {
-                    smart_list.scroll_index_to_top(unread_index);
+                self.done_loading = true;
+                if (self.pending_index) {
+                    smart_list.scroll_index_to_top(self.pending_index);
+                } else {
+                    self.maybe_go_to_first_unread();
                 }
             },
         });
@@ -57,6 +62,13 @@ export class MessageList {
         this.smart_list = smart_list;
     }
 
+    maybe_go_to_first_unread() {
+        const unread_index = rows.findIndex((row) => row.unread);
+        if (unread_index >= 0) {
+            smart_list.scroll_index_to_top(unread_index);
+        }
+    }
+
     go_to_message_id(message_id: number) {
         const rows = this.rows;
         const smart_list = this.smart_list;
@@ -64,8 +76,11 @@ export class MessageList {
         console.log("trying to go to", message_id);
         const index = rows.findIndex((message) => message.id === message_id);
         if (index >= 0) {
-            console.log("index", index);
-            smart_list.scroll_index_to_top(index);
+            if (this.done_loading) {
+                smart_list.scroll_index_to_top(index);
+            } else {
+                this.pending_index = index;
+            }
         }
     }
 
