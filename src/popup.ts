@@ -62,12 +62,9 @@ class Popup {
     show(info: PopupOptions) {
         const self = this;
 
-        const button = new Button(
-            info.confirm_button_text,
-            () => {
-                self.finish(info.callback);
-            },
-        );
+        const button = new Button(info.confirm_button_text, () => {
+            self.finish(info.callback);
+        });
 
         const button_div = document.createElement("div");
         button_div.append(button.div);
