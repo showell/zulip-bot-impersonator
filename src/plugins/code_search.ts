@@ -11,8 +11,8 @@ export class CodeSearch {
 
     constructor() {
         const div = document.createElement("div");
-        div.style.maxHeight = "90vh";
-        div.style.overflow = "auto";
+        div.style.display = "flex";
+        div.style.justifyContent = "center";
         this.div = div;
     }
 
@@ -31,7 +31,7 @@ export class CodeSearch {
             },
         };
 
-        const message_list = new MessageList(filter, 1000);
+        const message_list = new MessageList(filter, 750);
 
         div.append(message_list.div);
     }

@@ -5,6 +5,35 @@ import { APP } from "./app";
 import * as address from "./address";
 import * as popup from "./popup";
 
+function fix_code_blocks(code_div: Element) {
+    code_div.addEventListener("click", (e) => {
+        const heading = document.createElement("div");
+        heading.innerText = "Raw Code View";
+        heading.style.fontSize = "25px";
+        heading.style.fontWeight = "bold";
+
+        const code = code_div.cloneNode(true) as HTMLDivElement;
+        code.className = "";
+        code.style.overflowX = "auto";
+        code.style.overflowY = "auto";
+        code.style.maxHeight = "80vh";
+        code.style.padding = "10px";
+
+        const div = document.createElement("div");
+        div.append(heading);
+        div.append(code);
+
+        popup.pop({
+            div,
+            confirm_button_text: "Ok",
+            callback: () => {},
+        });
+
+        e.stopPropagation();
+        e.preventDefault();
+    });
+}
+
 function fix_images(img: HTMLImageElement) {
     let src = img.src;
     const origin = window.location.origin;
@@ -136,6 +165,9 @@ function fix_content(html_content: string): DocumentFragment {
     template.content
         .querySelectorAll("span.emoji")
         .forEach((ele) => fix_emojis(ele));
+    template.content
+        .querySelectorAll("div.codehilite")
+        .forEach((ele) => fix_code_blocks(ele));
     return template.content;
 }
 

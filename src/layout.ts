@@ -10,6 +10,10 @@ export function redraw_page(
     page_div.append(plugin_div);
 
     plugin_div.style.marginTop = "7px";
+    // TODO: calculate maxHeight more precisely
+    // relative to the bottom of the navbar
+    plugin_div.style.maxHeight = "90vh";
+    plugin_div.style.overflow = "auto";
     page_div.style.height = "100vh";
 }
 
