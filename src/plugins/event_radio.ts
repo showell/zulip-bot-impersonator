@@ -36,8 +36,6 @@ export class EventRadio {
             const message_row = new MessageRow(message);
 
             const address_div = document.createElement("div");
-            const stream_name = message_row.stream_name();
-            const topic_name = message_row.topic_name();
 
             const topic_id = undefined;
             const message_row_widget = new MessageRowWidget(
