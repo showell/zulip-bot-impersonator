@@ -77,10 +77,15 @@ class Popup {
         const button = this.make_button(info.confirm_button_text);
         button.addEventListener("click", () => self.finish(info.callback));
 
+        const button_div = document.createElement("div");
+        button_div.append(button);
+        button_div.style.display = "flex";
+        button_div.style.justifyContent = "end";
+
         // PUT THEM ALL TOGETHER
         const flex_div = document.createElement("div");
         flex_div.append(info.div);
-        flex_div.append(button);
+        flex_div.append(button_div);
 
         this.dialog_shell.invoke_with_custom_div(flex_div);
     }
