@@ -19,6 +19,7 @@ function fix_code_blocks(code_div: Element) {
         code.style.overflowX = "auto";
         code.style.overflowY = "auto";
         code.style.maxHeight = "80vh";
+        code.style.maxWidth = "80vw";
         code.style.padding = "10px";
 
         const div = document.createElement("div");
