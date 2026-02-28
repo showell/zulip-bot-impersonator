@@ -5,6 +5,7 @@ import * as mouse_drag from "./util/mouse_drag";
 
 import { APP } from "./app";
 import * as address from "./address";
+import * as images from "./images";
 import * as popup from "./popup";
 
 function fix_code_blocks(code_div: Element) {
@@ -82,18 +83,7 @@ function fix_images(img: HTMLImageElement) {
         img.style.width = "90%";
 
         img.addEventListener("click", (e) => {
-            const div = document.createElement("div");
-            const img = document.createElement("img");
-            img.src = temp_src;
-            img.style.width = "70vw";
-            div.append(img);
-            div.style.overflowX = "auto";
-            div.style.overflowY = "auto";
-            popup.pop({
-                div,
-                confirm_button_text: "Ok",
-                callback: () => {},
-            });
+            images.show_image_in_popup(img.src);
 
             e.stopPropagation();
             e.preventDefault();
