@@ -85,7 +85,7 @@ class LoginManager {
             };
 
             config.store_realm_config(new_realm);
-            window.location.replace(`/${new_realm.nickname}`);
+            window.location.replace(import.meta.env.BASE_URL+`${new_realm.nickname}`);
         };
 
         this.content_div.append(form);
@@ -105,7 +105,7 @@ class LoginManager {
             realm_btn.innerText = `Surf ${realm.nickname} (${realm.email})`;
 
             realm_btn.onclick = () => {
-                window.location.replace(`/${realm.nickname}`);
+                window.location.replace(import.meta.env.BASE_URL+`${realm.nickname}`);
             };
 
             list_container.append(realm_btn);
@@ -149,7 +149,7 @@ export function needs_to_login(): boolean {
     // 4. Otherwise we paint the login screen that shows the user their available realms
     // and a form to register a realm, the end result is either the user closes the tab for some reason
     // or gets redirected to a path with an existing realm.
-    const nickname = window.location.pathname.split("/")[1];
+    const nickname = window.location.pathname.split("/").at(-1);
     const config_from_nickname = config.get_realm_config(nickname)
     if (config_from_nickname === undefined) {
         start_login_process()

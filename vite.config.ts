@@ -1,8 +1,11 @@
 import { defineConfig } from "vite";
 
-export default defineConfig({
-    server: {
-        port: 7888,
-    },
-    base:'/zulip-bot-impersonator/'
-});
+export default defineConfig(({ mode }) => ({
+  server: {
+    port: 7888,
+  },
+  base:
+    mode === "production"
+      ? "/zulip-bot-impersonator/"
+      : "/",
+}));
