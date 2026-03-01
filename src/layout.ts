@@ -1,26 +1,13 @@
-import type { PluginHelper } from "./plugin_helper";
-
 import { render_list_heading } from "./dom/render";
 
-export function redraw_page(
+export function draw_page(
     page_div: HTMLDivElement,
     navbar_div: HTMLDivElement,
-    plugin_helpers: PluginHelper[],
+    container_div: HTMLDivElement,
 ): void {
     page_div.innerHTML = "";
     page_div.append(navbar_div);
-
-    for (const plugin_helper of plugin_helpers) {
-        const plugin_div = plugin_helper.div;
-
-        plugin_div.style.marginTop = "7px";
-        // TODO: calculate maxHeight more precisely
-        // relative to the bottom of the navbar
-        plugin_div.style.maxHeight = "90vh";
-        plugin_div.style.overflow = "auto";
-        page_div.append(plugin_div);
-    }
-
+    page_div.append(container_div);
     page_div.style.height = "100vh";
 }
 
