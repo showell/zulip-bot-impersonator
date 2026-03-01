@@ -72,6 +72,7 @@ export class Page {
         for (const plugin_helper of this.plugin_helpers) {
             if (plugin_helper.open) {
                 plugin_helper.open = false;
+                plugin_helper.div.style.display = "none";
                 plugin_helper.redraw_tab_button();
             }
         }
@@ -80,6 +81,7 @@ export class Page {
     open(plugin_helper: PluginHelper): void {
         this.close_all();
         plugin_helper.open = true;
+        plugin_helper.div.style.display = "block";
         plugin_helper.redraw_tab_button();
         this.redraw(plugin_helper);
     }
@@ -114,7 +116,7 @@ export class Page {
 
         const navbar_div = layout.make_navbar(StatusBar.div, button_bar_div);
 
-        layout.redraw_page(div, navbar_div, plugin_helper.div);
+        layout.redraw_page(div, navbar_div, plugin_helpers)
     }
 
     add_search_widget(address: Address): void {
