@@ -155,7 +155,7 @@ export function needs_to_login(): boolean {
     // 4. Otherwise we paint the login screen that shows the user their available realms
     // and a form to register a realm, the end result is either the user closes the tab for some reason
     // or gets redirected to a path with an existing realm.
-    const nickname = window.location.pathname.split("/").at(-1);
+    const nickname = window.location.pathname.split("/").at(-1)!;
     const config_from_nickname = config.get_realm_config(nickname);
     if (config_from_nickname === undefined) {
         start_login_process();
