@@ -1,8 +1,8 @@
 import { EventHandler, ZulipEvent } from "./backend/event";
 import * as database from "./backend/database";
 import * as zulip_client from "./backend/zulip_client";
-import * as login_manager from './login_manager'
-import * as config from './config'
+import * as login_manager from "./login_manager";
+import * as config from "./config";
 
 import * as mouse_drag from "./util/mouse_drag";
 
@@ -11,9 +11,9 @@ import { Page } from "./page";
 
 export async function run() {
     if (login_manager.needs_to_login()) {
-      // The login_manager will end up doing a page redirect that will
-      // call this `run` again.
-      return;
+        // The login_manager will end up doing a page redirect that will
+        // call this `run` again.
+        return;
     }
 
     // We overwrite this as soon as we fetch data

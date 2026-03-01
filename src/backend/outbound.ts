@@ -1,4 +1,4 @@
-import * as config from '../config'
+import * as config from "../config";
 
 type SendInfo = {
     stream_id: number;

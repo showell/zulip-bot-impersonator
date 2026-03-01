@@ -9,7 +9,6 @@ import * as model from "./backend/model";
 
 import * as page_widget from "./dom/page_widget";
 
-
 import { CodeSearch } from "./plugins/code_search";
 import { GitHubSearch } from "./plugins/github_search";
 import { PluginChooser } from "./plugins/plugin_chooser";

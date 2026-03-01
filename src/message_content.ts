@@ -1,5 +1,5 @@
 import * as zulip_client from "./backend/zulip_client";
-import * as config from './config'
+import * as config from "./config";
 
 import * as mouse_drag from "./util/mouse_drag";
 

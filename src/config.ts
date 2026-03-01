@@ -4,7 +4,7 @@ export type RealmConfig = {
     url: string;
     nickname: string;
 };
-import * as local_storage from './localstorage'
+import * as local_storage from "./localstorage";
 let current_realm_config: RealmConfig;
 
 // login_manager should be the only caller for this unless
@@ -14,7 +14,7 @@ export function set_current_realm_config(config: RealmConfig) {
 }
 
 export function get_realm_config(nickname: string): RealmConfig | undefined {
-    const config_str = local_storage.get(nickname)
+    const config_str = local_storage.get(nickname);
     if (config_str === null) return undefined;
     return JSON.parse(config_str);
 }

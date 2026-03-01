@@ -3,7 +3,9 @@ import type { EventHandler } from "./event";
 import * as config from "../config";
 
 function get_headers() {
-    const auth = btoa(`${config.get_email_for_current_realm()}:${config.get_api_key_for_current_realm()}`);
+    const auth = btoa(
+        `${config.get_email_for_current_realm()}:${config.get_api_key_for_current_realm()}`,
+    );
     const auth_header = `Basic ${auth}`;
     return { Authorization: auth_header };
 }
@@ -66,7 +68,10 @@ export async function get_users() {
 }
 
 export async function get_subscriptions() {
-    const url = new URL(`/api/v1/users/me/subscriptions`, config.get_current_realm_url());
+    const url = new URL(
+        `/api/v1/users/me/subscriptions`,
+        config.get_current_realm_url(),
+    );
     const response = await fetch(url, { headers: get_headers() });
     const data = await response.json();
     return data.subscriptions;

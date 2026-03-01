@@ -1,6 +1,6 @@
 import type { Message, Stream, User } from "./db_types";
 
-import * as config from '../config'
+import * as config from "../config";
 import { Database } from "./database";
 import { TopicMap } from "./topic_map";
 import * as parse from "./parse";

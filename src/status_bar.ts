@@ -32,8 +32,8 @@ class StatusBarWidget {
         this.text_div.innerText = text;
     }
 
-    clear(): void{
-        this.text_div.innerText=""
+    clear(): void {
+        this.text_div.innerText = "";
     }
 }
 
