@@ -35,3 +35,7 @@ Then do:
 ```
 npm run server
 ```
+
+## GH Pages
+
+We deploy this with GH Pages. More details to come.
