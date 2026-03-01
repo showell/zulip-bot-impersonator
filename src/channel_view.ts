@@ -35,8 +35,8 @@ export class ChannelView {
 
         const topic_pane_div = document.createElement("div");
 
+        // TopicList will immediately populate itself.
         const topic_list = new TopicList(channel_row, search_widget);
-        topic_list.populate();
 
         const heading_text = "#" + channel_row.name();
         layout.draw_table_pane(topic_pane_div, heading_text, topic_list.div);

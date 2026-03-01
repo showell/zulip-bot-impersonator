@@ -18,13 +18,17 @@ export class TopicList {
 
     constructor(channel_row: ChannelRow, search_widget: SearchWidget) {
         this.search_widget = search_widget;
-
-        const div = document.createElement("div");
-
         this.stream_id = channel_row.stream_id();
 
-        this.topic_rows = [];
-        this.cursor = new Cursor();
+        const cursor = new Cursor();
+        const topic_rows = this.populate_topic_rows();
+        cursor.set_count(topic_rows.length);
+
+        this.cursor = cursor;
+        this.topic_rows = topic_rows;
+
+        const div = document.createElement("div");
+        div.append(this.make_table());
 
         this.div = div;
     }
@@ -48,7 +52,7 @@ export class TopicList {
 
     refresh_topics_with_topic_selected(topic_id: number): void {
         this.topic_id = topic_id;
-        this.populate();
+        this.refresh();
     }
 
     get_topic_name(): string | undefined {
@@ -93,10 +97,6 @@ export class TopicList {
         if (topic_row === undefined) return undefined;
 
         return topic_row.topic_id();
-    }
-
-    refresh(): void {
-        this.populate();
     }
 
     set_topic_id_from_cursor(): void {
@@ -154,7 +154,7 @@ export class TopicList {
         return table_widget.table(columns, row_widgets);
     }
 
-    populate() {
+    refresh() {
         const div = this.div;
 
         this.topic_rows = this.populate_topic_rows();
@@ -167,30 +167,30 @@ export class TopicList {
     select_index(index: number) {
         this.cursor.select_index(index);
         this.set_topic_id_from_cursor();
-        this.populate();
+        this.refresh();
     }
 
     clear_selection(): void {
         this.cursor.clear();
         this.set_topic_id_from_cursor();
-        this.populate();
+        this.refresh();
     }
 
     surf(): void {
         this.cursor.first();
         this.set_topic_id_from_cursor();
-        this.populate();
+        this.refresh();
     }
 
     down(): void {
         this.cursor.down();
         this.set_topic_id_from_cursor();
-        this.populate();
+        this.refresh();
     }
 
     up(): void {
         this.cursor.up();
         this.set_topic_id_from_cursor();
-        this.populate();
+        this.refresh();
     }
 }
