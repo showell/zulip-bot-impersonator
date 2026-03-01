@@ -1,4 +1,4 @@
-import { config } from "../secrets";
+import * as config from '../config'
 
 type SendInfo = {
     stream_id: number;
@@ -13,11 +13,11 @@ export function mark_message_ids_unread(unread_message_ids: number[]): void {
         messages: JSON.stringify(unread_message_ids),
     });
 
-    const email = config.user_creds.email;
-    const api_key = config.user_creds.api_key;
+    const email = config.get_email_for_current_realm();
+    const api_key = config.get_api_key_for_current_realm();
 
     const credentials = btoa(`${email}:${api_key}`);
-    const api_url = `${config.realm_url}/api/v1/messages/flags`;
+    const api_url = `${config.get_current_realm_url()}/api/v1/messages/flags`;
 
     fetch(api_url, {
         method: "POST",
@@ -39,11 +39,11 @@ export function send_message(info: SendInfo): void {
         read_by_sender: "true",
     });
 
-    const email = config.user_creds.email;
-    const api_key = config.user_creds.api_key;
+    const email = config.get_email_for_current_realm();
+    const api_key = config.get_api_key_for_current_realm();
 
     const credentials = btoa(`${email}:${api_key}`);
-    const api_url = `${config.realm_url}/api/v1/messages`;
+    const api_url = `${config.get_current_realm_url()}/api/v1/messages`;
 
     fetch(api_url, {
         method: "POST",

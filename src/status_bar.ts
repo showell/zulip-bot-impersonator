@@ -31,6 +31,10 @@ class StatusBarWidget {
         this.text_div.style.color = "#31708f";
         this.text_div.innerText = text;
     }
+
+    clear(): void{
+        this.text_div.innerText=""
+    }
 }
 
 export function create_global_status_bar(): void {

@@ -1,9 +1,9 @@
 import type { EventHandler } from "./event";
 
-import { realm_data, self_creds } from "../secrets";
+import * as config from "../config";
 
 function get_headers() {
-    const auth = btoa(`${self_creds.email}:${self_creds.api_key}`);
+    const auth = btoa(`${config.get_email_for_current_realm()}:${config.get_api_key_for_current_realm()}`);
     const auth_header = `Basic ${auth}`;
     return { Authorization: auth_header };
 }
@@ -12,7 +12,7 @@ let queue_id: string | undefined;
 let last_event_id: string | undefined;
 
 export async function register_queue() {
-    const url = new URL("/api/v1/register", realm_data.url);
+    const url = new URL("/api/v1/register", config.get_current_realm_url());
     url.searchParams.set("apply_markdown", "true");
 
     const response = await fetch(url, {
@@ -29,7 +29,7 @@ export async function start_polling(event_handler: EventHandler) {
         return;
     }
 
-    const url = new URL("/api/v1/events", realm_data.url);
+    const url = new URL("/api/v1/events", config.get_current_realm_url());
 
     while (queue_id !== undefined && last_event_id !== undefined) {
         url.searchParams.set("queue_id", queue_id);
@@ -49,7 +49,7 @@ export async function start_polling(event_handler: EventHandler) {
 }
 
 export async function get_messages(num_before: number) {
-    const url = new URL(`/api/v1/messages`, realm_data.url);
+    const url = new URL(`/api/v1/messages`, config.get_current_realm_url());
     url.searchParams.set("narrow", `[]`);
     url.searchParams.set("num_before", JSON.stringify(num_before));
     url.searchParams.set("anchor", "newest");
@@ -59,21 +59,21 @@ export async function get_messages(num_before: number) {
 }
 
 export async function get_users() {
-    const url = new URL(`/api/v1/users`, realm_data.url);
+    const url = new URL(`/api/v1/users`, config.get_current_realm_url());
     const response = await fetch(url, { headers: get_headers() });
     const data = await response.json();
     return data.members;
 }
 
 export async function get_subscriptions() {
-    const url = new URL(`/api/v1/users/me/subscriptions`, realm_data.url);
+    const url = new URL(`/api/v1/users/me/subscriptions`, config.get_current_realm_url());
     const response = await fetch(url, { headers: get_headers() });
     const data = await response.json();
     return data.subscriptions;
 }
 
 export async function upload_file(file: File) {
-    const url = new URL("/api/v1/user_uploads", realm_data.url);
+    const url = new URL("/api/v1/user_uploads", config.get_current_realm_url());
     const formData = new FormData();
 
     formData.append("FILE", file);
@@ -90,7 +90,7 @@ export async function upload_file(file: File) {
 }
 
 export async function fetch_image(image_url: string): Promise<string> {
-    const url = new URL(`/api/v1${image_url}`, realm_data.url);
+    const url = new URL(`/api/v1${image_url}`, config.get_current_realm_url());
 
     const response = await fetch(url, {
         method: "GET",
@@ -99,5 +99,5 @@ export async function fetch_image(image_url: string): Promise<string> {
     const data = await response.json();
 
     // we get a temporary url that we have access to
-    return realm_data.url + data.url;
+    return config.get_current_realm_url() + data.url;
 }

@@ -9,7 +9,6 @@ import * as model from "./backend/model";
 
 import * as page_widget from "./dom/page_widget";
 
-import { config } from "./secrets";
 
 import { CodeSearch } from "./plugins/code_search";
 import { GitHubSearch } from "./plugins/github_search";
@@ -21,6 +20,7 @@ import * as layout from "./layout";
 import { MessageRow } from "./row_types";
 import { SearchWidget } from "./search_widget";
 import { StatusBar, create_global_status_bar } from "./status_bar";
+import { get_current_realm_nickname } from "./config";
 
 export class Page {
     div: HTMLDivElement;
@@ -60,7 +60,7 @@ export class Page {
     update_title(): void {
         const unread_count = model.get_total_unread_count();
         const prefix = unread_count === 0 ? "" : `(${unread_count}) `;
-        document.title = `${prefix}${config.nickname}`;
+        document.title = `${prefix}${get_current_realm_nickname()}`;
     }
 
     add_plugin(plugin: Plugin): void {

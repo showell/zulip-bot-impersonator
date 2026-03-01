@@ -1,7 +1,6 @@
 import type { Message, Stream, User } from "./db_types";
 
-import { config } from "../secrets";
-
+import * as config from '../config'
 import { Database } from "./database";
 import { TopicMap } from "./topic_map";
 import * as parse from "./parse";
@@ -48,7 +47,7 @@ export async function fetch_model_data(): Promise<Database> {
     for (const user of users) {
         user_map.set(user.id, user);
 
-        if (user.email === config.user_creds.email) {
+        if (user.email === config.get_email_for_current_realm()) {
             current_user_id = user.id;
         }
     }
