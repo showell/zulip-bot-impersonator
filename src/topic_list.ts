@@ -103,16 +103,26 @@ export class TopicList {
         this.topic_id = this.get_topic_id_from_cursor();
     }
 
-    sort(topic_rows: TopicRow[]) {
-        topic_rows.sort((r1, r2) => {
-            return r2.last_msg_id() - r1.last_msg_id();
+    sort_recent(topic_rows: TopicRow[]) {
+        topic_rows.sort((topic1, topic2) => {
+            return topic2.last_msg_id() - topic1.last_msg_id();
+        });
+    }
+
+    sort_alpha(topic_rows: TopicRow[]) {
+        topic_rows.sort((topic1, topic2) => {
+            return topic1.name().localeCompare(topic2.name());
         });
     }
 
     populate_topic_rows(): TopicRow[] {
         const stream_id = this.stream_id!;
-        const topic_rows = model.get_topic_rows(stream_id);
-        this.sort(topic_rows);
+        const batch_size = 10;
+        const all_topic_rows = model.get_topic_rows(stream_id);
+        this.sort_recent(all_topic_rows);
+        // TODO: make sure we get all unread topics at a minimum
+        const topic_rows = all_topic_rows.slice(0, batch_size);
+        this.sort_alpha(topic_rows);
         return topic_rows;
     }
 
