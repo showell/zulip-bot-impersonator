@@ -13,7 +13,8 @@ export function is_drag(event: Event): boolean {
 
     // This is the "Manhattan" distance, i.e. the distance driving
     // on grid lines.
-    const drag_distance = Math.abs(e.pageX - start_x) + Math.abs(e.pageY - start_y);
+    const drag_distance =
+        Math.abs(e.pageX - start_x) + Math.abs(e.pageY - start_y);
 
     const sel = window.getSelection();
     const has_selection = sel?.type === "Range" && sel.toString().length > 0;
