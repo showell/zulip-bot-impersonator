@@ -89,13 +89,13 @@ export class PluginHelper {
         this.page.go_to_top();
     }
 
-    refresh() {
+    redraw_tab_button() {
         this.tab_button.refresh();
     }
 
     update_label(label: string) {
         this.label = label;
-        this.refresh();
+        this.redraw_tab_button();
     }
 
     violet() {

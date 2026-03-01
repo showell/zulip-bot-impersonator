@@ -72,7 +72,7 @@ export class Page {
         for (const plugin_helper of this.plugin_helpers) {
             if (plugin_helper.open) {
                 plugin_helper.open = false;
-                plugin_helper.refresh();
+                plugin_helper.redraw_tab_button();
             }
         }
     }
@@ -80,7 +80,7 @@ export class Page {
     open(plugin_helper: PluginHelper): void {
         this.close_all();
         plugin_helper.open = true;
-        plugin_helper.refresh();
+        plugin_helper.redraw_tab_button();
         this.redraw(plugin_helper);
     }
 
