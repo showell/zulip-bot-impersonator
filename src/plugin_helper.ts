@@ -1,11 +1,7 @@
-import type { Stream } from "./backend/db_types";
-
 import { ZulipEvent } from "./backend/event";
-import * as backend_model from "./backend/model";
 
 import type { Page } from "./page";
 
-import * as page_widget from "./dom/page_widget";
 import { TabButton } from "./tab_button";
 
 export type Plugin = {
