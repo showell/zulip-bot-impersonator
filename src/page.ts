@@ -114,7 +114,7 @@ export class Page {
 
         const navbar_div = layout.make_navbar(StatusBar.div, button_bar_div);
 
-        layout.redraw_page(div, navbar_div, plugin_helper.plugin.div);
+        layout.redraw_page(div, navbar_div, plugin_helper.div);
     }
 
     add_search_widget(address: Address): void {

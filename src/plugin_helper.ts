@@ -15,6 +15,7 @@ export type Plugin = {
 };
 
 export class PluginHelper {
+    div: HTMLDivElement;
     deleted: boolean;
     page: Page;
     open: boolean;
@@ -23,12 +24,16 @@ export class PluginHelper {
     tab_button: TabButton;
 
     constructor(plugin: Plugin, page: Page) {
+        const div = document.createElement("div");
         this.plugin = plugin;
         this.page = page;
         this.deleted = false;
         this.open = false;
         this.label = "plugin";
         this.tab_button = new TabButton(this, page);
+
+        div.append(plugin.div);
+        this.div = div;
     }
 
     delete_me(): void {
