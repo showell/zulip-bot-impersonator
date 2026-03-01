@@ -4,7 +4,6 @@ import type { Message } from "./backend/db_types";
 import { EventFlavor } from "./backend/event";
 
 import type { Address } from "./address";
-import type { ChannelList } from "./channel_list";
 import type { MessageList } from "./message_list";
 import type { MessageView } from "./message_view";
 import type { PluginHelper } from "./plugin_helper";
@@ -14,8 +13,8 @@ import type { TopicList } from "./topic_list";
 import * as layout from "./layout";
 
 import { APP } from "./app";
+import { ChannelList } from "./channel_list";
 import { ButtonPanel } from "./nav_button_panel";
-import { ChannelPane } from "./channel_pane";
 import { ChannelView } from "./channel_view";
 import { PaneManager } from "./pane_manager";
 import { StatusBar } from "./status_bar";
@@ -44,7 +43,7 @@ export class SearchWidget {
     div: HTMLDivElement;
     button_panel: ButtonPanel;
     pane_manager: PaneManager;
-    channel_pane: ChannelPane;
+    channel_list: ChannelList;
     channel_view?: ChannelView;
     plugin_helper?: PluginHelper;
     start_address: Address;
@@ -59,17 +58,22 @@ export class SearchWidget {
         const button_panel = new ButtonPanel(self);
         const pane_manager = new PaneManager();
 
-        const channel_pane = new ChannelPane(self);
+        const channel_list = new ChannelList(self);
+        channel_list.populate();
+
+        const channel_pane_div = document.createElement("div");
+        layout.draw_table_pane(channel_pane_div, "Channels", channel_list.div);
+
         pane_manager.add_pane({
             key: "channel_pane",
-            pane_widget: channel_pane,
+            pane_widget: { div: channel_pane_div },
         });
 
         layout.draw_search_widget(div, button_panel.div, pane_manager.div);
 
         this.button_panel = button_panel;
+        this.channel_list = channel_list;
         this.pane_manager = pane_manager;
-        this.channel_pane = channel_pane;
         this.div = div;
     }
 
@@ -83,14 +87,14 @@ export class SearchWidget {
     }
 
     refresh_message_ids(message_ids: number[]): void {
-        this.channel_pane.populate();
+        this.channel_list.populate();
         if (this.channel_view) {
             this.channel_view.refresh_message_ids(message_ids);
         }
     }
 
     handle_incoming_message(message: Message): void {
-        this.channel_pane.populate();
+        this.channel_list.populate();
         if (this.channel_view) {
             this.channel_view.refresh(message);
         }
@@ -104,7 +108,7 @@ export class SearchWidget {
             if (start_address.channel_id === undefined) {
                 throw new Error("unexpected");
             }
-            this.get_channel_list().select_channel_id(start_address.channel_id);
+            this.channel_list.select_channel_id(start_address.channel_id);
             this.update_channel();
             this.channel_view!.select_topic_id(start_address.topic_id);
             this.update_topic();
@@ -118,7 +122,7 @@ export class SearchWidget {
         }
 
         if (start_address.channel_id) {
-            this.get_channel_list().select_channel_id(start_address.channel_id);
+            this.channel_list.select_channel_id(start_address.channel_id);
             this.update_channel();
             return;
         }
@@ -127,10 +131,6 @@ export class SearchWidget {
         this.button_panel.start();
         StatusBar.inform("Begin finding messages by clicking on a channel.");
         this.update_label();
-    }
-
-    get_channel_list(): ChannelList {
-        return this.channel_pane.get_channel_list();
     }
 
     get_topic_list(): TopicList | undefined {
@@ -170,7 +170,7 @@ export class SearchWidget {
     }
 
     channel_selected(): boolean {
-        return this.channel_pane.channel_selected();
+        return this.channel_list.has_selection();
     }
 
     build_main_section(): HTMLElement {
@@ -187,11 +187,11 @@ export class SearchWidget {
     }
 
     get_channel_id(): number | undefined {
-        return this.get_channel_list().get_channel_id();
+        return this.channel_list.get_channel_id();
     }
 
     get_channel_row(): ChannelRow {
-        return this.get_channel_list().get_channel_row()!;
+        return this.channel_list.get_channel_row()!;
     }
 
     get_channel_name(): string | undefined {
@@ -217,7 +217,7 @@ export class SearchWidget {
             return channel_row.unread_count();
         }
 
-        return this.get_channel_list().unread_count();
+        return this.channel_list.unread_count();
     }
 
     get_narrow_label(): string {
@@ -233,7 +233,7 @@ export class SearchWidget {
     }
 
     clear_channel(): void {
-        this.get_channel_list().clear_selection();
+        this.channel_list.clear_selection();
         this.pane_manager.remove_after("channel_pane");
         this.channel_view = undefined;
         this.update_button_panel();
@@ -262,18 +262,18 @@ export class SearchWidget {
     }
 
     set_channel_index(index: number): void {
-        this.get_channel_list().select_index(index);
+        this.channel_list.select_index(index);
         this.update_channel();
         this.button_panel.focus_surf_topics_button();
     }
 
     channel_up(): void {
-        this.get_channel_list().up();
+        this.channel_list.up();
         this.update_channel();
     }
 
     channel_down(): void {
-        this.get_channel_list().down();
+        this.channel_list.down();
         this.update_channel();
     }
 
@@ -283,8 +283,8 @@ export class SearchWidget {
         if (topic_list) {
             topic_list.clear_selection();
         }
-        this.get_channel_list().surf();
-        this.channel_pane.populate();
+        this.channel_list.surf();
+        this.channel_list.populate();
         this.update_channel();
         this.button_panel.focus_next_channel_button();
     }
