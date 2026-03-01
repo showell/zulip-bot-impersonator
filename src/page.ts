@@ -24,6 +24,7 @@ import { StatusBar, create_global_status_bar } from "./status_bar";
 export class Page {
     div: HTMLDivElement;
     plugin_helpers: PluginHelper[];
+    button_bar_div: HTMLDivElement;
 
     constructor() {
         const div = document.createElement("div");
@@ -38,14 +39,16 @@ export class Page {
             "Welcome to Zulip! loading users and recent messages...",
         );
 
+        this.button_bar_div = document.createElement("div");
+
         this.plugin_helpers = [];
         this.div = div;
     }
 
     start(): void {
+        this.populate();
         this.add_plugin(new PluginChooser());
         this.add_plugin(new CodeSearch());
-
         this.add_search_widget(address.nada());
         this.update_title();
     }
@@ -66,11 +69,14 @@ export class Page {
 
         this.open(plugin_helper);
         plugin.start(plugin_helper);
+        this.div.append(plugin_helper.div);
+        this.populate_button_bar();
     }
 
     close_all(): void {
         for (const plugin_helper of this.plugin_helpers) {
             if (plugin_helper.open) {
+                console.log("closing", plugin_helper.plugin);
                 plugin_helper.open = false;
                 plugin_helper.div.style.display = "none";
                 plugin_helper.redraw_tab_button();
@@ -83,22 +89,26 @@ export class Page {
         plugin_helper.open = true;
         plugin_helper.div.style.display = "block";
         plugin_helper.redraw_tab_button();
-        this.redraw(plugin_helper);
-    }
-
-    remove_deleted_plugins(): void {
-        this.plugin_helpers = this.plugin_helpers.filter((plugin_helper) => {
-            return !plugin_helper.deleted;
-        });
     }
 
     go_to_top(): void {
-        this.redraw(this.plugin_helpers[0]);
+        this.open(this.plugin_helpers[0]);
     }
 
-    redraw(plugin_helper: PluginHelper): void {
-        const self = this;
+    populate(): void {
+        const plugin_helpers = this.plugin_helpers;
         const div = this.div;
+
+
+        this.populate_button_bar();
+        const navbar_div = layout.make_navbar(StatusBar.div, this.button_bar_div);
+
+        layout.redraw_page(div, navbar_div, plugin_helpers)
+    }
+
+    populate_button_bar() {
+        const self = this;
+
         const plugin_helpers = this.plugin_helpers;
 
         const tab_button_divs = plugin_helpers.map((plugin_helper) => {
@@ -109,14 +119,13 @@ export class Page {
             self.add_search_widget(address.nada());
         }
 
-        const button_bar_div = page_widget.make_button_bar(
+        const button_bar = page_widget.make_button_bar(
             tab_button_divs,
             add_search_widget,
         );
 
-        const navbar_div = layout.make_navbar(StatusBar.div, button_bar_div);
-
-        layout.redraw_page(div, navbar_div, plugin_helpers)
+        this.button_bar_div.innerHTML = "";
+        this.button_bar_div.append(button_bar);
     }
 
     add_search_widget(address: Address): void {

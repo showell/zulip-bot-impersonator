@@ -36,38 +36,32 @@ export class PaneManager {
             console.log("mismatch key", key);
             return;
         }
+        this.panes[this.panes.length - 1].pane_widget.div.remove();
         this.panes = this.panes.slice(0, this.panes.length - 1);
-        this.redraw();
     }
 
     remove_after(key: string) {
         const new_panes = [];
 
+        let remove = false;
+
         for (const pane of this.panes) {
-            new_panes.push(pane);
-            if (pane.key === key) {
-                break;
+            if (remove) {
+                pane.pane_widget.div.remove();
+            } else {
+                new_panes.push(pane);
+                if (pane.key === key) {
+                    remove = true;
+                }
             }
         }
 
         this.panes = new_panes;
-        this.redraw();
     }
 
     replace_after(key: string, new_pane: Pane) {
-        const new_panes = [];
-
-        for (const pane of this.panes) {
-            new_panes.push(pane);
-            if (pane.key === key) {
-                break;
-            }
-        }
-
-        new_panes.push(new_pane);
-
-        this.panes = new_panes;
-        this.redraw();
+        this.remove_after(key);
+        this.add_pane(new_pane);
     }
 
     end_key_matches(key: string): boolean {
@@ -79,16 +73,5 @@ export class PaneManager {
         }
 
         return key === panes[size - 1].key;
-    }
-
-    redraw(): void {
-        // TODO: adjust to screen size
-        const div = this.div;
-        const panes = this.panes;
-
-        div.innerHTML = "";
-        for (const pane of panes) {
-            div.append(pane.pane_widget.div);
-        }
     }
 }

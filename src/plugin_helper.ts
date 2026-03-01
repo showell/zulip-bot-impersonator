@@ -37,8 +37,9 @@ export class PluginHelper {
     }
 
     delete_me(): void {
+        this.tab_button.div.style.display = "none";
+        this.div.style.display = "none";
         this.deleted = true;
-        this.page.remove_deleted_plugins();
         this.page.go_to_top();
     }
 
