@@ -56,10 +56,6 @@ export class ChannelView {
         this.channel_info = channel_info;
     }
 
-    topic_selected(): boolean {
-        return this.topic_list.has_selection();
-    }
-
     open_message_view(): void {
         const pane_manager = this.pane_manager;
         const topic_row = this.get_topic_row()!;

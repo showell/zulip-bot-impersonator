@@ -171,10 +171,11 @@ export class SearchWidget {
     }
 
     topic_selected(): boolean {
-        if (this.channel_view === undefined) {
+        const topic_list = this.get_topic_list();
+        if (topic_list === undefined) {
             return false;
         }
-        return this.channel_view.topic_selected();
+        return topic_list.has_selection();
     }
 
     channel_selected(): boolean {
