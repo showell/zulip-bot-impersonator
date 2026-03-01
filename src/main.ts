@@ -1,8 +1,8 @@
 import { EventHandler, ZulipEvent } from "./backend/event";
 import * as database from "./backend/database";
 import * as zulip_client from "./backend/zulip_client";
-
-import { config } from "./secrets";
+import * as login_manager from './login_manager'
+import * as config from './config'
 
 import * as mouse_drag from "./util/mouse_drag";
 
@@ -10,12 +10,18 @@ import * as app from "./app";
 import { Page } from "./page";
 
 export async function run() {
+    if (login_manager.needs_to_login()) {
+      // The login_manager will end up doing a page redirect that will
+      // call this `run` again.
+      return;
+    }
+
     // We overwrite this as soon as we fetch data
     // and call page.start(), which in turn calls
     // into SearchWidget to get the unread counts
     // for our initial download of Zulip data.  But
     // this is nice to have while data is still loading.
-    document.title = config.nickname;
+    document.title = config.get_current_realm_nickname()!;
 
     mouse_drag.initialize();
 

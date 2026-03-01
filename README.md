@@ -1,11 +1,5 @@
 ## Initial setup
 
-Add your bot data in src/secrets.ts after doing:
-
-```
-cp secrets.template.ts ./src/secrets.ts
-```
-
 Install oxlint:
 
 `npm add -D oxlint`

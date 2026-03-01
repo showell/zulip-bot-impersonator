@@ -1,5 +1,5 @@
 import * as zulip_client from "./backend/zulip_client";
-import { config } from "./secrets";
+import * as config from './config'
 
 import * as mouse_drag from "./util/mouse_drag";
 
@@ -74,7 +74,7 @@ function fix_videos(video: HTMLVideoElement) {
         return;
     }
 
-    video.setAttribute("src", config.realm_url + src);
+    video.setAttribute("src", config.get_current_realm_url() + src);
 
     async function use_temporary_url() {
         const temp_src = await get_temporary_upload(src);
@@ -104,7 +104,7 @@ function fix_images(img: HTMLImageElement) {
         return;
     }
 
-    img.setAttribute("src", config.realm_url + src);
+    img.setAttribute("src", config.get_current_realm_url() + src);
 
     async function use_temporary_url() {
         const temp_src = await get_temporary_upload(src);
@@ -163,7 +163,7 @@ function fix_anchor_links(ele: HTMLAnchorElement) {
 
         if (url.href.startsWith(origin)) {
             const frag = url.href.slice(origin.length);
-            ele.setAttribute("href", config.realm_url + frag);
+            ele.setAttribute("href", config.get_current_realm_url() + frag);
         }
     }
 
