@@ -47,4 +47,3 @@ export class TabButton {
         this.tab_button.style.backgroundColor = "violet";
     }
 }
-

@@ -11,4 +11,3 @@ export function tab_button(): HTMLButtonElement {
 
     return button;
 }
-

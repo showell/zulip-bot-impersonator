@@ -99,15 +99,21 @@ export class Page {
         const plugin_helpers = this.plugin_helpers;
         const div = this.div;
 
-
         this.populate_button_bar();
-        const navbar_div = layout.make_navbar(StatusBar.div, this.button_bar_div);
+        const navbar_div = layout.make_navbar(
+            StatusBar.div,
+            this.button_bar_div,
+        );
 
-        layout.redraw_page(div, navbar_div, plugin_helpers)
+        layout.redraw_page(div, navbar_div, plugin_helpers);
     }
 
     populate_button_bar() {
         const self = this;
+
+        this.plugin_helpers = this.plugin_helpers.filter(
+            (plugin_helper) => !plugin_helper.deleted,
+        );
 
         const plugin_helpers = this.plugin_helpers;
 
