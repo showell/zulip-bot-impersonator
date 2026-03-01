@@ -3,6 +3,7 @@ export type StreamType = "stream";
 export type Message = {
     code_snippets: string[];
     content: string;
+    github_refs: string[];
     id: number;
     is_super_new: boolean;
     sender_id: number;

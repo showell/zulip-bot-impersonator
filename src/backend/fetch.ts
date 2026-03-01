@@ -77,6 +77,7 @@ export async function fetch_model_data(): Promise<Database> {
             const message: Message = {
                 code_snippets: [],
                 content: row.content,
+                github_refs: [],
                 id: row.id,
                 is_super_new: false,
                 sender_id: row.sender_id,

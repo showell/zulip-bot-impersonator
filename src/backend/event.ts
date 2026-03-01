@@ -69,6 +69,7 @@ function build_event(raw_event: any): ZulipEvent | undefined {
                 const message: Message = {
                     code_snippets: [],
                     content: raw_message.content,
+                    github_refs: [],
                     id: raw_message.id,
                     is_super_new: true,
                     sender_id: raw_message.sender_id,
