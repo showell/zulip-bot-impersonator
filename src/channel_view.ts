@@ -6,18 +6,19 @@ import * as model from "./backend/model";
 
 import type { MessageList } from "./message_list";
 
+import * as layout from "./layout";
+
 import { AddTopicPane } from "./add_topic_pane";
 import { ChannelInfo } from "./channel_info";
 import { MessageView } from "./message_view";
 import { PaneManager } from "./pane_manager";
 import { ChannelRow } from "./row_types";
 import { TopicList } from "./topic_list";
-import { TopicPane } from "./topic_pane";
 
 export class ChannelView {
     channel_row: ChannelRow;
     channel_info: ChannelInfo;
-    topic_pane: TopicPane;
+    topic_list: TopicList;
     message_view?: MessageView;
     add_topic_pane?: AddTopicPane;
     pane_manager: PaneManager;
@@ -32,21 +33,31 @@ export class ChannelView {
 
         this.add_topic_pane = undefined;
 
-        this.topic_pane = new TopicPane(channel_row, search_widget);
+        const topic_pane_div = document.createElement("div");
+
+        const topic_list = new TopicList(channel_row, search_widget);
+        topic_list.populate();
+
+        const heading_text = "#" + channel_row.name();
+        layout.draw_table_pane(topic_pane_div, heading_text, topic_list.div);
+
         pane_manager.add_pane({
             key: "topic_pane",
-            pane_widget: this.topic_pane,
+            pane_widget: { div: topic_pane_div },
         });
 
-        this.channel_info = new ChannelInfo(channel_row);
+        const channel_info = new ChannelInfo(channel_row);
         pane_manager.add_pane({
             key: "channel_info",
-            pane_widget: this.channel_info,
+            pane_widget: channel_info,
         });
+
+        this.topic_list = topic_list;
+        this.channel_info = channel_info;
     }
 
     topic_selected(): boolean {
-        return this.topic_pane.topic_selected();
+        return this.topic_list.has_selection();
     }
 
     open_message_view(): void {
@@ -74,16 +85,16 @@ export class ChannelView {
     }
 
     get_topic_list(): TopicList {
-        return this.topic_pane.get_topic_list();
+        return this.topic_list;
     }
 
     get_topic_row(): TopicRow | undefined {
-        const topic_list = this.get_topic_list();
+        const topic_list = this.topic_list;
         return topic_list.get_topic_row()!;
     }
 
     refresh_message_ids(message_ids: number[]): void {
-        this.get_topic_list().refresh();
+        this.topic_list.refresh();
 
         const message_list = this.get_message_list();
 
@@ -97,7 +108,7 @@ export class ChannelView {
             return;
         }
 
-        const topic_list = this.get_topic_list();
+        const topic_list = this.topic_list;
         const topic_row = topic_list.get_topic_row();
         const sent_by_me = model.is_me(message.sender_id);
 
@@ -149,7 +160,7 @@ export class ChannelView {
     }
 
     select_topic_and_append(message: Message): void {
-        const topic_list = this.get_topic_list();
+        const topic_list = this.topic_list;
 
         topic_list.refresh_topics_with_topic_selected(message.topic_id);
         this.open_message_view();
@@ -157,7 +168,7 @@ export class ChannelView {
 
     clear_message_view(): void {
         const pane_manager = this.pane_manager;
-        const topic_list = this.get_topic_list();
+        const topic_list = this.topic_list;
 
         topic_list.clear_selection();
 
@@ -171,7 +182,7 @@ export class ChannelView {
 
     add_topic(): void {
         const pane_manager = this.pane_manager;
-        const topic_list = this.get_topic_list();
+        const topic_list = this.topic_list;
 
         topic_list.clear_selection();
 
@@ -188,13 +199,13 @@ export class ChannelView {
     }
 
     select_topic_id(topic_id: number): void {
-        const topic_list = this.get_topic_list();
+        const topic_list = this.topic_list;
         const index = topic_list.get_index_for(topic_id);
         this.set_topic_index(index);
     }
 
     set_topic_index(index: number): void {
-        const topic_list = this.get_topic_list();
+        const topic_list = this.topic_list;
 
         topic_list.select_index(index);
         this.add_topic_pane = undefined;
@@ -202,7 +213,7 @@ export class ChannelView {
     }
 
     surf_topics(): void {
-        const topic_list = this.get_topic_list();
+        const topic_list = this.topic_list;
 
         topic_list.surf();
         this.add_topic_pane = undefined;
@@ -210,7 +221,7 @@ export class ChannelView {
     }
 
     topic_up(): void {
-        const topic_list = this.get_topic_list();
+        const topic_list = this.topic_list;
 
         topic_list.up();
         this.add_topic_pane = undefined;
@@ -218,7 +229,7 @@ export class ChannelView {
     }
 
     topic_down(): void {
-        const topic_list = this.get_topic_list();
+        const topic_list = this.topic_list;
 
         topic_list.down();
         this.add_topic_pane = undefined;
