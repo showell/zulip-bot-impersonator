@@ -8,12 +8,6 @@ import type { Page } from "./page";
 import * as page_widget from "./dom/page_widget";
 import { TabButton } from "./tab_button";
 
-class Model {
-    stream_for(stream_id: number): Stream {
-        return backend_model.stream_for(stream_id);
-    }
-}
-
 export type Plugin = {
     div: HTMLDivElement;
     start: (plugin_helper: PluginHelper) => void;
@@ -27,7 +21,6 @@ export class PluginHelper {
     plugin: Plugin;
     label: string;
     tab_button: TabButton;
-    model: Model;
 
     constructor(plugin: Plugin, page: Page) {
         this.plugin = plugin;
@@ -36,7 +29,6 @@ export class PluginHelper {
         this.open = false;
         this.label = "plugin";
         this.tab_button = new TabButton(this, page);
-        this.model = new Model();
     }
 
     delete_me(): void {
