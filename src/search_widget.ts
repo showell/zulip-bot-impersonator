@@ -88,8 +88,16 @@ export class SearchWidget {
 
     refresh_message_ids(message_ids: number[]): void {
         this.channel_list.populate();
-        if (this.channel_view) {
-            this.channel_view.refresh_message_ids(message_ids);
+
+        const topic_list = this.get_topic_list();
+        const message_list = this.get_message_list();
+
+        if (topic_list) {
+            topic_list.refresh();
+         }
+
+        if (message_list) {
+            message_list.refresh_message_ids(message_ids);
         }
     }
 

@@ -93,16 +93,6 @@ export class ChannelView {
         return topic_list.get_topic_row()!;
     }
 
-    refresh_message_ids(message_ids: number[]): void {
-        this.topic_list.refresh();
-
-        const message_list = this.get_message_list();
-
-        if (message_list) {
-            message_list.refresh_message_ids(message_ids);
-        }
-    }
-
     refresh(message: Message): void {
         if (message.stream_id !== this.channel_row.stream_id()) {
             return;
