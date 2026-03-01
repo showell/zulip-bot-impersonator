@@ -11,8 +11,8 @@
     "server": "vite-node src/server.ts",
     "test": "vite-node src/test.ts",
     "build": "vite build",
-    "preview": "vite preview",
-    "format": "prettier --write ."
+    "lint": "oxlint",
+    "format": "prettier src/**/*.ts --write"
   },
   "dependencies": {
     "npm": "^11.10.1"
