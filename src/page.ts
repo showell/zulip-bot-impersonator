@@ -12,6 +12,7 @@ import * as page_widget from "./dom/page_widget";
 import { config } from "./secrets";
 
 import { CodeSearch } from "./plugins/code_search";
+import { GitHubSearch } from "./plugins/github_search";
 import { PluginChooser } from "./plugins/plugin_chooser";
 import { PluginHelper } from "./plugin_helper";
 
@@ -49,6 +50,7 @@ export class Page {
         this.populate();
         this.add_plugin(new PluginChooser());
         this.add_plugin(new CodeSearch());
+        this.add_plugin(new GitHubSearch());
         this.add_search_widget(address.nada());
         this.update_title();
     }

@@ -5,6 +5,7 @@ import { APP } from "../app";
 
 import { CodeSearch } from "./code_search";
 import { EventRadio } from "./event_radio";
+import { GitHubSearch } from "./github_search";
 
 export class PluginChooser {
     div: HTMLDivElement;
@@ -30,6 +31,7 @@ export class PluginChooser {
 
         add_plugin("Event Radio", () => new EventRadio());
         add_plugin("Code Search", () => new CodeSearch());
+        add_plugin("GitHub Search", () => new GitHubSearch());
 
         plugin_helper.update_label("Plugins");
     }

@@ -6,7 +6,6 @@ export function parse_content(message: Message) {
 
     doc.querySelectorAll("a").forEach((a) => {
         if (a.href.startsWith("https://github.com/")) {
-            console.log(a.href);
             message.github_refs.push(a.href);
         }
     });
