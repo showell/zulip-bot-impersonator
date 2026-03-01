@@ -1,6 +1,8 @@
 import type { ZulipEvent } from "../backend/event";
 import type { Plugin, PluginHelper } from "../plugin_helper";
 
+import { APP } from "../app";
+
 import { CodeSearch } from "./code_search";
 import { EventRadio } from "./event_radio";
 
@@ -21,7 +23,7 @@ export class PluginChooser {
             const button = document.createElement("button");
             button.innerText = `Launch ${name}`;
             button.addEventListener("click", () => {
-                plugin_helper.add_plugin(make_plugin());
+                APP.add_plugin(make_plugin());
             });
             div.append(button);
         }

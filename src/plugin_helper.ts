@@ -57,8 +57,4 @@ export class PluginHelper {
     violet() {
         this.tab_button.violet();
     }
-
-    add_plugin(plugin: Plugin): void {
-        this.page.add_plugin(plugin);
-    }
 }

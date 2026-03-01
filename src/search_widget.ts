@@ -13,6 +13,7 @@ import type { TopicList } from "./topic_list";
 
 import * as layout from "./layout";
 
+import { APP } from "./app";
 import { ButtonPanel } from "./nav_button_panel";
 import { ChannelPane } from "./channel_pane";
 import { ChannelView } from "./channel_view";
@@ -78,7 +79,7 @@ export class SearchWidget {
         const message_id = undefined; // for now
         const address = { channel_id, topic_id, message_id };
         const new_search_widget = new SearchWidget(address);
-        this.plugin_helper!.add_plugin(new_search_widget);
+        APP.add_plugin(new_search_widget);
     }
 
     refresh_message_ids(message_ids: number[]): void {
