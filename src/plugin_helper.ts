@@ -36,7 +36,7 @@ export class PluginHelper {
         this.tab_button.div.remove();
         this.div.remove();
         this.deleted = true;
-        this.page.go_to_top();
+        this.page.go_to_end();
     }
 
     redraw_tab_button() {

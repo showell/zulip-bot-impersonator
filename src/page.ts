@@ -91,8 +91,9 @@ export class Page {
         plugin_helper.redraw_tab_button();
     }
 
-    go_to_top(): void {
-        this.open(this.plugin_helpers[0]);
+    go_to_end(): void {
+        const plugin_helpers = this.plugin_helpers;
+        this.open(plugin_helpers[plugin_helpers.length - 1]);
     }
 
     populate(): void {

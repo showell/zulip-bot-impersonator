@@ -15,6 +15,8 @@ export class CodeSearch {
         const div = document.createElement("div");
         div.style.display = "flex";
         div.style.justifyContent = "center";
+        div.style.maxHeight = "90vh";
+        div.style.overflow = "auto";
         this.div = div;
     }
 
