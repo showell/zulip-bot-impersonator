@@ -6,28 +6,52 @@ import type { SearchWidget } from "./search_widget";
 import * as table_widget from "./dom/table_widget";
 import * as topic_row_widget from "./dom/topic_row_widget";
 
+import * as batch_count from "./batch_count";
 import { Cursor } from "./cursor";
 
 export class TopicList {
     div: HTMLDivElement;
+    all_topic_rows: TopicRow[];
     topic_rows: TopicRow[];
     cursor: Cursor;
+    adjuster_div: HTMLDivElement;
+    batch_size: number;
     stream_id: number;
     topic_id?: number;
     search_widget: SearchWidget;
 
     constructor(channel_row: ChannelRow, search_widget: SearchWidget) {
+        const self = this;
+
         this.search_widget = search_widget;
         this.stream_id = channel_row.stream_id();
 
+        this.batch_size = 10;
+
+        // these get re-assigned in populate_topic_rows
+        this.all_topic_rows = [];
+        this.topic_rows = [];
+
         const cursor = new Cursor();
-        const topic_rows = this.populate_topic_rows();
-        cursor.set_count(topic_rows.length);
+        this.populate_topic_rows();
+        cursor.set_count(this.topic_rows.length);
+
+        this.adjuster_div = batch_count.adjuster({
+            min: 1,
+            max: this.all_topic_rows.length,
+            value: this.batch_size,
+            callback(batch_size: number) {
+                self.batch_size = batch_size;
+                self.topic_rows = self.all_topic_rows.slice(0, batch_size);
+                self.sort_alpha(self.topic_rows);
+                self.redraw();
+            },
+        });
 
         this.cursor = cursor;
-        this.topic_rows = topic_rows;
 
         const div = document.createElement("div");
+        div.append(this.adjuster_div);
         div.append(this.make_table());
 
         this.div = div;
@@ -115,15 +139,19 @@ export class TopicList {
         });
     }
 
-    populate_topic_rows(): TopicRow[] {
+    populate_topic_rows() {
+        const self = this;
         const stream_id = this.stream_id!;
-        const batch_size = 10;
-        const all_topic_rows = model.get_topic_rows(stream_id);
-        this.sort_recent(all_topic_rows);
-        // TODO: make sure we get all unread topics at a minimum
-        const topic_rows = all_topic_rows.slice(0, batch_size);
+        const batch_size = this.batch_size;
+
+        this.all_topic_rows = model.get_topic_rows(stream_id);
+
+        this.sort_recent(this.all_topic_rows);
+
+        const topic_rows = this.all_topic_rows.slice(0, batch_size);
         this.sort_alpha(topic_rows);
-        return topic_rows;
+
+        this.topic_rows = topic_rows;
     }
 
     make_table(): HTMLTableElement {
@@ -155,12 +183,19 @@ export class TopicList {
     }
 
     refresh() {
+        this.populate_topic_rows();
+        this.redraw();
+    }
+
+    redraw() {
         const div = this.div;
 
-        this.topic_rows = this.populate_topic_rows();
         this.update_cursor();
 
         div.innerHTML = "";
+        if (!this.has_selection()) {
+            div.append(this.adjuster_div);
+        }
         div.append(this.make_table());
     }
 
