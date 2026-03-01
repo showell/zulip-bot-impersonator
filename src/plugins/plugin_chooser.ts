@@ -17,9 +17,9 @@ export class PluginChooser {
 
     start(plugin_helper: PluginHelper): void {
         const div = this.div;
-
-        div.innerText = "We only have one plugin so far!";
-
+        div.style.display = "flex";
+        div.style.flexDirection = "column";
+        div.style.gap = "10px";
         function add_plugin(name: string, make_plugin: () => Plugin) {
             const button = document.createElement("button");
             button.innerText = `Launch ${name}`;
