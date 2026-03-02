@@ -56,19 +56,18 @@ export class SearchWidget {
     plugin_helper: PluginHelper;
     start_address: Address;
 
-    constructor(plugin_helper: PluginHelper, address: Address) {
+    constructor(plugin_helper: PluginHelper, start_address: Address) {
         const self = this;
         this.plugin_helper = plugin_helper;
 
-        this.start_address = address;
+        this.start_address = start_address;
 
         const div = document.createElement("div");
 
         const button_panel = new ButtonPanel(self);
         const pane_manager = new PaneManager();
 
-        const channel_list = new ChannelList(self);
-        channel_list.refresh_completely();
+        const channel_list = new ChannelList(self, start_address.channel_id);
 
         const channel_pane_div = document.createElement("div");
         const empty_div = document.createElement("div");
@@ -87,13 +86,10 @@ export class SearchWidget {
         this.pane_manager = pane_manager;
         this.div = div;
 
-        const start_address = this.start_address;
-
         if (start_address.topic_id) {
             if (start_address.channel_id === undefined) {
                 throw new Error("unexpected");
             }
-            this.channel_list.select_channel_id(start_address.channel_id);
             this.update_channel();
             this.channel_view!.select_topic_id(start_address.topic_id);
             this.update_topic();
@@ -107,7 +103,6 @@ export class SearchWidget {
         }
 
         if (start_address.channel_id) {
-            this.channel_list.select_channel_id(start_address.channel_id);
             this.update_channel();
             return;
         }

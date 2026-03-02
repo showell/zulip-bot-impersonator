@@ -9,16 +9,17 @@ import * as table_widget from "./dom/table_widget";
 export class ChannelList {
     search_widget: SearchWidget;
     div: HTMLDivElement;
-    channel_id?: number;
+    channel_id: number | undefined;
     channel_rows: ChannelRow[];
 
-    constructor(search_widget: SearchWidget) {
-        const div = document.createElement("div");
+    constructor(search_widget: SearchWidget, channel_id: number | undefined) {
+        this.channel_id = channel_id;
+        this.search_widget = search_widget;
+
+        this.div = document.createElement("div");
 
         this.channel_rows = this.populate_channel_rows();
-
-        this.search_widget = search_widget;
-        this.div = div;
+        this.redraw();
     }
 
     get_channel_id(): number | undefined {
@@ -83,10 +84,12 @@ export class ChannelList {
     }
 
     refresh_completely() {
-        const div = this.div;
-
         this.channel_rows = this.populate_channel_rows();
+        this.redraw();
+    }
 
+    redraw() {
+        const div = this.div;
         div.innerHTML = "";
         div.append(this.make_table());
     }
