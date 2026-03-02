@@ -4,6 +4,7 @@ import type { Message } from "./backend/db_types";
 import { EventFlavor } from "./backend/event";
 
 import type { Address } from "./address";
+import type { ChannelChooser } from "./channel_chooser";
 import type { MessageList } from "./message_list";
 import type { MessageView } from "./message_view";
 import type { PluginHelper } from "./plugin_helper";
@@ -13,7 +14,7 @@ import type { TopicList } from "./topic_list";
 import * as layout from "./layout";
 
 import { APP } from "./app";
-import { ChannelList } from "./channel_list";
+import { make_channel_chooser } from "./channel_chooser";
 import { ButtonPanel } from "./nav_button_panel";
 import { ChannelView } from "./channel_view";
 import { PaneManager } from "./pane_manager";
@@ -51,38 +52,45 @@ export class SearchWidget {
     div: HTMLDivElement;
     button_panel: ButtonPanel;
     pane_manager: PaneManager;
-    channel_list: ChannelList;
+    channel_id: number | undefined;
+    channel_chooser: ChannelChooser;
     channel_view?: ChannelView;
     plugin_helper: PluginHelper;
     start_address: Address;
 
     constructor(plugin_helper: PluginHelper, start_address: Address) {
         const self = this;
-        this.plugin_helper = plugin_helper;
 
+        this.plugin_helper = plugin_helper;
         this.start_address = start_address;
+        this.channel_id = start_address.channel_id;
 
         const div = document.createElement("div");
 
         const button_panel = new ButtonPanel(self);
         const pane_manager = new PaneManager();
 
-        const channel_list = new ChannelList(self, start_address.channel_id);
-
-        const channel_pane_div = document.createElement("div");
-        const empty_div = document.createElement("div");
-
-        layout.draw_table_pane(channel_pane_div, "Channels", empty_div, channel_list.div);
+        const channel_chooser = make_channel_chooser({
+            start_channel_id: start_address.channel_id,
+            handle_channel_chosen(channel_id: number | undefined) {
+                self.channel_id = channel_id;
+                self.update_channel();
+            },
+            handle_channel_cleared() {
+                self.channel_id = undefined;
+                self.clear_channel();
+            },
+        });
 
         pane_manager.add_pane({
-            key: "channel_pane",
-            pane_widget: { div: channel_pane_div },
+            key: "channel_chooser",
+            pane_widget: { div: channel_chooser.div },
         });
 
         layout.draw_search_widget(div, button_panel.div, pane_manager.div);
 
         this.button_panel = button_panel;
-        this.channel_list = channel_list;
+        this.channel_chooser = channel_chooser;
         this.pane_manager = pane_manager;
         this.div = div;
 
@@ -113,7 +121,7 @@ export class SearchWidget {
     }
 
     fork(): void {
-        const channel_id = this.get_channel_id();
+        const channel_id = this.channel_id;
         const topic_id = this.get_topic_id();
         const message_id = undefined; // for now
         const address = { channel_id, topic_id, message_id };
@@ -121,7 +129,7 @@ export class SearchWidget {
     }
 
     refresh_message_ids(message_ids: number[]): void {
-        this.channel_list.refresh_completely();
+        this.channel_chooser.refresh_completely();
 
         const topic_list = this.get_topic_list();
         const message_list = this.get_message_list();
@@ -136,7 +144,7 @@ export class SearchWidget {
     }
 
     handle_incoming_message(message: Message): void {
-        this.channel_list.refresh_completely();
+        this.channel_chooser.refresh_completely();
         if (this.channel_view) {
             this.channel_view.refresh(message);
         }
@@ -180,7 +188,7 @@ export class SearchWidget {
     }
 
     channel_selected(): boolean {
-        return this.channel_list.has_selection();
+        return this.channel_id !== undefined;
     }
 
     build_main_section(): HTMLElement {
@@ -196,12 +204,8 @@ export class SearchWidget {
         });
     }
 
-    get_channel_id(): number | undefined {
-        return this.channel_list.get_channel_id();
-    }
-
     get_channel_row(): ChannelRow {
-        return this.channel_list.get_channel_row()!;
+        return this.channel_chooser.get_channel_row()!;
     }
 
     get_channel_name(): string | undefined {
@@ -227,7 +231,7 @@ export class SearchWidget {
             return channel_row.unread_count();
         }
 
-        return this.channel_list.unread_count();
+        return this.channel_chooser.total_unread_count();
     }
 
     get_narrow_label(): string {
@@ -243,8 +247,7 @@ export class SearchWidget {
     }
 
     clear_channel(): void {
-        this.channel_list.clear_selection();
-        this.pane_manager.remove_after("channel_pane");
+        this.pane_manager.remove_after("channel_chooser");
         this.channel_view = undefined;
         this.update_button_panel();
         this.update_label();
@@ -256,7 +259,7 @@ export class SearchWidget {
         const pane_manager = this.pane_manager;
         const channel_row = this.get_channel_row();
 
-        this.pane_manager.remove_after("channel_pane");
+        this.pane_manager.remove_after("channel_chooser");
 
         // ChannelView will add panes
         this.channel_view = new ChannelView(
@@ -268,11 +271,6 @@ export class SearchWidget {
         this.update_button_panel();
         StatusBar.inform("You can click on a topic now.");
         this.update_label();
-    }
-
-    set_channel_id(channel_id: number): void {
-        this.channel_list.select_channel_id(channel_id);
-        this.update_channel();
     }
 
     add_topic(): void {

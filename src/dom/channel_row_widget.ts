@@ -1,5 +1,4 @@
 import type { ChannelRow } from "../row_types";
-import type { SearchWidget } from "../search_widget";
 
 import { render_unread_count } from "./render";
 
@@ -23,34 +22,27 @@ function render_channel_name(channel_name: string): HTMLDivElement {
     return div;
 }
 
-function render_name_div(
-    channel_row: ChannelRow,
-    selected: boolean,
-    search_widget: SearchWidget,
-) {
-    const div = render_channel_name(channel_row.name());
+export function row_widget(opts: {
+    channel_row: ChannelRow;
+    selected: boolean;
+    set_channel_id: (channel_id: number) => void;
+    clear_channel: () => void;
+}): { divs: HTMLDivElement[] } {
+    const { channel_row, selected, set_channel_id, clear_channel } = opts;
 
-    div.addEventListener("click", () => {
-        if (selected) {
-            search_widget.clear_channel();
-        } else {
-            search_widget.set_channel_id(channel_row.stream_id());
-        }
-    });
+    const name_div = render_channel_name(channel_row.name());
 
     if (selected) {
-        div.style.backgroundColor = "cyan";
+        name_div.style.backgroundColor = "cyan";
     }
 
-    return div;
-}
-
-export function row_widget(
-    channel_row: ChannelRow,
-    selected: boolean,
-    search_widget: SearchWidget,
-): { divs: HTMLDivElement[] } {
-    const name_div = render_name_div(channel_row, selected, search_widget);
+    name_div.addEventListener("click", () => {
+        if (selected) {
+            clear_channel();
+        } else {
+            set_channel_id(channel_row.stream_id());
+        }
+    });
 
     return {
         divs: [

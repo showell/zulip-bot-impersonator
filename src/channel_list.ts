@@ -1,20 +1,27 @@
 import * as model from "./backend/model";
 
 import type { ChannelRow } from "./row_types";
-import type { SearchWidget } from "./search_widget";
 
 import * as channel_row_widget from "./dom/channel_row_widget";
 import * as table_widget from "./dom/table_widget";
 
+type Opts = {
+    channel_id: number | undefined;
+    handle_channel_chosen: (channel_id: number) => void;
+    handle_channel_cleared: () => void;
+};
+
 export class ChannelList {
-    search_widget: SearchWidget;
     div: HTMLDivElement;
     channel_id: number | undefined;
+    handle_channel_chosen: (channel_id: number) => void;
+    handle_channel_cleared: () => void;
     channel_rows: ChannelRow[];
 
-    constructor(search_widget: SearchWidget, channel_id: number | undefined) {
-        this.channel_id = channel_id;
-        this.search_widget = search_widget;
+    constructor(opts: Opts) {
+        this.channel_id = opts.channel_id;
+        this.handle_channel_chosen = opts.handle_channel_chosen;
+        this.handle_channel_cleared = opts.handle_channel_cleared;
 
         this.div = document.createElement("div");
 
@@ -54,18 +61,29 @@ export class ChannelList {
     }
 
     make_table(): HTMLElement {
+        const self = this;
         const channel_id = this.channel_id;
         const channel_rows = this.channel_rows;
-        const search_widget = this.search_widget;
+        const handle_channel_chosen = this.handle_channel_chosen;
+        const handle_channel_cleared = this.handle_channel_cleared;
         const row_widgets = [];
 
         for (const channel_row of channel_rows) {
             const selected = channel_row.stream_id() === channel_id;
-            const row_widget = channel_row_widget.row_widget(
+            const row_widget = channel_row_widget.row_widget({
                 channel_row,
                 selected,
-                search_widget,
-            );
+                set_channel_id(channel_id: number) {
+                    self.channel_id = channel_id;
+                    self.refresh_completely();
+                    handle_channel_chosen(channel_id);
+                },
+                clear_channel() {
+                    self.channel_id = undefined;
+                    self.refresh_completely();
+                    handle_channel_cleared();
+                },
+            });
             row_widgets.push(row_widget);
         }
 
@@ -73,7 +91,7 @@ export class ChannelList {
         return table_widget.table(columns, row_widgets);
     }
 
-    unread_count(): number {
+    total_unread_count(): number {
         let count = 0;
 
         for (const channel_row of this.channel_rows!) {
@@ -92,15 +110,5 @@ export class ChannelList {
         const div = this.div;
         div.innerHTML = "";
         div.append(this.make_table());
-    }
-
-    select_channel_id(channel_id: number): void {
-        this.channel_id = channel_id;
-        this.refresh_completely();
-    }
-
-    clear_selection(): void {
-        this.channel_id = undefined;
-        this.refresh_completely();
     }
 }

@@ -1,0 +1,50 @@
+import { ChannelList } from "./channel_list";
+import * as layout from "./layout";
+import { ChannelRow } from "./row_types";
+
+export type ChannelChooserOpts = {
+    start_channel_id: number | undefined;
+    handle_channel_chosen: (channel_id: number) => void;
+    handle_channel_cleared: () => void;
+};
+
+export type ChannelChooser = {
+    div: HTMLDivElement;
+    refresh_completely: () => void;
+    get_channel_row: () => ChannelRow;
+    total_unread_count: () => number;
+}
+
+export function make_channel_chooser(opts: ChannelChooserOpts) {
+    const channel_list = new ChannelList({
+        handle_channel_chosen: opts.handle_channel_chosen,
+        handle_channel_cleared: opts.handle_channel_cleared,
+        channel_id: opts.start_channel_id,
+    });
+
+    function pane_div(): HTMLDivElement {
+        const channel_pane_div = document.createElement("div");
+        const empty_div = document.createElement("div");
+
+        layout.draw_table_pane(channel_pane_div, "Channels", empty_div, channel_list.div);
+        return channel_pane_div;
+    }
+
+    function refresh_completely() {
+        channel_list.refresh_completely();
+    }
+
+    function get_channel_row(): ChannelRow {
+        // Our caller knows to call us only when
+        // a channel is chosen.
+        return channel_list.get_channel_row()!;
+    }
+
+    function total_unread_count(): number {
+        return channel_list.total_unread_count();
+    }
+
+    const div = pane_div();
+
+    return { div, refresh_completely, get_channel_row, total_unread_count };
+}
