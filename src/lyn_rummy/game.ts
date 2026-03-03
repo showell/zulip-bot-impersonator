@@ -65,6 +65,12 @@ enum GameEventType {
     ADVANCE_TURN,
 }
 
+export type JsonCard = {
+    value: CardValue;
+    suit: Suit;
+    origin_deck: OriginDeck;
+};
+
 type BoardLocation = {
     top: number;
     left: number;
@@ -354,7 +360,7 @@ export function build_full_double_deck(): Card[] {
     return shuffle(all_cards);
 }
 
-class Card {
+export class Card {
     suit: Suit;
     value: CardValue;
     color: CardColor;
@@ -365,6 +371,18 @@ class Card {
         this.suit = suit;
         this.origin_deck = origin_deck;
         this.color = card_color(suit);
+    }
+
+    toJSON(): JsonCard {
+        return {
+            value: this.value,
+            suit: this.suit,
+            origin_deck: this.origin_deck,
+        };
+    }
+
+    static from_json(json_card: JsonCard): Card {
+        return new Card(json_card.value, json_card.suit,json_card.origin_deck);
     }
 
     clone(): Card {
