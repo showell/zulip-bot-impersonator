@@ -3076,12 +3076,12 @@ class MainGamePage {
     player_area!: HTMLElement;
     board_area!: HTMLElement;
 
-    constructor() {
+    constructor(container: HTMLElement) {
         const page = document.createElement("div");
         page.style.display = "flex";
         page.style.paddingLeft = "50px";
         page.style.paddingRight = "50px";
-        document.body.append(page);
+        container.append(page);
 
         const div = document.createElement("div");
         div.style.minWidth = "100%";
@@ -3212,12 +3212,6 @@ class MainGamePage {
     }
 }
 
-function test() {
-    console.log("replay yo!");
-}
-
-test(); // runs in node
-
 class SoundEffectsSingleton {
     purr: HTMLAudioElement;
     bark: HTMLAudioElement;
@@ -3250,14 +3244,26 @@ class SoundEffectsSingleton {
 // SINGLETONS get initialized in gui().
 let SoundEffects: SoundEffectsSingleton;
 
+function get_title() {
+    return `${suit_emoji_str(Suit.DIAMOND)} Lyn Rummy ${suit_emoji_str(Suit.HEART)}`;
+}
+
+function set_title() {
+    document.title = get_title();
+}
+
 // This is the entry point for static/index.html
 export function gui() {
-    document.title = `${suit_emoji_str(Suit.DIAMOND)} Lyn Rummy ${suit_emoji_str(Suit.HEART)}`;
-    console.log("title set");
+    set_title();
+    const container = document.body;
+    run_game_code(container);
+}
+
+export function run_game_code(container: HTMLElement) {
     DragDropHelper = new DragDropHelperSingleton();
     Popup = new PopupSingleton();
     SoundEffects = new SoundEffectsSingleton();
-    new MainGamePage();
+    new MainGamePage(container);
 }
 
 function assert(

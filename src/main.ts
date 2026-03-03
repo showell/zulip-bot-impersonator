@@ -12,7 +12,6 @@ import { Page } from "./page";
 import * as game from "./lyn_rummy/game";
 
 export async function run() {
-    console.log(window.location.pathname);
     if (window.location.pathname === "/LynRummy") {
         game.gui();
         return;
