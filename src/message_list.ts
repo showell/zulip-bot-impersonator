@@ -1,7 +1,7 @@
 import type { Message } from "./backend/db_types";
 import type { Filter } from "./backend/filter";
 
-import * as outbound from "./backend/outbound";
+import * as zulip_client from "./backend/zulip_client";
 
 import { MessageRowWidget } from "./message_row_widget";
 import { MessageRow } from "./row_types";
@@ -110,7 +110,7 @@ export class MessageList {
             .map((message) => message.id);
 
         if (unread_message_ids) {
-            outbound.mark_message_ids_unread(unread_message_ids);
+            zulip_client.mark_message_ids_unread(unread_message_ids);
         }
     }
 

@@ -1,4 +1,3 @@
-import * as outbound from "./backend/outbound";
 import * as zulip_client from "./backend/zulip_client";
 
 import * as compose_widget from "./dom/compose_widget";
@@ -155,7 +154,7 @@ export class ComposeBox {
         const stream_id = this.stream_id;
         const topic_name = this.topic_input.topic_name();
 
-        outbound.send_message({ stream_id, topic_name, content });
+        zulip_client.send_message({ stream_id, topic_name, content });
     }
 
     focus_topic_input(): void {
