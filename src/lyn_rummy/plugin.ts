@@ -3,22 +3,26 @@ import type { PluginHelper } from "../plugin_helper";
 
 import * as lyn_rummy from "./game";
 
-export function plugin(plugin_helper: PluginHelper) {
+export function new_game_maker() {
+    function maker(plugin_helper: PluginHelper) {
+        const deck_cards = lyn_rummy.build_full_double_deck();
+        const json_cards = deck_cards.map((deck_card) => {
+            return deck_card.toJSON();
+        });
+
+        return plugin(plugin_helper, json_cards);
+    }
+    return maker;
+}
+
+function plugin(plugin_helper: PluginHelper, json_cards: lyn_rummy.JsonCard[]) {
+    const deck_cards = json_cards.map(lyn_rummy.Card.from_json);
+
     const div = document.createElement("div");
-
-    const my_deck_cards = lyn_rummy.build_full_double_deck();
-
-    const json = JSON.stringify(my_deck_cards, null, 2);
-    const json_cards = JSON.parse(json) as lyn_rummy.JsonCard[];
-    const deck_cards: lyn_rummy.Card[] = json_cards.map((json_card) => {
-        return lyn_rummy.Card.from_json(json_card);
-    });
-
-    lyn_rummy.run_game_code(deck_cards, div);
-
     const max_height = document.documentElement.clientHeight - 60;
     div.style.maxHeight = `${max_height}px`;
 
+    lyn_rummy.run_game_code(deck_cards, div);
     plugin_helper.update_label(lyn_rummy.get_title());
 
     function handle_event(_event: ZulipEvent) {}
