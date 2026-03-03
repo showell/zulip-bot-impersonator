@@ -2,6 +2,7 @@ import type { ZulipEvent } from "../backend/event";
 import type { PluginHelper } from "../plugin_helper";
 
 import * as lyn_rummy from "./game";
+import * as network from "./network";
 
 export function new_game_maker() {
     function maker(plugin_helper: PluginHelper) {
@@ -9,6 +10,8 @@ export function new_game_maker() {
         const json_cards = deck_cards.map((deck_card) => {
             return deck_card.toJSON();
         });
+
+        network.serialize_cards(json_cards);
 
         return plugin(plugin_helper, json_cards);
     }
