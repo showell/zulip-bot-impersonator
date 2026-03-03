@@ -11,4 +11,4 @@ export type ChannelChooser = {
     refresh_completely: () => void;
     get_channel_row: () => ChannelRow;
     total_unread_count: () => number;
-}
+};

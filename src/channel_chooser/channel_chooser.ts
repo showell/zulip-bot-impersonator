@@ -1,5 +1,5 @@
 import type { ChannelRow } from "../row_types";
-import type { ChannelChooserOpts, ChannelChooser } from "./types.ts";
+import type { ChannelChooserOpts } from "./types.ts";
 
 import { ChannelList } from "./channel_list";
 import * as layout from "../layout";
@@ -15,7 +15,12 @@ export function make_channel_chooser(opts: ChannelChooserOpts) {
         const channel_pane_div = document.createElement("div");
         const empty_div = document.createElement("div");
 
-        layout.draw_table_pane(channel_pane_div, "Channels", empty_div, channel_list.div);
+        layout.draw_table_pane(
+            channel_pane_div,
+            "Channels",
+            empty_div,
+            channel_list.div,
+        );
         return channel_pane_div;
     }
 
