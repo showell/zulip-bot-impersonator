@@ -104,7 +104,7 @@ function fix_images(img: HTMLImageElement) {
         return;
     }
 
-    img.setAttribute("src", config.get_current_realm_url() + src);
+    img.removeAttribute("src");
 
     async function use_temporary_url() {
         const temp_src = await get_temporary_upload(src);
