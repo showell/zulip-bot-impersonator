@@ -1577,7 +1577,7 @@ function render_board(): HTMLElement {
     div.style.border = "1px solid #000080";
     div.style.borderRadius = "15px";
     div.style.position = "relative";
-    div.style.height = "600px";
+    div.style.height = "540px";
     div.style.marginTop = "8px";
     return div;
 }
