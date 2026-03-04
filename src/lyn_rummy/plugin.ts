@@ -33,11 +33,15 @@ function plugin(plugin_helper: PluginHelper, local_id: string | undefined) {
 
     plugin_helper.update_label(lyn_rummy.get_title());
 
+    let game_id: number | undefined;
+
     function handle_event(event: ZulipEvent) {
         if (event.flavor === EventFlavor.MESSAGE) {
             const local_message_id = event.message.local_message_id;
 
             if (local_message_id && local_message_id === local_id) {
+                game_id = event.message.id;
+
                 const json_cards = network.deserialize_cards(
                     event.message.content,
                 );
