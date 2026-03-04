@@ -72,6 +72,31 @@ export type JsonCard = {
     origin_deck: OriginDeck;
 };
 
+export type JsonHandCard = {
+    card: JsonCard;
+    state: HandCardState;
+};
+
+export type JsonBoardCard = {
+    card: JsonCard;
+    state: BoardCardState;
+};
+
+export type JsonCardStack = {
+    board_cards: JsonBoardCard[];
+    loc: BoardLocation;
+};
+
+export type JsonPlayerAction = {
+    board_event: BoardEvent;
+    hand_cards_to_release: JsonHandCard[];
+};
+
+export type JsonGameEvent = {
+    type: GameEventType;
+    player_action: PlayerAction | undefined;
+};
+
 type BoardLocation = {
     top: number;
     left: number;
@@ -418,6 +443,17 @@ class HandCard {
         this.state = state;
     }
 
+    toJSON(): JsonHandCard {
+        return {
+            card: this.card,
+            state: this.state,
+        };
+    }
+
+    static from_json(json: JsonHandCard): HandCard {
+        return new HandCard(Card.from_json(json.card), json.state);
+    }
+
     clone(): HandCard {
         return new HandCard(this.card, this.state);
     }
@@ -434,6 +470,17 @@ class BoardCard {
     constructor(card: Card, state: BoardCardState) {
         this.card = card;
         this.state = state;
+    }
+
+    toJSON(): JsonBoardCard {
+        return {
+            card: this.card,
+            state: this.state,
+        };
+    }
+
+    static from_json(json: JsonBoardCard): BoardCard {
+        return new BoardCard(Card.from_json(json.card), json.state);
     }
 
     clone(): BoardCard {
@@ -488,6 +535,22 @@ class CardStack {
         this.board_cards = board_cards;
         this.stack_type = this.get_stack_type();
         this.loc = loc;
+    }
+
+    toJSON(): JsonCardStack {
+        return {
+            board_cards: this.board_cards,
+            loc: this.loc,
+        };
+    }
+
+    from_json(json: JsonCardStack): CardStack {
+        return new CardStack(
+            json.board_cards.map((board_card_json) =>
+                BoardCard.from_json(board_card_json),
+            ),
+            json.loc,
+        );
     }
 
     clone(): CardStack {
@@ -1234,6 +1297,22 @@ class PlayerAction {
         this.hand_cards_to_release = info.hand_cards_to_release;
     }
 
+    toJSON(): JsonPlayerAction {
+        return {
+            board_event: this.board_event,
+            hand_cards_to_release: this.hand_cards_to_release,
+        };
+    }
+
+    static from_json(json: JsonPlayerAction) {
+        const board_event = json.board_event;
+        const hand_cards_to_release = json.hand_cards_to_release.map(
+            (json_hand_card) => HandCard.from_json(json_hand_card),
+        );
+
+        return new PlayerAction({ board_event, hand_cards_to_release });
+    }
+
     static board_action(board_event: BoardEvent): PlayerAction {
         return new PlayerAction({
             board_event,
@@ -1258,34 +1337,36 @@ let GameEventTracker: GameEventTrackerSingleton;
 
 class GameEventTrackerSingleton {
     replay_in_progress: boolean;
-    game_events: GameEvent[];
+    json_game_events: JsonGameEvent[];
     orig_deck: Deck;
     orig_board: Board;
 
     constructor() {
         this.replay_in_progress = false;
-        this.game_events = [];
+        this.json_game_events = [];
         this.orig_deck = TheDeck.clone();
         this.orig_board = CurrentBoard.clone();
     }
 
     empty() {
-        return this.game_events.length === 0;
+        return this.json_game_events.length === 0;
     }
 
     push_event(game_event: GameEvent) {
         if (!this.replay_in_progress) {
-            this.game_events.push(game_event);
+            this.json_game_events.push(game_event.toJSON());
         }
     }
 
     pop_player_action(): PlayerAction | undefined {
-        const game_event = this.game_events.pop();
+        const json_game_event = this.json_game_events.pop();
 
-        if (game_event === undefined) {
+        if (json_game_event === undefined) {
             console.error("no events to pop");
             return undefined;
         }
+
+        const game_event = GameEvent.from_json(json_game_event);
 
         return game_event.player_action;
     }
@@ -1300,7 +1381,9 @@ class GameEventTrackerSingleton {
             BoardArea.populate();
         }
 
-        const game_events = this.game_events;
+        const game_events = this.json_game_events.map((json_game_event) => {
+            return GameEvent.from_json(json_game_event);
+        });
 
         let interval = 1000;
 
@@ -1369,6 +1452,14 @@ class GameEvent {
     constructor(type: GameEventType, player_action?: PlayerAction) {
         this.type = type;
         this.player_action = player_action;
+    }
+
+    toJSON(): JsonGameEvent {
+        return { type: this.type, player_action: this.player_action };
+    }
+
+    static from_json(json: JsonGameEvent): GameEvent {
+        return new GameEvent(json.type, json.player_action);
     }
 }
 
