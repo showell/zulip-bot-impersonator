@@ -11,7 +11,7 @@ export class GameSession {
     }
 
     broadcast(json_game_event: JsonGameEvent) {
-        console.log("broadcast", json_game_event);
+        console.log("broadcast", JSON.stringify(json_game_event, null, 4));
     }
 }
 

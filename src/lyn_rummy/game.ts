@@ -1333,8 +1333,10 @@ class GameEventTrackerSingleton {
     json_game_events: JsonGameEvent[];
     orig_deck: Deck;
     orig_board: Board;
+    broadcast_callback: BroadcastCallback | undefined;
 
-    constructor() {
+    constructor(broadcast_callback: BroadcastCallback | undefined) {
+        this.broadcast_callback = broadcast_callback;
         this.replay_in_progress = false;
         this.json_game_events = [];
         this.orig_deck = TheDeck.clone();
@@ -1347,7 +1349,13 @@ class GameEventTrackerSingleton {
 
     push_event(game_event: GameEvent) {
         if (!this.replay_in_progress) {
-            this.json_game_events.push(game_event.toJSON());
+            const json_game_event = game_event.toJSON();
+
+            this.json_game_events.push(json_game_event);
+
+            if (this.broadcast_callback) {
+                this.broadcast_callback(json_game_event);
+            }
         }
     }
 
@@ -3379,7 +3387,7 @@ export function start_game(
     EventManager = new EventManagerSingleton();
     TheGame = new Game();
     CurrentBoard = initial_board();
-    GameEventTracker = new GameEventTrackerSingleton();
+    GameEventTracker = new GameEventTrackerSingleton(broadcast_callback);
     PlayerGroup = new PlayerGroupSingleton(["Susan", "Lyn"]);
     ActivePlayer.start_turn();
 
