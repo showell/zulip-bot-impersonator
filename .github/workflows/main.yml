@@ -31,7 +31,7 @@ jobs:
       - name: Build project
         run: npm run build
 
-      - name: Hack for /zulip-bot-impersonator/** to work.
+      - name: Hack for /angry-cat/** to work.
         run: cp dist/index.html dist/404.html
 
       - name: Setup GitHub Pages

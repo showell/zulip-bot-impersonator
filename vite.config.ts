@@ -6,6 +6,6 @@ export default defineConfig(({ mode }) => ({
   },
   base:
     mode === "production"
-      ? "/zulip-bot-impersonator/"
+      ? "/angry-cat/"
       : "/",
 }));
