@@ -1,6 +1,6 @@
 # Welcome to Angry Cat!
 
-![Angry Cat]("./public/images/angry_cat.png")
+![Angry Cat]("public/images/angry_cat.png")
 
 Angry Cat is an effective client for conversing with
 your peers using Zulip. (It is all client-side TypeScript
