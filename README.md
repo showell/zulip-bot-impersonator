@@ -1,3 +1,16 @@
+# Welcome to Angry Cat!
+
+![Angry Cat]("./public/images/angry_cat.png")
+
+Angry Cat is an effective client for conversing with
+your peers using Zulip. (It is all client-side TypeScript
+code talking directly to a server.)
+
+We are hosted now (*as of March 2026*) on
+[Github Pages](https://showell.github.io/angry-cat)
+and our primary Zulip server is
+[macandcheese](https://macandcheese.zulipchat.com/).
+
 ## Initial setup
 
 Install vite:
