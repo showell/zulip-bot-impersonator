@@ -49,17 +49,17 @@ export function parse_path(path: string): PathInfo | undefined {
         return undefined;
     }
 
-    const [channel_part, _topic, topic_part, _, message_part] = path
+    const [channel_part, _topic, topic_part, with_near, message_part] = path
         .split("/")
         .slice(2);
 
     const channel_id_str = channel_part.split("-")[0]!;
     const channel_id = parseInt(channel_id_str);
     const topic_name =
-        topic_part === undefined ? undefined : unescape(topic_part);
+        topic_part !== undefined ? unescape(topic_part) : undefined;
 
     const message_id =
-        message_part === undefined ? undefined : parseInt(message_part);
+        (message_part && (with_near === "near")) ? parseInt(message_part) : undefined;
 
     return { channel_id, topic_name, message_id };
 }
