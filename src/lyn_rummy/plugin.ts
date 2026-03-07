@@ -21,31 +21,13 @@ export function plugin(plugin_helper: PluginHelper) {
 
     plugin_helper.update_label(lyn_rummy.get_title());
 
-    const deck_cards = lyn_rummy.build_full_double_deck();
-    const json_cards = deck_cards.map((deck_card) => {
-        return deck_card.toJSON();
-    });
+    let game_launcher: GameLauncher;
 
-    const local_id = network.serialize_cards(json_cards);
-
-    if (local_id === undefined) {
-        console.log("must not have found a transport channel");
-        div.innerText = "Your admin needs to create a Lyn Rummy channel";
-        return { div, handle_event: (_event: ZulipEvent) => {} };
-    }
-
-    const game_local_id: string = local_id;
-
-    let game_id: number | undefined;
+    game_launcher = new GameLauncher(div);
 
     function handle_event(event: ZulipEvent) {
-        if (game_id) return;
-
-        const game_start = get_game_start(event, game_local_id);
-        if (game_start) {
-            game_id = game_start.game_id;
-            div.innerText = "";
-            start_new_game(game_id, game_start.json_cards, div);
+        if (game_launcher) {
+            game_launcher.handle_event(event);
         }
     }
 
@@ -53,6 +35,46 @@ export function plugin(plugin_helper: PluginHelper) {
         div,
         handle_event,
     };
+}
+
+class GameLauncher {
+    local_id: string | undefined;
+    game_id: number | undefined;
+    div: HTMLDivElement;
+
+    constructor(div: HTMLDivElement) {
+        this.div = div;
+
+        const deck_cards = lyn_rummy.build_full_double_deck();
+        const json_cards = deck_cards.map((deck_card) => {
+            return deck_card.toJSON();
+        });
+
+        const local_id = network.serialize_cards(json_cards);
+
+        if (local_id === undefined) {
+            console.log("must not have found a transport channel");
+            div.innerText = "Your admin needs to create a Lyn Rummy channel";
+        }
+
+        this.local_id = local_id;
+    }
+
+    handle_event(event: ZulipEvent) {
+        const div = this.div;
+        const game_local_id = this.local_id;
+
+        if (!game_local_id) return;
+
+        if (this.game_id) return;
+
+        const game_start = get_game_start(event, game_local_id);
+        if (game_start) {
+            this.game_id = game_start.game_id;
+            div.innerText = "";
+            start_new_game(this.game_id, game_start.json_cards, div);
+        }
+    }
 }
 
 function get_game_start(event: ZulipEvent, local_id: string): GameStart | undefined {
