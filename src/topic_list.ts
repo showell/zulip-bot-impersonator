@@ -77,7 +77,7 @@ export class TopicList {
 
     get_topic_row(): TopicRow | undefined {
         const topic_id = this.topic_id;
-        const topic_rows = this.topic_rows;
+        const topic_rows = this.all_topic_rows;
 
         if (topic_id === undefined) {
             return undefined;
