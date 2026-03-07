@@ -2,6 +2,7 @@ import type { Message } from "../backend/db_types";
 import type { ZulipEvent } from "../backend/event";
 import type { PluginHelper } from "../plugin_helper";
 
+import { Button } from "../button";
 import { MessageRow } from "../row_types";
 import { EventFlavor } from "../backend/event";
 
@@ -30,19 +31,16 @@ export function plugin(plugin_helper: PluginHelper) {
 
     let game_launcher: GameLauncher;
 
-    const button = document.createElement("button");
-    button.innerText = "Launch new game";
-
-    button.addEventListener("click", () => {
+    const button = new Button("Launch new game", 150, () => {
         div.innerHTML = "";
         div.innerText = "waiting on server";
         game_launcher = new GameLauncher(div);
     });
 
-    const game_finder = new GameFinder(div, landing_div);
-
-    landing_div.append(button);
+    landing_div.append(button.div);
     div.append(landing_div);
+
+    const game_finder = new GameFinder(div, landing_div);
 
     function handle_event(event: ZulipEvent) {
         if (game_launcher) {
@@ -155,13 +153,10 @@ class GameFinder {
 
         const message_row = new MessageRow(message);
 
-        const button = document.createElement("button");
-        button.innerText = `Play ${message_row.sender_name()}`;
-
-        landing_div.append(button);
-
-        button.addEventListener("click", () => {
+        const button = new Button(`Play ${message_row.sender_name()}`, 150, () => {
             console.log("play", game_id, json_cards);
         });
+
+        landing_div.append(button.div);
     }
 }
