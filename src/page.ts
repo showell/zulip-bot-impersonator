@@ -10,8 +10,6 @@ import * as model from "./backend/model";
 import * as page_widget from "./dom/page_widget";
 
 import * as lyn_rummy from "./lyn_rummy/plugin";
-import * as code_search from "./plugins/code_search";
-import * as github_search from "./plugins/github_search";
 import * as plugin_chooser from "./plugins/plugin_chooser";
 import { PluginHelper } from "./plugin_helper";
 
@@ -52,8 +50,6 @@ export class Page {
         this.populate();
         this.add_plugin(plugin_chooser.plugin);
         this.add_plugin(lyn_rummy.new_game_maker());
-        this.add_plugin(code_search.plugin);
-        this.add_plugin(github_search.plugin);
         this.add_search_widget(address.nada());
         this.update_title();
     }
