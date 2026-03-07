@@ -1,6 +1,8 @@
+import type { Message } from "../backend/db_types";
 import type { ZulipEvent } from "../backend/event";
 import type { PluginHelper } from "../plugin_helper";
 
+import { MessageRow } from "../row_types";
 import { EventFlavor } from "../backend/event";
 
 import type { JsonCard, JsonGameEvent } from "./game";
@@ -36,6 +38,8 @@ export function plugin(plugin_helper: PluginHelper) {
         div.innerText = "waiting on server";
         game_launcher = new GameLauncher(div);
     });
+
+    const game_finder = new GameFinder(div, landing_div);
 
     landing_div.append(button);
     div.append(landing_div);
@@ -128,4 +132,36 @@ function start_new_game(
 
     const deck_cards = json_cards.map(lyn_rummy.Card.from_json);
     lyn_rummy.start_game(deck_cards, div, broadcast);
+}
+
+class GameFinder {
+    div: HTMLDivElement;
+    landing_div: HTMLDivElement;
+
+    constructor(div: HTMLDivElement, landing_div: HTMLDivElement) {
+        this.div = div;
+        this.landing_div = landing_div;
+
+        const message = network.find_last_game_message();
+        if (message) {
+            this.add_game_from_message(message);
+        }
+    }
+
+    add_game_from_message(message: Message) {
+        const landing_div = this.landing_div;
+        const game_id = message.id;
+        const json_cards = network.deserialize_cards(message.content);
+
+        const message_row = new MessageRow(message);
+
+        const button = document.createElement("button");
+        button.innerText = `Play ${message_row.sender_name()}`;
+
+        landing_div.append(button);
+
+        button.addEventListener("click", () => {
+            console.log("play", game_id, json_cards);
+        });
+    }
 }

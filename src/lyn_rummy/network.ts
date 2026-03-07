@@ -1,5 +1,8 @@
 import type { JsonCard, JsonGameEvent } from "./game";
+import type { Message } from "../backend/db_types";
 
+import { DB } from "../backend/database";
+import { topic_filter } from "../backend/filter";
 import * as model from "../backend/model";
 import * as zulip_client from "../backend/zulip_client";
 
@@ -69,4 +72,25 @@ export function deserialize_cards(content: string): JsonCard[] | undefined {
         }
     }
     return undefined;
+}
+
+export function find_last_game_message(): Message | undefined {
+    const channel_id = model.channel_id_for("Lyn Rummy");
+    if (channel_id === undefined) {
+        console.log("could not find channel");
+        return undefined;
+    }
+
+    const topic_name = "__game_transport__";
+
+    const topic_id = DB.topic_map.get_topic_id(channel_id, topic_name);
+
+    const filter = topic_filter(topic_id);
+    const messages = model.filtered_messages(filter);
+
+    if (messages.length === 0) {
+        return undefined;
+    }
+
+    return messages[messages.length - 1];
 }
