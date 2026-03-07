@@ -13,27 +13,20 @@ type GameStart = {
     json_cards: JsonCard[];
 };
 
-export function new_game_maker() {
-    function maker(plugin_helper: PluginHelper) {
-        const deck_cards = lyn_rummy.build_full_double_deck();
-        const json_cards = deck_cards.map((deck_card) => {
-            return deck_card.toJSON();
-        });
-
-        const local_id = network.serialize_cards(json_cards);
-
-        return plugin(plugin_helper, local_id);
-    }
-    return maker;
-}
-
-function plugin(plugin_helper: PluginHelper, local_id: string | undefined) {
+export function plugin(plugin_helper: PluginHelper) {
     const div = document.createElement("div");
     const max_height = document.documentElement.clientHeight - 60;
     div.style.maxHeight = `${max_height}px`;
     div.innerText = "waiting on server";
 
     plugin_helper.update_label(lyn_rummy.get_title());
+
+    const deck_cards = lyn_rummy.build_full_double_deck();
+    const json_cards = deck_cards.map((deck_card) => {
+        return deck_card.toJSON();
+    });
+
+    const local_id = network.serialize_cards(json_cards);
 
     if (local_id === undefined) {
         console.log("must not have found a transport channel");

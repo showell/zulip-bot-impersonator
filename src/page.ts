@@ -49,7 +49,7 @@ export class Page {
     start(): void {
         this.populate();
         this.add_plugin(plugin_chooser.plugin);
-        this.add_plugin(lyn_rummy.new_game_maker());
+        this.add_plugin(lyn_rummy.plugin);
         this.add_search_widget(address.nada());
         this.update_title();
     }
