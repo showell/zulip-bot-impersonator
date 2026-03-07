@@ -13,6 +13,7 @@ import type { TopicList } from "./topic_list";
 
 import * as layout from "./layout";
 
+import { AddressType, address_type } from "./address";
 import { APP } from "./app";
 import { make_channel_chooser } from "./channel_chooser/channel_chooser";
 import { ButtonPanel } from "./nav_button_panel";
@@ -94,46 +95,51 @@ export class SearchWidget {
         this.pane_manager = pane_manager;
         this.div = div;
 
-        if (start_address.topic_id) {
-            if (start_address.channel_id === undefined) {
-                throw new Error("unexpected");
-            }
-
-            const channel_row = this.get_channel_row();
-            console.log("channel_row", channel_row);
-
-            // ChannelView will add panes
-            this.channel_view = new ChannelView(
-                channel_row,
-                self,
-                pane_manager,
-            );
-
-            this.channel_view!.select_topic_id(start_address.topic_id);
-
-            if (start_address.message_id) {
-                const message_list = this.get_message_list()!;
-                message_list.go_to_message_id(start_address.message_id);
-                StatusBar.inform("You can read or reply now.");
-            } else {
-                StatusBar.inform("You can click on a topic now.");
+        switch (address_type(start_address)) {
+            case AddressType.NADA: {
+                this.update_button_panel();
+                this.update_label();
+                StatusBar.inform("Begin finding messages by clicking on a channel.");
                 return;
             }
 
-            this.update_button_panel();
-            this.update_label();
+            case AddressType.CHANNEL: {
+                this.update_channel();
+                return;
+            }
 
-            return;
+            case AddressType.TOPIC:
+            case AddressType.MESSAGE: {
+                if (start_address.channel_id === undefined) {
+                    throw new Error("unexpected");
+                }
+
+                const channel_row = this.get_channel_row();
+                console.log("channel_row", channel_row);
+
+                // ChannelView will add panes
+                this.channel_view = new ChannelView(
+                    channel_row,
+                    self,
+                    pane_manager,
+                );
+
+                this.channel_view!.select_topic_id(start_address.topic_id!);
+
+                if (start_address.message_id) {
+                    const message_list = this.get_message_list()!;
+                    message_list.go_to_message_id(start_address.message_id);
+                    StatusBar.inform("You can read or reply now.");
+                } else {
+                    StatusBar.inform("You can click on a topic now.");
+                }
+
+                this.update_button_panel();
+                this.update_label();
+
+                return;
+            }
         }
-
-        if (start_address.channel_id) {
-            this.update_channel();
-            return;
-        }
-
-        this.update_button_panel();
-        StatusBar.inform("Begin finding messages by clicking on a channel.");
-        this.update_label();
     }
 
     fork(): void {

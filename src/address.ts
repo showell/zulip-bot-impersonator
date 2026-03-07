@@ -1,5 +1,13 @@
 import { DB } from "./backend/database";
 
+export enum AddressType {
+    NADA,
+    CHANNEL,
+    TOPIC,
+    MESSAGE,
+}
+
+// We should eventually make this a discriminated union.
 export type Address = {
     channel_id: number | undefined;
     topic_id: number | undefined;
@@ -19,6 +27,14 @@ export function nada(): Address {
         message_id: undefined,
     };
 }
+
+export function address_type(address: Address): AddressType {
+    if (address.message_id) return AddressType.MESSAGE;
+    if (address.topic_id) return AddressType.TOPIC;
+    if (address.channel_id) return AddressType.CHANNEL;
+    return AddressType.NADA;
+}
+
 
 function unescape(str: string) {
     return decodeURIComponent(str.replace(/\./g, "%"));
