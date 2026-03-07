@@ -17,13 +17,29 @@ export function plugin(plugin_helper: PluginHelper) {
     const div = document.createElement("div");
     const max_height = document.documentElement.clientHeight - 60;
     div.style.maxHeight = `${max_height}px`;
-    div.innerText = "waiting on server";
+    div.style.marginTop = "10px";
+
+    const landing_div = document.createElement("div");
+    landing_div.style.paddingTop = "30px";
+    landing_div.style.display = "flex";
+    landing_div.style.justifyContent = "center";
 
     plugin_helper.update_label(lyn_rummy.get_title());
 
     let game_launcher: GameLauncher;
 
-    game_launcher = new GameLauncher(div);
+    const button = document.createElement("button");
+    button.innerText = "Launch new game";
+
+    button.addEventListener("click", () => {
+        div.innerHTML = "";
+        div.innerText = "waiting on server";
+        game_launcher = new GameLauncher(div);
+    });
+
+    landing_div.append(button);
+    div.append(landing_div);
+
 
     function handle_event(event: ZulipEvent) {
         if (game_launcher) {
