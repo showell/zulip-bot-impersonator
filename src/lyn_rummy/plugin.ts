@@ -4,14 +4,14 @@ import type { PluginHelper } from "../plugin_helper";
 
 import type { JsonCard, JsonGameEvent } from "./game";
 
+import * as model from "../backend/model";
+import * as network from "../backend/network";
+
 import { Button } from "../button";
 import { MessageRow } from "../row_types";
 
 import { GameSession } from "./game_session";
-
 import * as lyn_rummy from "./game";
-import * as model from "../backend/model";
-import * as network from "./network";
 
 export function plugin(plugin_helper: PluginHelper) {
     const div = document.createElement("div");

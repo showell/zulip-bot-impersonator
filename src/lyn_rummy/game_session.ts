@@ -1,6 +1,6 @@
 import type { JsonGameEvent } from "./game";
 
-import * as network from "./network";
+import * as network from "../backend/network";
 
 export class GameSession {
     game_id: number;
