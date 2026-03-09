@@ -10,7 +10,7 @@ import * as network from "../backend/network";
 import { Button } from "../button";
 import { MessageRow } from "../row_types";
 
-import { GameSession } from "./game_session";
+import { GameHelper } from "./game_helper";
 import * as lyn_rummy from "./game";
 
 export function plugin(plugin_helper: PluginHelper) {
@@ -96,13 +96,13 @@ function start_new_game(
         return;
     }
 
-    const game_session = new GameSession({ game_id, channel_id });
+    const game_helper = new GameHelper({ game_id, channel_id });
 
     function broadcast(json_game_event: JsonGameEvent) {
-        game_session.broadcast(json_game_event);
+        game_helper.broadcast(json_game_event);
     }
 
-    const json_events = is_spectator ? game_session.get_events() : [];
+    const json_events = is_spectator ? game_helper.get_events() : [];
 
     const deck_cards = json_cards.map(lyn_rummy.Card.from_json);
     lyn_rummy.start_game(deck_cards, div, broadcast, json_events);
