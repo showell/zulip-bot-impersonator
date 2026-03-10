@@ -94,11 +94,11 @@ function start_new_game(
     is_spectator: boolean,
 ): void {
     const game_helper = new GameHelper({ game_id, network_helper });
-    const json_events = is_spectator ? game_helper.get_events() : [];
+    const event_rows = is_spectator ? game_helper.get_events() : [];
     const webxdc = game_helper.xdc_interface();
 
     const deck_cards = json_cards.map(lyn_rummy.Card.from_json);
-    lyn_rummy.start_game(deck_cards, div, webxdc, json_events);
+    lyn_rummy.start_game(deck_cards, div, webxdc, event_rows);
 }
 
 class GameFinder {
@@ -122,7 +122,7 @@ class GameFinder {
         if (row) {
             const message = row.message;
             const game_id = message.id;
-            const json_cards = JSON.parse(row.value_string);
+            const json_cards = JSON.parse(row.json_string).value;
 
             if (json_cards === undefined) {
                 console.log("UNEXPECTED lack of cards");

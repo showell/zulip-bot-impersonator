@@ -3,6 +3,11 @@ import type * as webxdc from "../backend/webxdc";
 
 import { NetworkHelper } from "../backend/network";
 
+export type EventRow = {
+    json_game_event: JsonGameEvent;
+    addr: string;
+};
+
 export class GameHelper {
     game_id: number;
     network_helper: NetworkHelper;
@@ -36,7 +41,7 @@ export class GameHelper {
         });
     }
 
-    get_events(): JsonGameEvent[] {
+    get_events(): EventRow[] {
         const game_id = this.game_id;
         const network_helper = this.network_helper;
 
@@ -50,6 +55,12 @@ export class GameHelper {
             content_label,
         });
 
-        return rows.map((row) => JSON.parse(row.value_string));
+        return rows.map((row) => {
+            const { value, addr } = JSON.parse(row.json_string);
+            return {
+                json_game_event: value,
+                addr,
+            };
+        });
     }
 }

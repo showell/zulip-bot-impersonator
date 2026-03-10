@@ -8,7 +8,7 @@ import * as zulip_client from "../backend/zulip_client";
 
 type RowType = {
     message: Message;
-    value_string: string;
+    json_string: string;
 };
 
 export class NetworkHelper {
@@ -30,7 +30,9 @@ export class NetworkHelper {
         const { category, key, content_label, value, message_callback } = info;
 
         const topic_name = `__${category}_${key}__`;
-        const json = JSON.stringify(value);
+
+        const addr = zulip_client.addr();
+        const json = JSON.stringify({ value, addr });
         const content = `~~~ ${content_label}\n${json}`;
 
         zulip_client.send_message(
@@ -115,7 +117,7 @@ function data_from_message(
         if (pre) {
             return {
                 message,
-                value_string: pre.innerText,
+                json_string: pre.innerText,
             };
         }
     }

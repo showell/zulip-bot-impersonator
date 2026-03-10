@@ -1,4 +1,5 @@
 import type { Update, WebXdc } from "../backend/webxdc";
+import type { EventRow } from "./game_helper";
 
 const enum CardValue {
     ACE = 1,
@@ -3434,7 +3435,7 @@ export function start_game(
     deck_cards: Card[],
     container: HTMLElement,
     webxdc: WebXdc,
-    json_game_events: JsonGameEvent[],
+    event_rows: EventRow[],
 ) {
     TheDeck = new Deck(deck_cards);
     DragDropHelper = new DragDropHelperSingleton();
@@ -3449,6 +3450,9 @@ export function start_game(
     ActivePlayer.start_turn();
     new MainGamePage(container);
 
+    const json_game_events = event_rows.map(
+        (event_row) => event_row.json_game_event,
+    );
     GameEventTracker.handle_initial_events(json_game_events);
 }
 

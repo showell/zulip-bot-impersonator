@@ -1,6 +1,7 @@
 import type { Message } from "./db_types";
 import type { EventHandler, ZulipEvent } from "./event";
 
+import { DB } from "./database";
 import { EventFlavor } from "./event";
 
 import * as config from "../config";
@@ -13,6 +14,10 @@ export type MessageCallback = (message: Message) => void;
 type LocalIdType = string;
 
 const SENT_MESSAGE_CALLBACKS = new Map<LocalIdType, MessageCallback>();
+
+export function addr(): string {
+    return `${DB.current_user_id}-${queue_id}`;
+}
 
 function get_headers() {
     const auth = btoa(
