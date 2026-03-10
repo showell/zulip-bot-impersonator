@@ -1398,12 +1398,6 @@ class GameEventTrackerSingleton {
         this.replay();
     }
 
-    handle_event(json_game_event: JsonGameEvent): void {
-        this.json_game_events.push(json_game_event);
-        const game_event = GameEvent.from_json(json_game_event);
-        this.play_game_event(game_event);
-    }
-
     push_event(game_event: GameEvent) {
         const webxdc = this.webxdc;
 
@@ -1429,6 +1423,13 @@ class GameEventTrackerSingleton {
         const game_event = GameEvent.from_json(json_game_event);
 
         return game_event.player_action;
+    }
+
+    handle_event(json_game_event: JsonGameEvent): void {
+        const game_event = GameEvent.from_json(json_game_event);
+        this.replay_in_progress = true;
+        this.play_game_event(game_event);
+        this.replay_in_progress = false;
     }
 
     play_game_event(game_event: GameEvent) {
@@ -3478,6 +3479,8 @@ export function start_game(
 
     function listener(update: Update): void {
         const event_row = update.payload as EventRow;
+
+        console.log("addrs", event_row.addr, webxdc.selfAddr);
 
         if (event_row.addr !== webxdc.selfAddr) {
             GameEventTracker.handle_event(event_row.json_game_event);

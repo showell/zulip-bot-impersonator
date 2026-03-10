@@ -11,6 +11,7 @@ export class GameHelper {
 
     constructor(info: { game_id: number; network_helper: NetworkHelper }) {
         this.game_id = info.game_id;
+        console.log("GAME", this.game_id);
         this.network_helper = info.network_helper;
     }
 
