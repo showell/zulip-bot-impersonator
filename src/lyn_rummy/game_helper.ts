@@ -1,4 +1,5 @@
 import type { EventRow, JsonGameEvent } from "./game";
+import type { RowType } from "../backend/network";
 import type * as webxdc from "../backend/webxdc";
 
 import * as zulip_client from "../backend/zulip_client";
@@ -15,12 +16,26 @@ export class GameHelper {
 
     xdc_interface() {
         const self = this;
+        const game_id = this.game_id;
+        const network_helper = this.network_helper;
 
         return {
             selfAddr: zulip_client.addr(),
             sendUpdate(update: webxdc.Update): void {
                 const json_game_event = update.payload as JsonGameEvent;
                 self.broadcast(json_game_event);
+            },
+            setUpdateListener(game_callback: webxdc.UpdateListener): void {
+                function callback(row: RowType): void {
+                    const event_row: EventRow = JSON.parse(row.json_string);
+                    game_callback({ payload: event_row });
+                }
+                network_helper.set_event_listener_for_category({
+                    category: "game_events",
+                    key: game_id.toString(),
+                    content_label: "lynrummy-event",
+                    callback,
+                });
             },
         };
     }

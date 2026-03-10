@@ -1,4 +1,5 @@
 import type { Message } from "../backend/db_types";
+import type { ZulipEvent } from "../backend/event";
 import type { PluginHelper } from "../plugin_helper";
 
 import type { JsonCard } from "./game";
@@ -33,6 +34,10 @@ export function plugin(plugin_helper: PluginHelper) {
     }
 
     const network_helper = new NetworkHelper(channel_id);
+
+    plugin_helper.set_zulip_event_listener((zulip_event: ZulipEvent) => {
+        network_helper.handle_zulip_event(zulip_event);
+    });
 
     const button = new Button("Launch new game", 150, () => {
         div.innerHTML = "";

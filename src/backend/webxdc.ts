@@ -20,9 +20,12 @@ export type Update = {
     payload: object;
 };
 
+export type UpdateListener = (update: Update) => void;
+
 export type WebXdc = {
     selfAddr: string; // current_user_id-queue_id
 
     // we don't even bother with the deprecated descr field here
     sendUpdate: (update: Update) => void;
+    setUpdateListener: (listener: UpdateListener) => void;
 };

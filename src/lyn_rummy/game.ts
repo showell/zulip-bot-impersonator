@@ -1,4 +1,4 @@
-import type { Update, WebXdc } from "../backend/webxdc";
+import type { Update, UpdateListener, WebXdc } from "../backend/webxdc";
 
 const enum CardValue {
     ACE = 1,
@@ -1396,6 +1396,12 @@ class GameEventTrackerSingleton {
         }
 
         this.replay();
+    }
+
+    handle_event(json_game_event: JsonGameEvent): void {
+        this.json_game_events.push(json_game_event);
+        const game_event = GameEvent.from_json(json_game_event);
+        this.play_game_event(game_event);
     }
 
     push_event(game_event: GameEvent) {
@@ -3439,9 +3445,11 @@ export function gui() {
     const webxdc = {
         selfAddr: "standalone",
         sendUpdate(_update: Update) {},
+        setUpdateListener(_callback: UpdateListener) {},
     };
 
-    start_game(deck_cards, container, webxdc, []);
+    const event_rows: EventRow[] = [];
+    start_game(deck_cards, container, webxdc, event_rows);
 }
 
 export function start_game(
@@ -3467,6 +3475,16 @@ export function start_game(
         (event_row) => event_row.json_game_event,
     );
     GameEventTracker.handle_initial_events(json_game_events);
+
+    function listener(update: Update): void {
+        const event_row = update.payload as EventRow;
+
+        if (event_row.addr !== webxdc.selfAddr) {
+            GameEventTracker.handle_event(event_row.json_game_event);
+        }
+    }
+
+    webxdc.setUpdateListener(listener);
 }
 
 function assert(
