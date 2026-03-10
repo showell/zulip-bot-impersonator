@@ -1425,6 +1425,25 @@ class GameEventTrackerSingleton {
         return game_event.player_action;
     }
 
+    play_game_event(game_event: GameEvent) {
+        switch (game_event.type) {
+            case GameEventType.PLAYER_ACTION:
+                TheGame.process_player_action(game_event.player_action!);
+                break;
+
+            case GameEventType.MAYBE_COMPLETE_TURN:
+                TheGame.maybe_complete_turn();
+                break;
+
+            case GameEventType.ADVANCE_TURN:
+                TheGame.advance_turn_to_next_player();
+                break;
+        }
+
+        PlayerArea.populate();
+        BoardArea.populate();
+    }
+
     replay(): void {
         const self = this;
 
@@ -1471,22 +1490,7 @@ class GameEventTrackerSingleton {
             }
 
             const game_event = game_events[i];
-            console.log("in replay", game_event);
-
-            switch (game_event.type) {
-                case GameEventType.PLAYER_ACTION:
-                    TheGame.process_player_action(game_event.player_action!);
-                    break;
-
-                case GameEventType.MAYBE_COMPLETE_TURN:
-                    TheGame.maybe_complete_turn();
-                    break;
-
-                case GameEventType.ADVANCE_TURN:
-                    TheGame.advance_turn_to_next_player();
-                    break;
-            }
-            show();
+            self.play_game_event(game_event);
             i += 1;
 
             setTimeout(step, interval);
