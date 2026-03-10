@@ -21,6 +21,8 @@ export type Update = {
 };
 
 export type WebXdc = {
+    selfAddr: string; // current_user_id-queue_id
+
     // we don't even bother with the deprecated descr field here
     sendUpdate: (update: Update) => void;
 };

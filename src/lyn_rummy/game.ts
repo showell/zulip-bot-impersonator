@@ -1,5 +1,4 @@
 import type { Update, WebXdc } from "../backend/webxdc";
-import type { EventRow } from "./game_helper";
 
 const enum CardValue {
     ACE = 1,
@@ -103,6 +102,11 @@ export type JsonPlayerAction = {
 export type JsonGameEvent = {
     type: GameEventType;
     player_action: JsonPlayerAction | undefined;
+};
+
+export type EventRow = {
+    json_game_event: JsonGameEvent;
+    addr: string;
 };
 
 type BoardLocation = {
@@ -1395,12 +1399,16 @@ class GameEventTrackerSingleton {
     }
 
     push_event(game_event: GameEvent) {
+        const webxdc = this.webxdc;
+
         if (!this.replay_in_progress) {
             const json_game_event = game_event.toJSON();
 
             this.json_game_events.push(json_game_event);
 
-            this.webxdc.sendUpdate({ payload: json_game_event });
+            const addr = webxdc.selfAddr;
+            const event_row = { json_game_event, addr };
+            webxdc.sendUpdate({ payload: event_row });
         }
     }
 
@@ -3425,6 +3433,7 @@ export function gui() {
     const container = document.body;
     const deck_cards = build_full_double_deck();
     const webxdc = {
+        selfAddr: "standalone",
         sendUpdate(_update: Update) {},
     };
 

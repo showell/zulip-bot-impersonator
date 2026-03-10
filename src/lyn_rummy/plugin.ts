@@ -122,7 +122,7 @@ class GameFinder {
         if (row) {
             const message = row.message;
             const game_id = message.id;
-            const json_cards = JSON.parse(row.json_string).value;
+            const json_cards = JSON.parse(row.json_string);
 
             if (json_cards === undefined) {
                 console.log("UNEXPECTED lack of cards");

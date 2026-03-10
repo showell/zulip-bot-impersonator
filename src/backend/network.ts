@@ -31,8 +31,7 @@ export class NetworkHelper {
 
         const topic_name = `__${category}_${key}__`;
 
-        const addr = zulip_client.addr();
-        const json = JSON.stringify({ value, addr });
+        const json = JSON.stringify(value);
         const content = `~~~ ${content_label}\n${json}`;
 
         zulip_client.send_message(

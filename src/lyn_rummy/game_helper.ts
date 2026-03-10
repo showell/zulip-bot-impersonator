@@ -1,12 +1,8 @@
-import type { JsonGameEvent } from "./game";
+import type { EventRow, JsonGameEvent } from "./game";
 import type * as webxdc from "../backend/webxdc";
 
+import * as zulip_client from "../backend/zulip_client";
 import { NetworkHelper } from "../backend/network";
-
-export type EventRow = {
-    json_game_event: JsonGameEvent;
-    addr: string;
-};
 
 export class GameHelper {
     game_id: number;
@@ -21,6 +17,7 @@ export class GameHelper {
         const self = this;
 
         return {
+            selfAddr: zulip_client.addr(),
             sendUpdate(update: webxdc.Update): void {
                 const json_game_event = update.payload as JsonGameEvent;
                 self.broadcast(json_game_event);
@@ -56,11 +53,7 @@ export class GameHelper {
         });
 
         return rows.map((row) => {
-            const { value, addr } = JSON.parse(row.json_string);
-            return {
-                json_game_event: value,
-                addr,
-            };
+            return JSON.parse(row.json_string);
         });
     }
 }
