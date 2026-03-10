@@ -1,5 +1,4 @@
 import type { Message } from "../backend/db_types";
-import type { ZulipEvent } from "../backend/event";
 
 import type { PluginHelper } from "../plugin_helper";
 

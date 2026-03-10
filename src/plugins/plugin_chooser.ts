@@ -1,4 +1,3 @@
-import type { ZulipEvent } from "../backend/event";
 import type { PluginHelper, PluginMaker } from "../plugin_helper";
 
 import { APP } from "../app";

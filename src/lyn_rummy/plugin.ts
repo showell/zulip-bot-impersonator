@@ -1,8 +1,7 @@
 import type { Message } from "../backend/db_types";
-import type { ZulipEvent } from "../backend/event";
 import type { PluginHelper } from "../plugin_helper";
 
-import type { JsonCard, JsonGameEvent } from "./game";
+import type { JsonCard } from "./game";
 
 import * as model from "../backend/model";
 import { NetworkHelper } from "../backend/network";
@@ -95,13 +94,7 @@ function start_new_game(
     is_spectator: boolean,
 ): void {
     const game_helper = new GameHelper({ game_id, network_helper });
-
-    function broadcast(json_game_event: JsonGameEvent) {
-        game_helper.broadcast(json_game_event);
-    }
-
     const json_events = is_spectator ? game_helper.get_events() : [];
-
     const webxdc = game_helper.xdc_interface();
 
     const deck_cards = json_cards.map(lyn_rummy.Card.from_json);

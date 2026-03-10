@@ -109,8 +109,6 @@ type BoardLocation = {
     left: number;
 };
 
-type BroadcastCallback = (event: JsonGameEvent) => void;
-
 function is_pair_of_dups(card1: Card, card2: Card): boolean {
     // In a two-deck game, two cards can be both be
     // the Ace of Hearts, to use an example,
