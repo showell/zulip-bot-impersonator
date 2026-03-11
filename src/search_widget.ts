@@ -372,6 +372,13 @@ export class SearchWidget {
             this.refresh_message_ids(event.message_ids);
         }
 
+        if (
+            event.flavor === EventFlavor.REACTION_ADD_EVENT ||
+            event.flavor === EventFlavor.REACTION_REMOVE_EVENT
+        ) {
+            this.refresh_message_ids([event.message_id]);
+        }
+
         this.update_label();
     }
 }

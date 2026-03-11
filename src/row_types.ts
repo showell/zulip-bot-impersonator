@@ -213,7 +213,7 @@ export class ReactionItem {
     }
 
     sender_names(): string[] {
-        return this._reaction.user_ids.map(
+        return [...this._reaction.user_ids].map(
             (id) => DB.user_map.get(id)!.full_name,
         );
     }
@@ -223,7 +223,7 @@ export class ReactionItem {
     }
 
     reactor_count() {
-        return this._reaction.user_ids.length;
+        return this._reaction.user_ids.size;
     }
 
     toggle_reaction_from_current_user() {
