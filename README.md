@@ -25,6 +25,21 @@ Install biome:
 
 `npm i -D --save-exact @biomejs/biome`
 
+## Create a local src/test_config.ts file
+
+Create a file like this named `src/test_config.ts`
+in order to use node for running ad-hoc queries
+against our model.
+
+```
+export const TEST_CONFIG = {
+    nickname: "test",
+    url: "https://macandcheese.zulipchat.com/",
+    email: "showell30@yahoo.com",
+    api_key: "KjGWo1SFREDCUYnbXl7mFREDsbRdDORP",
+};
+```
+
 ## Development workflow
 
 I usually keep 4 terminals open:
