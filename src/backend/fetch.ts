@@ -47,13 +47,13 @@ export function convert_server_reactions(reactions: any[]): Reaction[] {
             const reaction: Reaction = {
                 emoji_code: raw_reaction.emoji_code,
                 emoji_name: raw_reaction.emoji_name,
-                user_ids: [raw_reaction.user_id],
+                user_ids: new Set<number>([raw_reaction.user_id]),
             };
             reaction_map.set(raw_reaction.emoji_name, reaction);
         } else {
             reaction_map
                 .get(raw_reaction.emoji_name)!
-                .user_ids.push(raw_reaction.user_id);
+                .user_ids.add(raw_reaction.user_id);
         }
     }
     return [...reaction_map.values()];

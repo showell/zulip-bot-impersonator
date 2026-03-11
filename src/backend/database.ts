@@ -44,6 +44,36 @@ export function handle_event(event: ZulipEvent): void {
             message.unread = event.unread;
         });
     }
+
+    if (event.flavor === EventFlavor.REACTION_ADD_EVENT) {
+        mutate_message(event.message_id, (message) => {
+            const reaction = message.reactions.find(
+                (reaction) => reaction.emoji_code === event.emoji_code,
+            );
+            if (reaction) {
+                reaction.user_ids.add(event.user_id);
+            } else {
+                message.reactions.push({
+                    emoji_code: event.emoji_code,
+                    emoji_name: event.emoji_name,
+                    user_ids: new Set<number>([event.user_id]),
+                });
+            }
+        });
+    }
+
+    if (event.flavor === EventFlavor.REACTION_REMOVE_EVENT) {
+        mutate_message(event.message_id, (message) => {
+            const reaction_idx = message.reactions.findIndex(
+                (reaction) => reaction.emoji_code === event.emoji_code,
+            );
+            const reaction = message.reactions[reaction_idx];
+            reaction?.user_ids.delete(event.user_id);
+            if (reaction?.user_ids.size === 0) {
+                message.reactions.splice(reaction_idx, 1);
+            }
+        });
+    }
 }
 
 function add_message_to_cache(message: Message) {

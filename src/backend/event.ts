@@ -10,12 +10,22 @@ export const enum EventFlavor {
     MUTATE_MESSAGE_CONTENT,
     MUTATE_UNREAD,
     UNKNOWN,
+    REACTION_ADD_EVENT,
+    REACTION_REMOVE_EVENT,
 }
 
 type MessageEvent = {
     flavor: EventFlavor.MESSAGE;
     message: Message;
     info: string;
+};
+
+type ReactionEvent = {
+    flavor: EventFlavor.REACTION_ADD_EVENT | EventFlavor.REACTION_REMOVE_EVENT;
+    message_id: number;
+    user_id: number;
+    emoji_code: string;
+    emoji_name: string;
 };
 
 type MutateUnreadEvent = {
@@ -48,6 +58,7 @@ export type ZulipEvent =
     | MutateMessageAddressEvent
     | MutateMessageContentEvent
     | MutateUnreadEvent
+    | ReactionEvent
     | UnknownEvent;
 
 function build_event(raw_event: any): ZulipEvent | undefined {
@@ -135,6 +146,22 @@ function build_event(raw_event: any): ZulipEvent | undefined {
                 raw_content: raw_event.content,
                 content: raw_event.rendered_content,
             };
+        }
+
+        case "reaction": {
+            if (raw_event.reaction_type !== "unicode_emoji") return undefined;
+            const flavor =
+                raw_event.op === "add"
+                    ? EventFlavor.REACTION_ADD_EVENT
+                    : EventFlavor.REACTION_REMOVE_EVENT;
+            const event_object: ReactionEvent = {
+                flavor,
+                message_id: raw_event.message_id,
+                user_id: raw_event.user_id,
+                emoji_code: raw_event.emoji_code,
+                emoji_name: raw_event.emoji_name,
+            };
+            return event_object;
         }
     }
 
