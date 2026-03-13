@@ -1,12 +1,15 @@
 import { EventHandler, ZulipEvent } from "./backend/event";
 import * as database from "./backend/database";
+import * as message_fetch from "./backend/message_fetch";
 import * as zulip_client from "./backend/zulip_client";
+
 import * as login_manager from "./login_manager";
 import * as config from "./config";
 
 import * as mouse_drag from "./util/mouse_drag";
 
 import * as app from "./app";
+import { DB } from "./backend/database";
 import { Page } from "./page";
 
 import * as game from "./lyn_rummy/game";
@@ -68,6 +71,8 @@ export async function run() {
     page.start();
 
     app.init(page);
+
+    message_fetch.backfill(DB);
 }
 
 run();
