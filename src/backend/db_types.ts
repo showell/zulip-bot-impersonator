@@ -13,7 +13,6 @@ export type Message = {
     topic_id: number;
     type: "stream";
     unread: boolean;
-    reactions: Reaction[];
 };
 
 // We only support unicode emoji right now,

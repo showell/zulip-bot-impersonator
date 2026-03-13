@@ -1,5 +1,4 @@
 import type { MessageRow } from "./row_types";
-import * as reactions_widget_row from "./reactions_row_widget";
 import * as mouse_drag from "./util/mouse_drag";
 
 import { APP } from "./app";
@@ -7,6 +6,7 @@ import { Button } from "./button";
 import { render_message_content } from "./message_content";
 import { MessagePopup } from "./message_popup";
 import { pop } from "./popup";
+import { ReactionsRowWidget } from "./reactions_row_widget";
 
 function render_message_box() {
     const div = document.createElement("div");
@@ -114,12 +114,13 @@ export class MessageRowWidget {
 
         const content = message_row.content();
         const content_div = render_message_content(content);
-        const reactions_div = new reactions_widget_row.ReactionsRowWidget(
-            message_row.reactions(),
-        ).div;
+
+        const reactions_widget = new ReactionsRowWidget(
+            message_row.message_id(),
+        );
 
         div.append(content_div);
-        div.append(reactions_div);
+        div.append(reactions_widget.div);
 
         this.div = div;
     }

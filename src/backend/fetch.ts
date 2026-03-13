@@ -4,6 +4,7 @@ import * as config from "../config";
 import { Database } from "./database";
 import * as message_fetch from "./message_fetch";
 import { MessageIndex } from "./message_index";
+import { ReactionsMap } from "./reactions";
 import { TopicMap } from "./topic_map";
 import * as zulip_client from "./zulip_client";
 
@@ -62,6 +63,7 @@ export async function fetch_model_data(): Promise<Database> {
     const topic_map = new TopicMap();
     const message_map = new Map<number, Message>();
     const message_index = new MessageIndex();
+    const reactions_map = new ReactionsMap();
 
     const db = {
         current_user_id,
@@ -70,6 +72,7 @@ export async function fetch_model_data(): Promise<Database> {
         topic_map,
         message_map,
         message_index,
+        reactions_map,
     };
 
     await message_fetch.fetch_initial_messages(db);

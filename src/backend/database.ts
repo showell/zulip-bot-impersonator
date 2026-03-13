@@ -5,6 +5,7 @@ import type { MessageIndex } from "./message_index";
 import { EventFlavor } from "./event";
 import * as fetch from "./fetch";
 import { TopicMap } from "./topic_map";
+import { ReactionsMap } from "./reactions";
 
 export let DB: Database;
 
@@ -18,6 +19,7 @@ export type Database = {
     topic_map: TopicMap;
     message_map: MessageMap;
     message_index: MessageIndex;
+    reactions_map: ReactionsMap;
 };
 
 export async function fetch_original_data(): Promise<void> {
@@ -52,34 +54,11 @@ export function handle_event(event: ZulipEvent): void {
     }
 
     if (event.flavor === EventFlavor.REACTION_ADD_EVENT) {
-        mutate_message(event.message_id, (message) => {
-            const reaction = message.reactions.find(
-                (reaction) => reaction.emoji_code === event.emoji_code,
-            );
-            if (reaction) {
-                reaction.user_ids.add(event.user_id);
-            } else {
-                message.reactions.push({
-                    message_id: event.message_id,
-                    emoji_code: event.emoji_code,
-                    emoji_name: event.emoji_name,
-                    user_ids: new Set<number>([event.user_id]),
-                });
-            }
-        });
+        DB.reactions_map.process_add_event(event);
     }
 
     if (event.flavor === EventFlavor.REACTION_REMOVE_EVENT) {
-        mutate_message(event.message_id, (message) => {
-            const reaction_idx = message.reactions.findIndex(
-                (reaction) => reaction.emoji_code === event.emoji_code,
-            );
-            const reaction = message.reactions[reaction_idx];
-            reaction?.user_ids.delete(event.user_id);
-            if (reaction?.user_ids.size === 0) {
-                message.reactions.splice(reaction_idx, 1);
-            }
-        });
+        DB.reactions_map.process_remove_event(event);
     }
 }
 

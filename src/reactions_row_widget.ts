@@ -1,10 +1,16 @@
-import { Reaction } from "./backend/db_types";
-import { ReactionItem } from "./row_types";
+import type { Reaction } from "./backend/db_types";
+
+import { DB } from "./backend/database";
 import * as zulip_client from "./backend/zulip_client";
+
+import { ReactionItem } from "./row_types";
 
 export class ReactionsRowWidget {
     div: HTMLDivElement;
-    constructor(reactions: Reaction[]) {
+
+    constructor(message_id: number) {
+        const reactions: Reaction[] =
+            DB.reactions_map.get_reactions_for_message_id(message_id);
         this.div = this.render_reactions_div(reactions);
     }
 

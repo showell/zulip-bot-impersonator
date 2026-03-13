@@ -199,10 +199,6 @@ export class MessageRow {
 
         return `#${stream_name} > ${topic_name}`;
     }
-
-    reactions(): Reaction[] {
-        return this._message.reactions;
-    }
 }
 
 export class ReactionItem {
@@ -234,11 +230,6 @@ export class ReactionItem {
     }
 
     current_user_reacted(): boolean {
-        console.log(DB.current_user_id, this._reaction.user_ids);
         return this._reaction.user_ids.has(DB.current_user_id);
-    }
-
-    toggle_reaction_from_current_user() {
-        // TODO
     }
 }

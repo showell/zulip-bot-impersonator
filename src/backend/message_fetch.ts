@@ -1,41 +1,14 @@
 import type { Database } from "./database";
-import type { Message, Reaction } from "./db_types";
+import type { Message } from "./db_types";
 
 import * as parse from "./parse";
 import * as zulip_client from "./zulip_client";
 
 const INITIAL_BATCH_SIZE = 2000;
 
-export function convert_server_reactions(
-    reactions: any[],
-    message_id: number,
-): Reaction[] {
-    const raw_reactions = reactions.filter(
-        (reaction: any) => reaction.reaction_type === "unicode_emoji",
-    );
-    // Maps emoji name to a Reaction object.
-    const reaction_map = new Map<string, Reaction>();
-
-    for (const raw_reaction of raw_reactions) {
-        if (!reaction_map.has(raw_reaction.emoji_name)) {
-            const reaction: Reaction = {
-                emoji_code: raw_reaction.emoji_code,
-                emoji_name: raw_reaction.emoji_name,
-                user_ids: new Set<number>([raw_reaction.user_id]),
-                message_id: message_id,
-            };
-            reaction_map.set(raw_reaction.emoji_name, reaction);
-        } else {
-            reaction_map
-                .get(raw_reaction.emoji_name)!
-                .user_ids.add(raw_reaction.user_id);
-        }
-    }
-    return [...reaction_map.values()];
-}
-
 export async function fetch_initial_messages(db: Database): Promise<void> {
-    const { message_map, topic_map, user_map, message_index } = db;
+    const { message_map, topic_map, user_map, message_index, reactions_map } =
+        db;
 
     const rows = await zulip_client.get_messages(INITIAL_BATCH_SIZE);
 
@@ -51,13 +24,13 @@ export async function fetch_initial_messages(db: Database): Promise<void> {
             const unread =
                 row.flags.find((flag: string) => flag === "read") === undefined;
 
-            const reactions = convert_server_reactions(row.reactions, row.id);
+            const message_id = row.id;
 
             const message: Message = {
                 code_snippets: [],
                 content: row.content,
                 github_refs: [],
-                id: row.id,
+                id: message_id,
                 is_super_new: false,
                 local_message_id,
                 sender_id: row.sender_id,
@@ -65,10 +38,12 @@ export async function fetch_initial_messages(db: Database): Promise<void> {
                 timestamp: row.timestamp,
                 topic_id: topic.topic_id,
                 type: row.type,
-                reactions,
                 unread,
             };
+
             parse.parse_content(message);
+            reactions_map.add_server_reactions(row.reactions, message_id);
+
             return message;
         });
 
